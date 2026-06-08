@@ -1,16 +1,51 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pokedex</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pokedex</title>
 
-  <!-- Bootstrap CSS import -->
-  <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
-</head>
-<body>
+    <!-- Bootstrap CSS import -->
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <!-- Custom CSS import -->
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body class="d-flex flex-column min-vh-100">
+    <header>
+      <nav class="navbar navbar-expand-sm bg-dark opacity-95" data-bs-theme="dark">
+        <div class="container-xxl">
+          <a class="navbar-brand">Pokedéx</a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-id="search-button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarToggler"
+            aria-controls="navbarToggler"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarToggler">
+            <form class="d-flex ms-auto" role="search">
+              <input
+                class="form-control me-2"
+                type="search"
+                data-id="search-input"
+                placeholder="Search"
+                aria-label="Search"
+              />
+              <button class="btn btn-light" type="submit">Search</button>
+            </form>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <main class="bg-dark flex-grow-1" data-id="content"></main>
+    <footer class="height-3 text-bg-dark opacity-95"></footer>
 
-  <!-- Bootstrap JavaScript import -->
-   <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+    <!-- Bootstrap JavaScript import -->
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
 </html>
