@@ -1,7 +1,9 @@
-.height-3 {
-  height: 3rem;
+body {
+  font-family: 'Baloo 2';
 }
 
-.opacity-95 {
-  opacity: 0.95;
+ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
 }

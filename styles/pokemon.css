@@ -1,0 +1,13 @@
+.card-width {
+  width: 260px;
+}
+
+.bg-grass {
+  background-color: rgb(104,176,35);
+  color: white;
+  --bs-card-subtitle-color: rgba(101, 99, 99, 0.7);
+}
+
+.card-picture {
+  width: 100%;
+}
