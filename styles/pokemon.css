@@ -1,13 +1,61 @@
-.card-width {
-  width: 260px;
-}
-
 .bg-grass {
   background-color: rgb(104,176,35);
+  color: white;
+  --bs-card-subtitle-color: #64C864;
+}
+
+.bg-water {
+  background-color: #46B4F0;
   color: white;
   --bs-card-subtitle-color: rgba(101, 99, 99, 0.7);
 }
 
-.card-picture {
+.bg-fire {
+  background-color: #F0781E;
+  color: white;
+  --bs-card-subtitle-color: rgba(101, 99, 99, 0.7);
+}
+
+.bg-bug {
+  background-color: #497B1E;
+  color: white;
+  --bs-card-subtitle-color: rgba(101, 99, 99, 0.7);
+}
+
+.bg-normal {
+  background-color: #A8A878;
+  color: white;
+  --bs-card-subtitle-color: rgba(101, 99, 99, 0.7);
+}
+
+.bg-poison {
+  background-color: #AD4AE7;
+  color: white;
+  --bs-card-subtitle-color: rgba(101, 99, 99, 0.7);
+}
+
+.bg-electric {
+  background-color: #F0F032;
+  color: white;
+  --bs-card-subtitle-color: rgba(101, 99, 99, 0.7);
+}
+
+.bg-ground {
+  background-color: #9C7B42;
+  color: white;
+  --bs-card-subtitle-color: rgba(101, 99, 99, 0.7);
+}
+
+.smallCard-width {
+  width: 260px;
+}
+
+.smallCard-body-height {
+  height: 220px;
+}
+
+.smallCard-img {
+  position: absolute;
+  bottom: 0;
   width: 100%;
 }
