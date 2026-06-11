@@ -59,3 +59,7 @@
   bottom: 0;
   width: 100%;
 }
+
+.smallCard-type-img {
+  height: 40px;
+}
