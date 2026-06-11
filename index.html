@@ -10,7 +10,7 @@
     <!-- Custom CSS import -->
     <link rel="stylesheet" href="./style.css" />
   </head>
-  <body class="d-flex flex-column min-vh-100">
+  <body class="d-flex flex-column min-vh-100" onload="init()">
     <header>
       <nav class="navbar navbar-expand-sm bg-dark" data-bs-theme="dark">
         <div class="container-xxl">
@@ -44,14 +44,7 @@
     </header>
     <main class="bg-black flex-grow-1">
       <section class="container p-4" data-id="content">
-        <div class="d-flex justify-content-center align-items-center flex-wrap gap-3">
-          <div class="card text-bg-dark card-width h-100">
-            <div class="card-header d-flex flex-row-reverse justify-content-between align-items-center"><h5>Bulbasaur</h5> <h6>#1</h6></div>
-            <div class="card-body bg-grass p-0" style="height: 300px;">
-              <!-- <img src="assets\img\assy-pikachu-1774508_640.jpg" class="img-fluid card-picture" alt="..." /> -->
-            </div>
-            <div class="card-footer">This is some text within a card body.</div>
-          </div>
+        <div id="content-wrapper" class="d-flex justify-content-center align-items-center flex-wrap gap-3">
         </div>
       </section>
     </main>
@@ -73,5 +66,11 @@
 
     <!-- Bootstrap JavaScript import -->
     <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JavaScript import -->
+    <script src="./scripts/template.js"></script>
+    <script src="./scripts/apiservice.js"></script>
+    <script src="./scripts/pokeapi.js"></script>
+    <script src="./scripts/render.js"></script>
+    <script src="./script.js"></script>
   </body>
 </html>
