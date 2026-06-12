@@ -1,49 +1,11 @@
-.bg-grass {
-  background-color: rgb(104,176,35);
-  color: white;
-  --bs-card-subtitle-color: #64C864;
+/* Small Cards */
+.card {
+  cursor: pointer;
+  transition: all 255ms;
 }
 
-.bg-water {
-  background-color: #46B4F0;
-  color: white;
-  --bs-card-subtitle-color: rgba(101, 99, 99, 0.7);
-}
-
-.bg-fire {
-  background-color: #F0781E;
-  color: white;
-  --bs-card-subtitle-color: rgba(101, 99, 99, 0.7);
-}
-
-.bg-bug {
-  background-color: #497B1E;
-  color: white;
-  --bs-card-subtitle-color: rgba(101, 99, 99, 0.7);
-}
-
-.bg-normal {
-  background-color: #A8A878;
-  color: white;
-  --bs-card-subtitle-color: rgba(101, 99, 99, 0.7);
-}
-
-.bg-poison {
-  background-color: #AD4AE7;
-  color: white;
-  --bs-card-subtitle-color: rgba(101, 99, 99, 0.7);
-}
-
-.bg-electric {
-  background-color: #F0F032;
-  color: white;
-  --bs-card-subtitle-color: rgba(101, 99, 99, 0.7);
-}
-
-.bg-ground {
-  background-color: #9C7B42;
-  color: white;
-  --bs-card-subtitle-color: rgba(101, 99, 99, 0.7);
+.card:hover {
+transform: scale(1.06);
 }
 
 .smallCard-width {
@@ -51,15 +13,16 @@
 }
 
 .smallCard-body-height {
-  height: 220px;
+  height: 200px;
 }
 
 .smallCard-img {
   position: absolute;
   bottom: 0;
-  width: 100%;
 }
 
 .smallCard-type-img {
-  height: 40px;
+  height: 28px;
 }
+
+/* Small Cards END */

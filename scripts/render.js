@@ -1,13 +1,24 @@
 function renderSmallCards(pokemons) {
   const contentWrapperRef = document.getElementById("content-wrapper");
-  contentWrapperRef.innerHTML = "";
-  for (let index = pokemonApiIndexCounter - POKEMON_LOADING_INTERVAL + 1; index <= POKEMON_LOADING_INTERVAL; index++) {
+  // contentWrapperRef.innerHTML = "";
+  for (let index = pokemonApiIndexCounter - POKEMON_LOADING_INTERVAL + 1; index <= Object.keys(pokemons).length; index++) {
     currentPokemon = pokemons[index];
     currentTypeValuesAsArray = Object.values(currentPokemon.types);
     let footerHtmlString = getFooterHtmlString(currentTypeValuesAsArray);
     contentWrapperRef.innerHTML += getSmallPokemonCardTemplate(currentPokemon, currentTypeValuesAsArray, footerHtmlString);
   }
 }
+
+// function renderSmallCards(pokemons) {
+//   const contentWrapperRef = document.getElementById("content-wrapper");
+//   contentWrapperRef.innerHTML = "";
+//   for (let index = pokemonApiIndexCounter - POKEMON_LOADING_INTERVAL + 1; index <= POKEMON_LOADING_INTERVAL; index++) {
+//     currentPokemon = pokemons[index];
+//     currentTypeValuesAsArray = Object.values(currentPokemon.types);
+//     let footerHtmlString = getFooterHtmlString(currentTypeValuesAsArray);
+//     contentWrapperRef.innerHTML += getSmallPokemonCardTemplate(currentPokemon, currentTypeValuesAsArray, footerHtmlString);
+//   }
+// }
 
 function getFooterHtmlString(currentTypeValuesAsArray) {
   let footerHtmlString = "";

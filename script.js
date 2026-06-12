@@ -1,7 +1,7 @@
 const POKEAPI_BASE_URL = "https://pokeapi.co/api/v2/";
 const POKEAPI_POKEMON = "pokemon/";
 const POKEAPI_TYPE = "type/";
-const POKEMON_LOADING_INTERVAL = 30;
+const POKEMON_LOADING_INTERVAL = 40;
 
 let pokemons = {};
 let allTypeRefs = {};
@@ -22,4 +22,9 @@ async function loadPokemons() {
     const pokemonApiObject = await getPokemonObjectFromPokeApi(pokemonApiIndexCounter);
     pokemons[pokemonApiIndexCounter] = await getPokemonStatsForSmallCard(pokemonApiObject);
   }
+}
+
+async function loadMore() {
+  await loadPokemons();
+  renderSmallCards(pokemons);
 }
