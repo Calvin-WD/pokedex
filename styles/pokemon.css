@@ -1,28 +1,34 @@
 /* Small Cards */
-.card {
-  cursor: pointer;
+#content-wrapper .card {
   transition: all 255ms;
 }
 
-.card:hover {
-transform: scale(1.06);
+#content-wrapper .card:hover {
+  transform: scale(1.06);
 }
 
-.smallCard-width {
+.card-width {
   width: 260px;
 }
 
-.smallCard-body-height {
+.card-body-height {
   height: 200px;
 }
 
-.smallCard-img {
+.card-image {
   position: absolute;
   bottom: 0;
 }
 
-.smallCard-type-img {
-  height: 28px;
+.card-type-image {
+  /* height: 28px; */
+  width: 12%;
 }
 
+.card-bg-white {
+  background-color: white !important;
+}
 /* Small Cards END */
+
+/* Dialog */
+/* Dialog END */
