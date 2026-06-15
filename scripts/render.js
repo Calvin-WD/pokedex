@@ -1,3 +1,7 @@
+/** 
+ * Render Cards
+ */
+
 function renderCards(pokemons) {
   const contentWrapperRef = document.getElementById("content-wrapper");
   // contentWrapperRef.innerHTML = "";
@@ -5,12 +9,12 @@ function renderCards(pokemons) {
     const tag = 'button type="button"';
     const currentPokemon = pokemons[index];
     const currentTypeValuesAsArray = Object.values(currentPokemon.types);
-    const footerHtmlString = getFooterHtmlString(currentTypeValuesAsArray);
+    const footerHtmlString = getCardFooterHtmlString(currentTypeValuesAsArray);
     contentWrapperRef.innerHTML += getPokemonCardTemplate(tag, currentPokemon, currentTypeValuesAsArray, footerHtmlString);
   }
 }
 
-function getFooterHtmlString(currentTypeValuesAsArray) {
+function getCardFooterHtmlString(currentTypeValuesAsArray) {
   let footerHtmlString = "";
   for (let typeIndex = 0; typeIndex < currentTypeValuesAsArray.length; typeIndex++) {
     const currentTypeImgUrl = currentTypeValuesAsArray[typeIndex].typeImage;
@@ -19,7 +23,29 @@ function getFooterHtmlString(currentTypeValuesAsArray) {
   return footerHtmlString;
 }
 
-// function renderDialog() {
-//   const dialogRef = document.getElementById("dialog-wrapper");
-//   dialogRef.innerHTML = getPokemonCardExtensionTemplate();
-// }
+/** 
+ * Render Cards END
+ */
+
+/** 
+ * Render Dialog
+ */
+
+function renderDialog(dialogRef, pokemonId) {
+  const currentPokemon = getPokemonFromCacheById(pokemonId);
+  const currentTypeValuesAsArray = Object.values(currentPokemon.types)
+  dialogRef.innerHTML = getDialogContentTemplate(currentPokemon);
+  console.log(currentPokemon);
+  
+}
+
+function getDialogHeaderHtmlString() {
+  
+}
+function getDialogBodyHtmlString() {
+
+}
+
+/** 
+ * Render Dialog END
+ */

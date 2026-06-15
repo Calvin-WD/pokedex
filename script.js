@@ -32,10 +32,9 @@ async function loadMore() {
 
 function openDialog(pokemonId) {
   let dialogRef = document.getElementById("dialog");
-  const currentPokemon = getPokemonFromCache(pokemonId);
-  renderDialog(dialogRef, currentPokemon);
-  // document.body.classList.add("overFlowHidden");
+  renderDialog(dialogRef, pokemonId);
   dialogRef.showModal();
+  document.body.classList.add("overFlowHidden");
 }
 
 function closeDialog() {
@@ -43,6 +42,10 @@ function closeDialog() {
   dialogRef.close();
 }
 
-function getPokemonFromCache(pokemonId) {
+function disableBodyScrollability() {
+  document.body.classList.remove("overFlowHidden");
+}
+
+function getPokemonFromCacheById(pokemonId) {
   return pokemons[pokemonId];
 }
