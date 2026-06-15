@@ -1,3 +1,8 @@
+async function getData(path = "") {
+  let response = await fetch(POKEAPI_BASE_URL + path);
+  return (responseToJson = await response.json());
+}
+
 /**
  * Gets the pokemon object from the Pokeapi using the id and returns it
  */
