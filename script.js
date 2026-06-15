@@ -9,7 +9,8 @@ let pokemonApiIndexCounter = 0;
 
 async function init() {
   await loadPokemons();
-  renderSmallCards(pokemons);
+  renderCards(pokemons);
+  
 }
 
 /**
@@ -26,5 +27,22 @@ async function loadPokemons() {
 
 async function loadMore() {
   await loadPokemons();
-  renderSmallCards(pokemons);
+  renderCards(pokemons);
+}
+
+function openDialog(pokemonId) {
+  let dialogRef = document.getElementById("dialog");
+  const currentPokemon = getPokemonFromCache(pokemonId);
+  renderDialog(dialogRef, currentPokemon);
+  // document.body.classList.add("overFlowHidden");
+  dialogRef.showModal();
+}
+
+function closeDialog() {
+  let dialogRef = document.getElementById("dialog");
+  dialogRef.close();
+}
+
+function getPokemonFromCache(pokemonId) {
+  return pokemons[pokemonId];
 }

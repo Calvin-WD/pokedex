@@ -1,30 +1,25 @@
-function renderSmallCards(pokemons) {
+function renderCards(pokemons) {
   const contentWrapperRef = document.getElementById("content-wrapper");
   // contentWrapperRef.innerHTML = "";
   for (let index = pokemonApiIndexCounter - POKEMON_LOADING_INTERVAL + 1; index <= Object.keys(pokemons).length; index++) {
-    currentPokemon = pokemons[index];
-    currentTypeValuesAsArray = Object.values(currentPokemon.types);
-    let footerHtmlString = getFooterHtmlString(currentTypeValuesAsArray);
-    contentWrapperRef.innerHTML += getSmallPokemonCardTemplate(currentPokemon, currentTypeValuesAsArray, footerHtmlString);
+    const tag = 'button type="button"';
+    const currentPokemon = pokemons[index];
+    const currentTypeValuesAsArray = Object.values(currentPokemon.types);
+    const footerHtmlString = getFooterHtmlString(currentTypeValuesAsArray);
+    contentWrapperRef.innerHTML += getPokemonCardTemplate(tag, currentPokemon, currentTypeValuesAsArray, footerHtmlString);
   }
 }
-
-// function renderSmallCards(pokemons) {
-//   const contentWrapperRef = document.getElementById("content-wrapper");
-//   contentWrapperRef.innerHTML = "";
-//   for (let index = pokemonApiIndexCounter - POKEMON_LOADING_INTERVAL + 1; index <= POKEMON_LOADING_INTERVAL; index++) {
-//     currentPokemon = pokemons[index];
-//     currentTypeValuesAsArray = Object.values(currentPokemon.types);
-//     let footerHtmlString = getFooterHtmlString(currentTypeValuesAsArray);
-//     contentWrapperRef.innerHTML += getSmallPokemonCardTemplate(currentPokemon, currentTypeValuesAsArray, footerHtmlString);
-//   }
-// }
 
 function getFooterHtmlString(currentTypeValuesAsArray) {
   let footerHtmlString = "";
   for (let typeIndex = 0; typeIndex < currentTypeValuesAsArray.length; typeIndex++) {
     const currentTypeImgUrl = currentTypeValuesAsArray[typeIndex].typeImage;
-    footerHtmlString += getSmallPokemonCardTypeImageTemplate(currentTypeImgUrl);
+    footerHtmlString += getPokemonCardTypeImageTemplate(currentTypeImgUrl);
   }
   return footerHtmlString;
 }
+
+// function renderDialog() {
+//   const dialogRef = document.getElementById("dialog-wrapper");
+//   dialogRef.innerHTML = getPokemonCardExtensionTemplate();
+// }
