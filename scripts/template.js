@@ -1,29 +1,28 @@
-/** 
+/**
  * Card Templates
  */
 
-function getPokemonCardTemplate(tag, pokemon, typesArray, footerHtml, extension = "") {
-  return `<${tag} class="card text-bg-dark card-width h-100 p-0" data-pokemon-id="${pokemon.id}" onclick="openDialog(${pokemon.id})">
+function getPokemonCardTemplate(pokemon, footerHtml) {
+  return `<button type="button" class="card text-bg-dark card-width h-100 p-0" data-pokemon-id="${pokemon.base.id}" onclick="openDialog(${pokemon.base.id})">
       <div class="card-header d-flex flex-row-reverse justify-content-between align-items-center">
-        <h5 class="text-end">${pokemon.name.toUpperCase()}</h5> <h6>#${pokemon.id}</h6>
+        <h5 class="text-end">${pokemon.base.name.toUpperCase()}</h5> <h6>#${pokemon.base.id}</h6>
       </div>
-      <div class="card-body position-relative d-flex justify-content-center card-body-height bg-type-${typesArray[0].type.name} p-0">
-        <img src="${pokemon.sprites.other.home.front_default}" class="card-image w-75" data-id="card-image">
+      <div class="card-body position-relative d-flex justify-content-center card-body-height bg-type-${pokemon.base.types[0].type.name} p-0">
+        <img src="${pokemon.base.sprites.other.home.front_default}" class="card-image w-75" data-id="card-image">
       </div>
       <div class="d-flex justify-content-center gap-5 p-1">${footerHtml}</div>
-      ${extension}
-    </${tag}>`;
+    </button>`;
 }
 
 function getPokemonCardTypeImageTemplate(typeImgUrl) {
   return `<img src="${typeImgUrl}" class="card-type-image">`;
 }
 
-/** 
+/**
  * Card Templates END
  */
 
-/** 
+/**
  * Dialog Templates
  */
 
@@ -45,16 +44,16 @@ function getDialogHeaderTemplate(pokemon, badgesHtml) {
       <button type="button" class="btn-close" onclick="closeDialog()"></button>
       <div class="d-flex flex-row-reverse justify-content-end w-100 gap-2">
         <h3 class="modal-title fs-5" id="cardExtensionLabel">
-          ${pokemon.name.toUpperCase()}
+          ${pokemon.base.name.toUpperCase()}
         </h3>
-        <h4>#${pokemon.id}</h4>
+        <h4>#${pokemon.base.id}</h4>
       </div>
       <div class="d-flex justify-content-around">
         <div class="d-flex flex-column justify-content-center gap-3">
           ${badgesHtml}
         </div>
         <img
-          src="${pokemon.sprites.other.home.front_default}"
+          src="${pokemon.base.sprites.other.home.front_default}"
           alt=""
           class="w-50"
         />
@@ -68,10 +67,10 @@ function getHeaderTypeBadgeTemplate(typeName) {
 /** Header templates END */
 
 /** Body templates */
-function getDialogBodyTemplate() {
+function getDialogBodyTemplate(pokemon, abilityNames) {
   return `<div class="modal-body card-bg-white rounded-top-4 p-3">
       ${getDialogBodyNavTabsTemplate()}
-      ${getDialogBodyNavContentTemplate()}
+      ${getDialogBodyNavContentTemplate(pokemon, abilityNames)}
     </div>`;
 }
 
@@ -122,9 +121,8 @@ function getDialogBodyNavTabsTemplate() {
     </ul>`;
 }
 
-function getDialogBodyNavContentTemplate() {
-  return (
-    `<div class="tab-content" id="myTabContent">
+function getDialogBodyNavContentTemplate(pokemon, abilityNames) {
+  return `<div class="tab-content" id="myTabContent">
       <div
         class="tab-pane fade show active"
         id="about-tab-pane"
@@ -133,20 +131,20 @@ function getDialogBodyNavContentTemplate() {
         tabindex="0"
       >
         <dl class="row pt-2 mb-0">
-          <dt class="col-3">Species</dt>
-          <dd class="col-9">Description Details</dd>
+          <dt class="col-3">Name</dt>
+          <dd class="col-9">${pokemon.base.name}</dd>
         </dl>
         <dl class="row pt-2 mb-0">
           <dt class="col-3">Height</dt>
-          <dd class="col-9">Description Details</dd>
+          <dd class="col-9">${pokemon.base.height}</dd>
         </dl>
         <dl class="row pt-2 mb-0">
           <dt class="col-3">Weight</dt>
-          <dd class="col-9">Description Details</dd>
+          <dd class="col-9">${pokemon.base.weight}</dd>
         </dl>
         <dl class="row pt-2 mb-0">
           <dt class="col-3">Abilities</dt>
-          <dd class="col-9">Description Details</dd>
+          <dd class="col-9">${abilityNames}</dd>
         </dl>
       </div>
       <div class="tab-pane fade" id="base-tab-pane" role="tabpanel" aria-labelledby="base-tab" tabindex="0">
@@ -197,9 +195,17 @@ function getDialogBodyNavContentTemplate() {
           <dd class="col-9">Description Details</dd>
         </dl>
       </div>
-    </div>`
-  );
+    </div>`;
 }
+
+// function getAboutTabContentTemplate(key, value) {
+//   return (
+//     `<dl class="row pt-2 mb-0">
+//       <dt class="col-3">${key}</dt>
+//       <dd class="col-9">${value}</dd>
+//     </dl>`
+//   );
+// }
 /** Body templates END */
 
 /** Footer templates */
@@ -215,6 +221,6 @@ function getDialogFooterTemplate() {
 }
 /** Footer templates END */
 
-/** 
+/**
  * Dialog Templates END
  */

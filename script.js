@@ -1,6 +1,7 @@
 const POKEAPI_BASE_URL = "https://pokeapi.co/api/v2/";
 const POKEAPI_POKEMON = "pokemon/";
 const POKEAPI_TYPE = "type/";
+const POKEAPI_SPECIES = "pokemon-species/";
 const POKEMON_LOADING_INTERVAL = 40;
 
 let pokemons = {};
@@ -20,15 +21,19 @@ async function loadPokemons() {
   for (let index = 0; index < POKEMON_LOADING_INTERVAL; index++) {
     pokemonApiIndexCounter++;
     const pokemonApiObject = await getPokemonObjectFromPokeApi(pokemonApiIndexCounter);
-    pokemons[pokemonApiObject.id] = pokemonApiObject;
+    cachePokemonBaseData(pokemonApiObject);
+    // pokemons[pokemonApiObject.id] = pokemonApiObject;
     await loadTypeImages(pokemonApiObject);
+    console.log(pokemonApiObject);
+    
   }
+  
   console.log(pokemons);
-
+  
 }
 
 async function loadTypeImages(pokemonApiObject) {
-  const types = pokemons[pokemonApiObject.id].types;
+  const types = pokemons[pokemonApiObject.id].base.types;
 
   for (let typeIndex = 0; typeIndex < types.length; typeIndex++) {
     const type = types[typeIndex].type;
@@ -37,7 +42,12 @@ async function loadTypeImages(pokemonApiObject) {
   }
 }
 
-async function loadMore() {
+async function loadPokemonSpecies(pokemonId) {
+  const species = await getSpeciesObjectFromApi(pokemonId);
+  pokemons[pokemonId]["extension"] = { species: species };
+}
+
+async function loadMorePokemon() {
   await loadPokemons();
   renderCards(pokemons);
 }
@@ -58,6 +68,3 @@ function disableBodyScrollability() {
   document.body.classList.remove("overFlowHidden");
 }
 
-function getPokemonFromCacheById(pokemonId) {
-  return pokemons[pokemonId];
-}

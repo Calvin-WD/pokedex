@@ -11,9 +11,9 @@ function renderCards(pokemons) {
   ) {
     const tag = 'button type="button"';
     const currentPokemon = pokemons[index];
-    const currentTypeValues = Object.values(currentPokemon.types);
+    const currentTypeValues = Object.values(currentPokemon.base.types);
     const footerHtmlString = getCardFooterHtmlString(currentTypeValues);
-    contentWrapperRef.innerHTML += getPokemonCardTemplate(tag, currentPokemon, currentTypeValues, footerHtmlString);
+    contentWrapperRef.innerHTML += getPokemonCardTemplate(currentPokemon, footerHtmlString);
   }
 }
 
@@ -36,9 +36,9 @@ function getCardFooterHtmlString(typeValues) {
 
 function renderDialog(dialogRef, pokemonId) {
   const currentPokemon = getPokemonFromCacheById(pokemonId);
-  const currentTypeValues = Object.values(currentPokemon.types);
+  const currentTypeValues = Object.values(currentPokemon.base.types);
   let dialogHeaderHtml = getDialogHeaderHtmlString(currentPokemon, currentTypeValues);
-  let dialogBodyHtml = getDialogBodyHtmlString();
+  let dialogBodyHtml = getDialogBodyHtmlString(currentPokemon);
   let dialogFooterHtml = getDialogFooterHtmlString();
   dialogRef.innerHTML = getDialogContentTemplate(currentTypeValues, dialogHeaderHtml, dialogBodyHtml, dialogFooterHtml);
 }
@@ -60,9 +60,27 @@ function getDialogTypeBadgeHtmlString(typeValues) {
 /** Get header html string END */
 
 /** Get body html string */
-function getDialogBodyHtmlString() {
-  return getDialogBodyTemplate();
+function getDialogBodyHtmlString(pokemon) {
+  const abilityNames = getAbilityNamesAsString(pokemon);
+  console.log(abilityNames);
+
+  return getDialogBodyTemplate(pokemon, abilityNames);
 }
+
+// function getAboutTabContentHtmlString(pokemon, abilityNames) {
+//   const aboutTabContentArray = [
+//     { Name: pokemon.name },
+//     { Height: pokemon.height },
+//     { Weight: pokemon.weight },
+//     { Abilities: abilityNames },
+//   ];
+//   let fullTabContentHtmlString = "";
+
+//   for (let index = 0; index < aboutTabContentArray.length; index++) {
+//     const element = aboutTabContentArray[index];
+//     fullTabContentHtmlString += getAboutTabContentTemplate(element)
+//   }
+// }
 /** Get body html string END */
 
 /** Get footer html string */

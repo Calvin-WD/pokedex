@@ -24,3 +24,7 @@ async function getTypeImageUrl(typeId) {
   let typeObject = await getTypeObjectFromPokeApi(typeId);
   return typeObject.sprites["generation-viii"]["legends-arceus"]["symbol_icon"];
 }
+
+async function getSpeciesObjectFromApi(id="") {
+  return await getData(POKEAPI_SPECIES + id);
+}
