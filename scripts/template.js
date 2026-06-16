@@ -2,15 +2,15 @@
  * Card Templates
  */
 
-function getPokemonCardTemplate(tag, pokemon, typesArray, footerHtmlString, extension = "") {
+function getPokemonCardTemplate(tag, pokemon, typesArray, footerHtml, extension = "") {
   return `<${tag} class="card text-bg-dark card-width h-100 p-0" data-pokemon-id="${pokemon.id}" onclick="openDialog(${pokemon.id})">
       <div class="card-header d-flex flex-row-reverse justify-content-between align-items-center">
         <h5 class="text-end">${pokemon.name.toUpperCase()}</h5> <h6>#${pokemon.id}</h6>
       </div>
-      <div class="card-body position-relative d-flex justify-content-center card-body-height bg-type-${typesArray[0].name} p-0">
-        <img src="${pokemon.image}" class="card-image w-75" data-id="card-image">
+      <div class="card-body position-relative d-flex justify-content-center card-body-height bg-type-${typesArray[0].type.name} p-0">
+        <img src="${pokemon.sprites.other.home.front_default}" class="card-image w-75" data-id="card-image">
       </div>
-      <div class="d-flex justify-content-center gap-5 p-1">${footerHtmlString}</div>
+      <div class="d-flex justify-content-center gap-5 p-1">${footerHtml}</div>
       ${extension}
     </${tag}>`;
 }
@@ -27,32 +27,34 @@ function getPokemonCardTypeImageTemplate(typeImgUrl) {
  * Dialog Templates
  */
 
-function getDialogContentTemplate(pokemon) {
+/** Content Template */
+function getDialogContentTemplate(typesArray, headerHtml, dialogBodyHtml, dialogFooterHtml) {
   return `<div class="modal-dialog">
-        <div class="modal-content bg-type-fire rounded-4">
-          ${getDialogHeaderTemplate(pokemon)}
-          ${getDialogBodyTemplate()}
-          ${getDialogFooterTemplate()}
+        <div class="modal-content bg-type-${typesArray[0].type.name} rounded-4">
+          ${headerHtml}
+          ${dialogBodyHtml}
+          ${dialogFooterHtml}
         </div>
       </div>`;
 }
+/** Content Template END */
 
-function getDialogHeaderTemplate(pokemon) {
+/** Header templates */
+function getDialogHeaderTemplate(pokemon, badgesHtml) {
   return `<div class="modal-header flex-column p-3 border-0">
       <button type="button" class="btn-close" onclick="closeDialog()"></button>
-      <div class="d-flex flex-row-reverse justify-content-end align-items-center w-100 gap-2">
+      <div class="d-flex flex-row-reverse justify-content-end w-100 gap-2">
         <h3 class="modal-title fs-5" id="cardExtensionLabel">
-          ${pokemon.name}
+          ${pokemon.name.toUpperCase()}
         </h3>
         <h4>#${pokemon.id}</h4>
       </div>
       <div class="d-flex justify-content-around">
         <div class="d-flex flex-column justify-content-center gap-3">
-          <span class="badge text-bg-dark">Fire</span>
-          <span class="badge text-bg-dark">Flying</span>
+          ${badgesHtml}
         </div>
         <img
-          src="${pokemon.image}"
+          src="${pokemon.sprites.other.home.front_default}"
           alt=""
           class="w-50"
         />
@@ -60,6 +62,12 @@ function getDialogHeaderTemplate(pokemon) {
     </div>`;
 }
 
+function getHeaderTypeBadgeTemplate(typeName) {
+  return `<span class="badge text-bg-dark">${typeName.toUpperCase()}</span>`;
+}
+/** Header templates END */
+
+/** Body templates */
 function getDialogBodyTemplate() {
   return `<div class="modal-body card-bg-white rounded-top-4 p-3">
       ${getDialogBodyNavTabsTemplate()}
@@ -192,17 +200,20 @@ function getDialogBodyNavContentTemplate() {
     </div>`
   );
 }
+/** Body templates END */
 
+/** Footer templates */
 function getDialogFooterTemplate() {
   return `<div class="modal-footer justify-content-between card-bg-white rounded-bottom-4 border-0">
-      <button type="button" class="btn">
-        Previous
-      </button>
-      <button type="button" class="btn">
-        Next
-      </button>
-    </div>`;
+  <button type="button" class="btn">
+  Previous
+  </button>
+  <button type="button" class="btn">
+  Next
+  </button>
+  </div>`;
 }
+/** Footer templates END */
 
 /** 
  * Dialog Templates END

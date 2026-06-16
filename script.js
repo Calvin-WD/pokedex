@@ -10,7 +10,6 @@ let pokemonApiIndexCounter = 0;
 async function init() {
   await loadPokemons();
   renderCards(pokemons);
-  
 }
 
 /**
@@ -21,7 +20,20 @@ async function loadPokemons() {
   for (let index = 0; index < POKEMON_LOADING_INTERVAL; index++) {
     pokemonApiIndexCounter++;
     const pokemonApiObject = await getPokemonObjectFromPokeApi(pokemonApiIndexCounter);
-    pokemons[pokemonApiIndexCounter] = await getPokemonStatsForSmallCard(pokemonApiObject);
+    pokemons[pokemonApiObject.id] = pokemonApiObject;
+    await loadTypeImages(pokemonApiObject);
+  }
+  console.log(pokemons);
+
+}
+
+async function loadTypeImages(pokemonApiObject) {
+  const types = pokemons[pokemonApiObject.id].types;
+
+  for (let typeIndex = 0; typeIndex < types.length; typeIndex++) {
+    const type = types[typeIndex].type;
+    let typeId = type.url.substr(POKEAPI_BASE_URL.length + POKEAPI_TYPE.length);
+    type["typeImage"] = await getTypeImageUrl(typeId);
   }
 }
 

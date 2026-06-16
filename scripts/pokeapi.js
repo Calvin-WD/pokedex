@@ -17,39 +17,6 @@ async function getTypeObjectFromPokeApi(id="") {
   return await getData(POKEAPI_TYPE + id);
 }
 
-/**
- * Extract the basic values from the pokemon Pokeapi Object and returns it as a json
- * Values: id, name, types, image
- */
-async function getPokemonStatsForSmallCard(pokemonApiObject) {
-  let id = pokemonApiObject.id;
-  let name = pokemonApiObject.name;
-  let currentTypes = await getTypes(pokemonApiObject);
-  let img = pokemonApiObject.sprites.other.home.front_default;
-  return {
-    id: id,
-    name: name,
-    types: currentTypes,
-    image: img,
-  };
-}
-
-/**
- * Iterates through the types and returns it as an Array
- * The Array could contain more than type
- * The single type is a json
- */
-async function getTypes(pokemonApiObject) {
-  let currentTypes = [];
-  for (let indexType = 0; indexType < pokemonApiObject.types.length; indexType++) {
-    let type = pokemonApiObject.types[indexType].type;
-    let typeId = type.url.substr(POKEAPI_BASE_URL.length + POKEAPI_TYPE.length);
-    type["typeImage"] = await getTypeImageUrl(typeId);
-    currentTypes[type.name] = type;
-  }
-  return currentTypes;
-}
-
 /** 
  * Returns the type images url based on the type id
  */
