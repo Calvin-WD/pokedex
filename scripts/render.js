@@ -62,25 +62,31 @@ function getDialogTypeBadgeHtmlString(typeValues) {
 /** Get body html string */
 function getDialogBodyHtmlString(pokemon) {
   const abilityNames = getAbilityNamesAsString(pokemon);
-  console.log(abilityNames);
+  const aboutTabContentHtml = getAboutTabContentHtmlString(pokemon, abilityNames);
+  const statTabContentHtml = getStatsTabContentHtmlString(pokemon);
 
-  return getDialogBodyTemplate(pokemon, abilityNames);
+  return getDialogBodyTemplate(aboutTabContentHtml, statTabContentHtml);
 }
 
-// function getAboutTabContentHtmlString(pokemon, abilityNames) {
-//   const aboutTabContentArray = [
-//     { Name: pokemon.name },
-//     { Height: pokemon.height },
-//     { Weight: pokemon.weight },
-//     { Abilities: abilityNames },
-//   ];
-//   let fullTabContentHtmlString = "";
+function getAboutTabContentHtmlString(pokemon, abilityNames) {
+  const aboutTabContentArray = getAboutTabContentAsArray(pokemon, abilityNames);
+  let fullTabContentHtmlString = "";
+  for (let index = 0; index < aboutTabContentArray.length; index++) {
+    const element = aboutTabContentArray[index];
+    fullTabContentHtmlString += getAboutTabContentTemplate(element);
+  }
+  return fullTabContentHtmlString;
+}
 
-//   for (let index = 0; index < aboutTabContentArray.length; index++) {
-//     const element = aboutTabContentArray[index];
-//     fullTabContentHtmlString += getAboutTabContentTemplate(element)
-//   }
-// }
+function getStatsTabContentHtmlString(pokemon) {
+  const statsTabContentArray = getStatsTabContentAsArray(pokemon.base.stats);
+  let fullTabContentHtmlString = "";
+  for (let index = 0; index < statsTabContentArray.length; index++) {
+    const element = statsTabContentArray[index];
+    fullTabContentHtmlString += getStatsTabContentTemplate(element);
+  }
+  return fullTabContentHtmlString;
+}
 /** Get body html string END */
 
 /** Get footer html string */

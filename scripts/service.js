@@ -11,6 +11,24 @@ function getAbilityNamesAsString(pokemon) {
   return abilityNames.join(", ");
 }
 
+function getAboutTabContentAsArray(pokemon, abilityNames) {
+  return [
+    { value: pokemon.base.name, title: "Name" },
+    { value: pokemon.base.height, title: "Height" },
+    { value: pokemon.base.weight, title: "Weight" },
+    { value: abilityNames, title: "Abilities" },
+  ];
+}
+
+function getStatsTabContentAsArray(pokemonStatsArray) {
+  let statsTabContentArray = [];
+  for (let statsIndex = 0; statsIndex < pokemonStatsArray.length; statsIndex++) {
+    const currentStat = pokemonStatsArray[statsIndex];
+    statsTabContentArray.push({"title":currentStat.stat.name, "value":currentStat.base_stat});
+  }
+  return statsTabContentArray;
+}
+
 function cachePokemonBaseData(pokemonApiObject) {
   pokemons[pokemonApiObject.id] = {
     base: {
@@ -20,7 +38,8 @@ function cachePokemonBaseData(pokemonApiObject) {
       weight: pokemonApiObject.weight,
       abilities: pokemonApiObject.abilities,
       types: pokemonApiObject.types,
-      sprites: pokemonApiObject.sprites
+      sprites: pokemonApiObject.sprites,
+      stats: pokemonApiObject.stats,
     },
   };
 }

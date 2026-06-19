@@ -67,10 +67,10 @@ function getHeaderTypeBadgeTemplate(typeName) {
 /** Header templates END */
 
 /** Body templates */
-function getDialogBodyTemplate(pokemon, abilityNames) {
+function getDialogBodyTemplate(aboutTabContentHtml, statTabContentHtml) {
   return `<div class="modal-body card-bg-white rounded-top-4 p-3">
       ${getDialogBodyNavTabsTemplate()}
-      ${getDialogBodyNavContentTemplate(pokemon, abilityNames)}
+      ${getDialogBodyNavContentTemplate(aboutTabContentHtml, statTabContentHtml)}
     </div>`;
 }
 
@@ -93,12 +93,12 @@ function getDialogBodyNavTabsTemplate() {
       <li class="nav-item" role="presentation">
         <button
           class="nav-link"
-          id="base-tab"
+          id="stat-tab"
           data-bs-toggle="tab"
-          data-bs-target="#base-tab-pane"
+          data-bs-target="#stat-tab-pane"
           type="button"
           role="tab"
-          aria-controls="base-tab-pane"
+          aria-controls="stat-tab-pane"
           aria-selected="false"
         >
           Base Stats
@@ -121,7 +121,7 @@ function getDialogBodyNavTabsTemplate() {
     </ul>`;
 }
 
-function getDialogBodyNavContentTemplate(pokemon, abilityNames) {
+function getDialogBodyNavContentTemplate(aboutTabContentHtml, statTabContentHtml) {
   return `<div class="tab-content" id="myTabContent">
       <div
         class="tab-pane fade show active"
@@ -130,54 +130,24 @@ function getDialogBodyNavContentTemplate(pokemon, abilityNames) {
         aria-labelledby="about-tab"
         tabindex="0"
       >
-        <dl class="row pt-2 mb-0">
-          <dt class="col-3">Name</dt>
-          <dd class="col-9">${pokemon.base.name}</dd>
-        </dl>
-        <dl class="row pt-2 mb-0">
-          <dt class="col-3">Height</dt>
-          <dd class="col-9">${pokemon.base.height}</dd>
-        </dl>
-        <dl class="row pt-2 mb-0">
-          <dt class="col-3">Weight</dt>
-          <dd class="col-9">${pokemon.base.weight}</dd>
-        </dl>
-        <dl class="row pt-2 mb-0">
-          <dt class="col-3">Abilities</dt>
-          <dd class="col-9">${abilityNames}</dd>
-        </dl>
+        ${aboutTabContentHtml}
       </div>
-      <div class="tab-pane fade" id="base-tab-pane" role="tabpanel" aria-labelledby="base-tab" tabindex="0">
-        <dl class="row pt-2 mb-0">
-          <dt class="col-3">HP</dt>
-          <dd class="col-9">Description Details</dd>
-        </dl>
-        <dl class="row pt-2 mb-0">
-          <dt class="col-3">Attack</dt>
-          <dd class="col-9">Description Details</dd>
-        </dl>
-        <dl class="row pt-2 mb-0">
-          <dt class="col-3">Defense</dt>
-          <dd class="col-9">Description Details</dd>
-        </dl>
-        <dl class="row pt-2 mb-0">
-          <dt class="col-3">Sp. Def</dt>
-          <dd class="col-9">Description Details</dd>
-        </dl>
-        <dl class="row pt-2 mb-0">
-          <dt class="col-3">Sp. Atk</dt>
-          <dd class="col-9">Description Details</dd>
-        </dl>
-        <dl class="row pt-2 mb-0">
-          <dt class="col-3">Speed</dt>
-          <dd class="col-9">Description Details</dd>
-        </dl>
-        <dl class="row pt-2 mb-0">
-          <dt class="col-3">Total</dt>
-          <dd class="col-9">Description Details</dd>
-        </dl>
+      <div
+        class="tab-pane fade"
+        id="stat-tab-pane"
+        role="tabpanel"
+        aria-labelledby="stat-tab"
+        tabindex="0"
+      >
+        ${statTabContentHtml}
       </div>
-      <div class="tab-pane fade" id="evolution-tab-pane" role="tabpanel" aria-labelledby="evolution-tab" tabindex="0">
+      <div
+        class="tab-pane fade"
+        id="evolution-tab-pane"
+        role="tabpanel"
+        aria-labelledby="evolution-tab"
+        tabindex="0"
+      >
         <dl class="row pt-2 mb-0">
           <dt class="col-3">Species</dt>
           <dd class="col-9">Description Details</dd>
@@ -193,19 +163,26 @@ function getDialogBodyNavContentTemplate(pokemon, abilityNames) {
         <dl class="row pt-2 mb-0">
           <dt class="col-3">Abilities</dt>
           <dd class="col-9">Description Details</dd>
-        </dl>
-      </div>
-    </div>`;
+      </dl>
+    </div>
+  </div>`;
 }
 
-// function getAboutTabContentTemplate(key, value) {
-//   return (
-//     `<dl class="row pt-2 mb-0">
-//       <dt class="col-3">${key}</dt>
-//       <dd class="col-9">${value}</dd>
-//     </dl>`
-//   );
-// }
+function getAboutTabContentTemplate(aboutObject) {
+  return `<dl class="row pt-2 mb-0">
+      <dt class="col-5">${aboutObject.title}</dt>
+      <dd class="col-7">${aboutObject.value}</dd>
+    </dl>`;
+}
+
+function getStatsTabContentTemplate(statsObject) {
+  return (
+    `<dl class="row pt-2 mb-0">
+      <dt class="col-5">${statsObject.title}</dt>
+      <dd class="col-7">${statsObject.value}</dd>
+    </dl>`
+  );
+}
 /** Body templates END */
 
 /** Footer templates */

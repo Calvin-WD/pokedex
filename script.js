@@ -20,9 +20,8 @@ async function init() {
 async function loadPokemons() {
   for (let index = 0; index < POKEMON_LOADING_INTERVAL; index++) {
     pokemonApiIndexCounter++;
-    const pokemonApiObject = await getPokemonObjectFromPokeApi(pokemonApiIndexCounter);
+    const pokemonApiObject = await getData(POKEAPI_POKEMON + pokemonApiIndexCounter);
     cachePokemonBaseData(pokemonApiObject);
-    // pokemons[pokemonApiObject.id] = pokemonApiObject;
     await loadTypeImages(pokemonApiObject);
     console.log(pokemonApiObject);
     
@@ -38,12 +37,13 @@ async function loadTypeImages(pokemonApiObject) {
   for (let typeIndex = 0; typeIndex < types.length; typeIndex++) {
     const type = types[typeIndex].type;
     let typeId = type.url.substr(POKEAPI_BASE_URL.length + POKEAPI_TYPE.length);
-    type["typeImage"] = await getTypeImageUrl(typeId);
+    const currentTypeObject = await getData(POKEAPI_TYPE + typeId);
+    type["typeImage"] = currentTypeObject.sprites["generation-viii"]["legends-arceus"]["symbol_icon"];
   }
 }
 
 async function loadPokemonSpecies(pokemonId) {
-  const species = await getSpeciesObjectFromApi(pokemonId);
+  const species = await getData(POKEAPI_SPECIES + pokemonId);
   pokemons[pokemonId]["extension"] = { species: species };
 }
 
