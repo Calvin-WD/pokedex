@@ -3,6 +3,7 @@ const POKEAPI_POKEMON = "pokemon/";
 const POKEAPI_TYPE = "type/";
 const POKEAPI_SPECIES = "pokemon-species/";
 const POKEAPI_EVOCHAIN = "evolution-chain/";
+const POKEAPI_IMG_URL = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/";
 const POKEMON_LOADING_INTERVAL = 40;
 
 let pokemons = {};
@@ -81,27 +82,26 @@ async function checkIfEvoChainIsLoaded(pokemon) {
 
 function buildEvoChainObject(pokemon) {
   const evoChain = evoChains[pokemon.evoChain.id];
-  addPokemonToEvoChainObject(getPokemonIdByUrl(evoChain.species.url), evoChain);
+  addPokemonToEvoChainObject(getPokemonIdByUrl(evoChain.species.url), evoChain, rank=1);
   if (!evoChain.evolves_to[0]) {
     return;
   } else {
-    addPokemonToEvoChainObject(getPokemonIdByUrl(evoChain.evolves_to[0].species.url), evoChain);
+    addPokemonToEvoChainObject(getPokemonIdByUrl(evoChain.evolves_to[0].species.url), evoChain, rank=2);
     if (!evoChain.evolves_to[0].evolves_to[0]) {
       return;
     } else {
-      addPokemonToEvoChainObject(getPokemonIdByUrl(evoChain.evolves_to[0].evolves_to[0].species.url), evoChain);
+      addPokemonToEvoChainObject(getPokemonIdByUrl(evoChain.evolves_to[0].evolves_to[0].species.url), evoChain, rank=3);
     }
   }
 }
 
-function addPokemonToEvoChainObject(pokemonId, evoChain) {
-  const pokemon = getPokemonFromCacheById(pokemonId);
+function addPokemonToEvoChainObject(pokemonId, evoChain, rank) {
   if (!evoChain["pokemons"]) {
     evoChain["pokemons"] = {};
   }
   evoChain.pokemons[pokemonId] = {
-    name: pokemon.base.name,
-    image: pokemon.base.sprites.other.home.front_default,
+    rank: rank,
+    image: `${POKEAPI_IMG_URL + pokemonId}.png`,
   };
 }
 
