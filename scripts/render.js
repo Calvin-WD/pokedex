@@ -34,13 +34,12 @@ function getCardFooterHtmlString(typeValues) {
  * Render Dialog
  */
 
-function renderDialog(dialogRef, pokemonId) {
-  const currentPokemon = getPokemonFromCacheById(pokemonId);
-  const currentTypeValues = Object.values(currentPokemon.base.types);
-  let dialogHeaderHtml = getDialogHeaderHtmlString(currentPokemon, currentTypeValues);
-  let dialogBodyHtml = getDialogBodyHtmlString(currentPokemon);
+function renderDialog(dialogRef, pokemon) {
+  const typeValues = Object.values(pokemon.base.types);
+  let dialogHeaderHtml = getDialogHeaderHtmlString(pokemon, typeValues);
+  let dialogBodyHtml = getDialogBodyHtmlString(pokemon);
   let dialogFooterHtml = getDialogFooterHtmlString();
-  dialogRef.innerHTML = getDialogContentTemplate(currentTypeValues, dialogHeaderHtml, dialogBodyHtml, dialogFooterHtml);
+  dialogRef.innerHTML = getDialogContentTemplate(typeValues, dialogHeaderHtml, dialogBodyHtml, dialogFooterHtml);
 }
 
 /** Get header html string */
@@ -86,6 +85,10 @@ function getStatsTabContentHtmlString(pokemon) {
     fullTabContentHtmlString += getStatsTabContentTemplate(element);
   }
   return fullTabContentHtmlString;
+}
+
+function getEvoChainTabContentHtmlString(pokemon) {
+
 }
 /** Get body html string END */
 

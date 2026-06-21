@@ -148,22 +148,7 @@ function getDialogBodyNavContentTemplate(aboutTabContentHtml, statTabContentHtml
         aria-labelledby="evolution-tab"
         tabindex="0"
       >
-        <dl class="row pt-2 mb-0">
-          <dt class="col-3">Species</dt>
-          <dd class="col-9">Description Details</dd>
-        </dl>
-        <dl class="row pt-2 mb-0">
-          <dt class="col-3">Height</dt>
-          <dd class="col-9">Description Details</dd>
-        </dl>
-        <dl class="row pt-2 mb-0">
-          <dt class="col-3">Weight</dt>
-          <dd class="col-9">Description Details</dd>
-        </dl>
-        <dl class="row pt-2 mb-0">
-          <dt class="col-3">Abilities</dt>
-          <dd class="col-9">Description Details</dd>
-      </dl>
+        <div></div>
     </div>
   </div>`;
 }
@@ -182,6 +167,10 @@ function getStatsTabContentTemplate(statsObject) {
       <dd class="col-7">${statsObject.value}</dd>
     </dl>`
   );
+}
+
+function getEvoChainTabContentTemplate() {
+
 }
 /** Body templates END */
 

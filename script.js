@@ -2,10 +2,11 @@ const POKEAPI_BASE_URL = "https://pokeapi.co/api/v2/";
 const POKEAPI_POKEMON = "pokemon/";
 const POKEAPI_TYPE = "type/";
 const POKEAPI_SPECIES = "pokemon-species/";
+const POKEAPI_EVOCHAIN = "evolution-chain/";
 const POKEMON_LOADING_INTERVAL = 40;
 
 let pokemons = {};
-let allTypeRefs = {};
+let evoChains = {};
 let pokemonApiIndexCounter = 0;
 
 async function init() {
@@ -23,12 +24,7 @@ async function loadPokemons() {
     const pokemonApiObject = await getData(POKEAPI_POKEMON + pokemonApiIndexCounter);
     cachePokemonBaseData(pokemonApiObject);
     await loadTypeImages(pokemonApiObject);
-    console.log(pokemonApiObject);
-    
   }
-  
-  console.log(pokemons);
-  
 }
 
 async function loadTypeImages(pokemonApiObject) {
@@ -36,15 +32,22 @@ async function loadTypeImages(pokemonApiObject) {
 
   for (let typeIndex = 0; typeIndex < types.length; typeIndex++) {
     const type = types[typeIndex].type;
-    let typeId = type.url.substr(POKEAPI_BASE_URL.length + POKEAPI_TYPE.length);
+    let typeId = type.url.substring(POKEAPI_BASE_URL.length + POKEAPI_TYPE.length);
     const currentTypeObject = await getData(POKEAPI_TYPE + typeId);
     type["typeImage"] = currentTypeObject.sprites["generation-viii"]["legends-arceus"]["symbol_icon"];
   }
 }
 
-async function loadPokemonSpecies(pokemonId) {
-  const species = await getData(POKEAPI_SPECIES + pokemonId);
-  pokemons[pokemonId]["extension"] = { species: species };
+async function loadPokemonSpecies(pokemon) {
+  const species = await getData(POKEAPI_SPECIES + pokemon.base.id);
+  const evoChainUrl = species.evolution_chain.url;
+  const evoChainId = evoChainUrl.substring(POKEAPI_BASE_URL.length + POKEAPI_EVOCHAIN.length, evoChainUrl.length - 1);
+  pokemon["evoChain"] = { id: evoChainId, url: evoChainUrl };
+}
+
+async function loadPokemonEvoChain(evoChainId, evoChainUrl) {
+  const evoChain = await getData(evoChainUrl.substring(POKEAPI_BASE_URL.length));
+  evoChains[`${evoChainId}`] = evoChain.chain;
 }
 
 async function loadMorePokemon() {
@@ -52,9 +55,11 @@ async function loadMorePokemon() {
   renderCards(pokemons);
 }
 
-function openDialog(pokemonId) {
+async function openDialog(pokemonId) {
+  const pokemon = getPokemonFromCacheById(pokemonId);
+  await checkIfEvoChainIsLoaded(pokemon);
   let dialogRef = document.getElementById("dialog");
-  renderDialog(dialogRef, pokemonId);
+  renderDialog(dialogRef, pokemon);
   dialogRef.showModal();
   document.body.classList.add("overFlowHidden");
 }
@@ -64,7 +69,46 @@ function closeDialog() {
   dialogRef.close();
 }
 
+async function checkIfEvoChainIsLoaded(pokemon) {
+  if (!pokemon["evoChain"]) {
+    await loadPokemonSpecies(pokemon);
+  }
+  if (!evoChains[`${pokemon.evoChain.id}`]) {
+    await loadPokemonEvoChain(pokemon.evoChain.id, pokemon.evoChain.url);
+    buildEvoChainObject(pokemon);
+  }
+}
+
+function buildEvoChainObject(pokemon) {
+  const evoChain = evoChains[pokemon.evoChain.id];
+  addPokemonToEvoChainObject(getPokemonIdByUrl(evoChain.species.url), evoChain);
+  if (!evoChain.evolves_to[0]) {
+    return;
+  } else {
+    addPokemonToEvoChainObject(getPokemonIdByUrl(evoChain.evolves_to[0].species.url), evoChain);
+    if (!evoChain.evolves_to[0].evolves_to[0]) {
+      return;
+    } else {
+      addPokemonToEvoChainObject(getPokemonIdByUrl(evoChain.evolves_to[0].evolves_to[0].species.url), evoChain);
+    }
+  }
+}
+
+function addPokemonToEvoChainObject(pokemonId, evoChain) {
+  const pokemon = getPokemonFromCacheById(pokemonId);
+  if (!evoChain["pokemons"]) {
+    evoChain["pokemons"] = {};
+  }
+  evoChain.pokemons[pokemonId] = {
+    name: pokemon.base.name,
+    image: pokemon.base.sprites.other.home.front_default,
+  };
+}
+
+function getPokemonIdByUrl(url) {
+  return `${url}`.substring(POKEAPI_BASE_URL.length + POKEAPI_SPECIES.length, `${url}`.length - 1);
+}
+
 function disableBodyScrollability() {
   document.body.classList.remove("overFlowHidden");
 }
-
