@@ -48,7 +48,7 @@ function getDialogHeaderTemplate(pokemon, badgesHtml) {
         </h3>
         <h4>#${pokemon.base.id}</h4>
       </div>
-      <div class="d-flex flex-sm-row flex-column-reverse justify-content-center align-items-center gap-4 gap-sm-0">
+      <div class="d-flex flex-sm-row flex-column-reverse justify-content-center align-items-center gap-4">
         <div class="d-flex flex-row flex-sm-column justify-content-center gap-3">
           ${badgesHtml}
         </div>

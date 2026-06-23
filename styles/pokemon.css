@@ -36,6 +36,7 @@
 }
 
 .evoChain-image {
-  width: 20%;
+  width: 140px;
+  max-width: 20%;
 }
 /* Dialog END */
