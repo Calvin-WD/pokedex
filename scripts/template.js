@@ -3,7 +3,7 @@
  */
 
 function getPokemonCardTemplate(pokemon, footerHtml) {
-  return `<button type="button" class="card text-bg-dark card-width h-100 p-0" data-pokemon-id="${pokemon.base.id}" onclick="openDialog(${pokemon.base.id})">
+  return `<button type="button" class="card bg-body-tertiary card-width h-100 p-0" data-pokemon-id="${pokemon.base.id}" onclick="openDialog(${pokemon.base.id})">
       <div class="card-header d-flex flex-row-reverse justify-content-between align-items-center">
         <h5 class="text-end">${pokemon.base.name.toUpperCase()}</h5> <h6>#${pokemon.base.id}</h6>
       </div>
@@ -41,41 +41,41 @@ function getDialogContentTemplate(typesArray, headerHtml, dialogBodyHtml, dialog
 /** Header templates */
 function getDialogHeaderTemplate(pokemon, badgesHtml) {
   return `<div class="modal-header flex-column p-3 border-0">
-      <button type="button" class="btn-close" onclick="closeDialog()"></button>
-      <div class="d-flex flex-row-reverse justify-content-end w-100 gap-2">
+      <button type="button" class="btn-close" data-bs-theme="dark" onclick="closeDialog()"></button>
+      <div class="d-flex flex-row-reverse align-items-center justify-content-end w-100 gap-2">
         <h3 class="modal-title fs-5" id="cardExtensionLabel">
           ${pokemon.base.name.toUpperCase()}
         </h3>
         <h4>#${pokemon.base.id}</h4>
       </div>
-      <div class="d-flex justify-content-around">
-        <div class="d-flex flex-column justify-content-center gap-3">
+      <div class="d-flex flex-sm-row flex-column-reverse justify-content-center align-items-center gap-4 gap-sm-0">
+        <div class="d-flex flex-row flex-sm-column justify-content-center gap-3">
           ${badgesHtml}
         </div>
         <img
           src="${pokemon.base.sprites.other.home.front_default}"
           alt=""
-          class="w-50"
+          class="w-50 dialog-image-mw"
         />
       </div>
     </div>`;
 }
 
 function getHeaderTypeBadgeTemplate(typeName) {
-  return `<span class="badge text-bg-dark">${typeName.toUpperCase()}</span>`;
+  return `<span class="badge bg-body-secondary">${typeName}</span>`;
 }
 /** Header templates END */
 
 /** Body templates */
-function getDialogBodyTemplate(aboutTabContentHtml, statTabContentHtml) {
-  return `<div class="modal-body card-bg-white rounded-top-4 p-3">
+function getDialogBodyTemplate(aboutTabContentHtml, statTabContentHtml, evoChainTabContentHtml) {
+  return `<div class="modal-body bg-body-secondary text-body rounded-top-4 p-3">
       ${getDialogBodyNavTabsTemplate()}
-      ${getDialogBodyNavContentTemplate(aboutTabContentHtml, statTabContentHtml)}
+      ${getDialogBodyNavContentTemplate(aboutTabContentHtml, statTabContentHtml, evoChainTabContentHtml)}
     </div>`;
 }
 
 function getDialogBodyNavTabsTemplate() {
-  return `<ul class="nav nav-tabs justify-content-around" id="myTab" role="tablist">
+  return `<ul class="nav nav-underline justify-content-around" id="myTab" role="tablist">
       <li class="nav-item" role="presentation">
         <button
           class="nav-link active"
@@ -101,7 +101,7 @@ function getDialogBodyNavTabsTemplate() {
           aria-controls="stat-tab-pane"
           aria-selected="false"
         >
-          Base Stats
+          Stats
         </button>
       </li>
       <li class="nav-item" role="presentation">
@@ -121,7 +121,7 @@ function getDialogBodyNavTabsTemplate() {
     </ul>`;
 }
 
-function getDialogBodyNavContentTemplate(aboutTabContentHtml, statTabContentHtml) {
+function getDialogBodyNavContentTemplate(aboutTabContentHtml, statTabContentHtml, evoChainTabContentHtml) {
   return `<div class="tab-content" id="myTabContent">
       <div
         class="tab-pane fade show active"
@@ -148,7 +148,9 @@ function getDialogBodyNavContentTemplate(aboutTabContentHtml, statTabContentHtml
         aria-labelledby="evolution-tab"
         tabindex="0"
       >
-        <div></div>
+        <div class="d-flex justify-content-center align-items-center gap-2 py-2">
+          ${evoChainTabContentHtml}
+        </div>
     </div>
   </div>`;
 }
@@ -161,22 +163,24 @@ function getAboutTabContentTemplate(aboutObject) {
 }
 
 function getStatsTabContentTemplate(statsObject) {
-  return (
-    `<dl class="row pt-2 mb-0">
+  return `<dl class="row pt-2 mb-0">
       <dt class="col-5">${statsObject.title}</dt>
       <dd class="col-7">${statsObject.value}</dd>
-    </dl>`
-  );
+    </dl>`;
 }
 
-function getEvoChainTabContentTemplate() {
+function getEvoChainTabContentTemplate(evoChainImage) {
+  return `<img src="${evoChainImage}" class="evoChain-image">`;
+}
 
+function getEvoChainArrowTemplate() {
+  return `<i class="bi bi-arrow-right"></i>`;
 }
 /** Body templates END */
 
 /** Footer templates */
 function getDialogFooterTemplate() {
-  return `<div class="modal-footer justify-content-between card-bg-white rounded-bottom-4 border-0">
+  return `<div class="modal-footer justify-content-between bg-body-secondary text-body rounded-bottom-4 border-0">
   <button type="button" class="btn">
   Previous
   </button>

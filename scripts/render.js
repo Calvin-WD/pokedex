@@ -63,8 +63,9 @@ function getDialogBodyHtmlString(pokemon) {
   const abilityNames = getAbilityNamesAsString(pokemon);
   const aboutTabContentHtml = getAboutTabContentHtmlString(pokemon, abilityNames);
   const statTabContentHtml = getStatsTabContentHtmlString(pokemon);
+  const evoChainTabContentHtml = getEvoChainTabContentHtmlString(pokemon);
 
-  return getDialogBodyTemplate(aboutTabContentHtml, statTabContentHtml);
+  return getDialogBodyTemplate(aboutTabContentHtml, statTabContentHtml, evoChainTabContentHtml);
 }
 
 function getAboutTabContentHtmlString(pokemon, abilityNames) {
@@ -88,7 +89,17 @@ function getStatsTabContentHtmlString(pokemon) {
 }
 
 function getEvoChainTabContentHtmlString(pokemon) {
-
+  const evoChain = evoChains[pokemon.evoChain.id];
+  const evoChainPokemons = evoChain.pokemons;
+  let fullTapContentHtmlString = "";
+  for (let index = 1; index <= Object.keys(evoChainPokemons).length; index++) {
+    const element = evoChainPokemons[index];
+    if (index <= 3 && index > 1) {
+      fullTapContentHtmlString += getEvoChainArrowTemplate();
+    }
+    fullTapContentHtmlString += getEvoChainTabContentTemplate(element.image);
+  }
+  return fullTapContentHtmlString;
 }
 /** Get body html string END */
 

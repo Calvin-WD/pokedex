@@ -82,15 +82,15 @@ async function checkIfEvoChainIsLoaded(pokemon) {
 
 function buildEvoChainObject(pokemon) {
   const evoChain = evoChains[pokemon.evoChain.id];
-  addPokemonToEvoChainObject(getPokemonIdByUrl(evoChain.species.url), evoChain, rank=1);
+  addPokemonToEvoChainObject(getPokemonIdBySpeciesUrl(evoChain.species.url), evoChain, rank=1);
   if (!evoChain.evolves_to[0]) {
     return;
   } else {
-    addPokemonToEvoChainObject(getPokemonIdByUrl(evoChain.evolves_to[0].species.url), evoChain, rank=2);
+    addPokemonToEvoChainObject(getPokemonIdBySpeciesUrl(evoChain.evolves_to[0].species.url), evoChain, rank=2);
     if (!evoChain.evolves_to[0].evolves_to[0]) {
       return;
     } else {
-      addPokemonToEvoChainObject(getPokemonIdByUrl(evoChain.evolves_to[0].evolves_to[0].species.url), evoChain, rank=3);
+      addPokemonToEvoChainObject(getPokemonIdBySpeciesUrl(evoChain.evolves_to[0].evolves_to[0].species.url), evoChain, rank=3);
     }
   }
 }
@@ -99,13 +99,12 @@ function addPokemonToEvoChainObject(pokemonId, evoChain, rank) {
   if (!evoChain["pokemons"]) {
     evoChain["pokemons"] = {};
   }
-  evoChain.pokemons[pokemonId] = {
-    rank: rank,
+  evoChain.pokemons[rank] = {
     image: `${POKEAPI_IMG_URL + pokemonId}.png`,
   };
 }
 
-function getPokemonIdByUrl(url) {
+function getPokemonIdBySpeciesUrl(url) {
   return `${url}`.substring(POKEAPI_BASE_URL.length + POKEAPI_SPECIES.length, `${url}`.length - 1);
 }
 

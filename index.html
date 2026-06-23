@@ -7,12 +7,13 @@
 
     <!-- Bootstrap CSS import -->
     <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="./node_modules/bootstrap-icons/font/bootstrap-icons.css" />
     <!-- Custom CSS import -->
     <link rel="stylesheet" href="./style.css" />
   </head>
-  <body class="d-flex flex-column min-vh-100" onload="init()">
+  <body class="d-flex flex-column min-vh-100" data-bs-theme="dark" onload="init()">
     <header>
-      <nav class="navbar navbar-expand-sm bg-dark" data-bs-theme="dark">
+      <nav class="navbar navbar-expand-sm bg-body-tertiary">
         <div class="container-xxl">
           <a class="navbar-brand">Pokedéx</a>
           <button
@@ -42,7 +43,7 @@
         </div>
       </nav>
     </header>
-    <main class="bg-black flex-grow-1">
+    <main class="bg-body flex-grow-1">
       <section class="container d-flex flex-column align-items-center p-4 gap-4" data-id="content">
         <div id="content-wrapper" class="d-flex justify-content-center align-items-center flex-wrap gap-3"></div>
         <button
@@ -55,11 +56,11 @@
           Load more
         </button>
       </section>
-      <aside id="dialog-wrapper">
+      <aside id="dialog-wrapper" class="container-sm">
         <dialog id="dialog" class="border-0 bg-transparent" closedby="any" onclose="disableBodyScrollability()"></dialog>
       </aside>
     </main>
-    <footer class="text-bg-dark">
+    <footer class="bg-body-tertiary">
       <div class="container-xxl d-flex justify-content-center text-center">
         <div class="row">
           <div class="col-12 col-sm-4">Copyright 2026</div>
