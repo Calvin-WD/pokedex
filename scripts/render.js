@@ -4,17 +4,27 @@
 
 function renderCards(pokemons) {
   const contentWrapperRef = document.getElementById("content-wrapper");
-  for (
-    let index = pokemonApiIndexCounter - POKEMON_LOADING_INTERVAL + 1;
-    index <= Object.keys(pokemons).length;
-    index++
-  ) {
-    const tag = 'button type="button"';
-    const currentPokemon = pokemons[index];
-    const currentTypeValues = Object.values(currentPokemon.base.types);
-    const footerHtmlString = getCardFooterHtmlString(currentTypeValues);
-    contentWrapperRef.innerHTML += getPokemonCardTemplate(currentPokemon, footerHtmlString);
+  const pokemonsEntries = Object.entries(pokemons);
+  for (let index = pokemonApiIndexCounter - POKEMON_LOADING_INTERVAL; index < pokemonsEntries.length; index++) {
+    const currentPokemon = pokemonsEntries[index][1];
+    renderSingleCard(contentWrapperRef, currentPokemon);
   }
+}
+
+function renderFilteredCards(searchValue) {
+  const contentWrapperRef = document.getElementById("content-wrapper");
+  contentWrapperRef.innerHTML = "";
+  currentPokemons = filterPokemonsInArray(searchValue);
+  for (let index = 0; index < currentPokemons.length; index++) {
+    const currentPokemon = currentPokemons[index][1];
+    renderSingleCard(contentWrapperRef, currentPokemon);
+  }
+}
+
+function renderSingleCard(contentWrapperRef, pokemon) {
+  const currentTypeValues = Object.values(pokemon.base.types);
+  const footerHtmlString = getCardFooterHtmlString(currentTypeValues);
+  contentWrapperRef.innerHTML += getPokemonCardTemplate(pokemon, footerHtmlString);
 }
 
 function getCardFooterHtmlString(typeValues) {

@@ -7,12 +7,14 @@ const POKEAPI_IMG_URL = "https://raw.githubusercontent.com/PokeAPI/sprites/maste
 const POKEMON_LOADING_INTERVAL = 40;
 
 let pokemons = {};
+let currentPokemons = {};
 let evoChains = {};
 let pokemonApiIndexCounter = 0;
 
 async function init() {
   await loadPokemons();
-  renderCards(pokemons);
+  currentPokemons = pokemons;
+  renderCards(currentPokemons);
 }
 
 /**
@@ -53,7 +55,8 @@ async function loadPokemonEvoChain(evoChainId, evoChainUrl) {
 
 async function loadMorePokemon() {
   await loadPokemons();
-  renderCards(pokemons);
+  currentPokemons = pokemons;
+  renderCards(currentPokemons);
 }
 
 function showNextPokemonInDialog(pokemonId) {
@@ -131,6 +134,13 @@ function addPokemonToEvoChainObject(pokemonId, evoChain, rank) {
 
 function getPokemonIdBySpeciesUrl(url) {
   return `${url}`.substring(POKEAPI_BASE_URL.length + POKEAPI_SPECIES.length, `${url}`.length - 1);
+}
+
+function filterPokemonsInArray(searchValue) {
+  currentPokemons = pokemons;
+  let pokemonsArray = Object.entries(currentPokemons);
+  pokemonsArray = pokemonsArray.filter((element) => element[1].base.name.includes(searchValue));
+  return pokemonsArray;
 }
 
 function disableBodyScrollability() {

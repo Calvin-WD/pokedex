@@ -3,11 +3,16 @@
  */
 
 function getPokemonCardTemplate(pokemon, footerHtml) {
-  return `<button type="button" class="card bg-body-tertiary card-width h-100 p-0" data-pokemon-id="${pokemon.base.id}" onclick="openDialog(${pokemon.base.id})">
+  return `<button 
+    type="button"
+    class="card bg-body-tertiary card-width h-100 p-0"
+    data-pokemon-id="${pokemon.base.id}"
+    onclick="openDialog(${pokemon.base.id})">
       <div class="card-header d-flex flex-row-reverse justify-content-between align-items-center">
         <h5 class="text-end">${pokemon.base.name.toUpperCase()}</h5> <h6>#${pokemon.base.id}</h6>
       </div>
-      <div class="card-body position-relative d-flex justify-content-center card-body-height bg-type-${pokemon.base.types[0].type.name} p-0">
+      <div
+      class="card-body position-relative d-flex justify-content-center card-body-height bg-type-${pokemon.base.types[0].type.name} p-0">
         <img src="${pokemon.base.sprites.other.home.front_default}" class="card-image w-75" data-id="card-image">
       </div>
       <div class="d-flex justify-content-center gap-5 p-1">${footerHtml}</div>
