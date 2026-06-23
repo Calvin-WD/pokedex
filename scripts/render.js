@@ -34,11 +34,13 @@ function getCardFooterHtmlString(typeValues) {
  * Render Dialog
  */
 
-function renderDialog(dialogRef, pokemon) {
+async function renderDialog(dialogRef, pokemonId) {
+  const pokemon = getPokemonFromCacheById(pokemonId);
   const typeValues = Object.values(pokemon.base.types);
+  await checkIfEvoChainIsLoaded(pokemon);
   let dialogHeaderHtml = getDialogHeaderHtmlString(pokemon, typeValues);
   let dialogBodyHtml = getDialogBodyHtmlString(pokemon);
-  let dialogFooterHtml = getDialogFooterHtmlString();
+  let dialogFooterHtml = getDialogFooterHtmlString(pokemon);
   dialogRef.innerHTML = getDialogContentTemplate(typeValues, dialogHeaderHtml, dialogBodyHtml, dialogFooterHtml);
 }
 

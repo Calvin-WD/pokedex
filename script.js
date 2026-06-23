@@ -56,11 +56,32 @@ async function loadMorePokemon() {
   renderCards(pokemons);
 }
 
+function showNextPokemonInDialog(pokemonId) {
+  const dialogRef = document.getElementById("dialog");
+  const currentPokemonId = pokemonId + 1;
+  if (currentPokemonId <= Object.keys(pokemons).length) {
+    dialogRef.dataset.pokemonId = currentPokemonId;
+    renderDialog(dialogRef, currentPokemonId);
+  } else {
+    console.error("Keine weiteren Pokemon geladen");
+  }
+}
+
+function showPreviousPokemonInDialog(pokemonId) {
+  const dialogRef = document.getElementById("dialog");
+  const currentPokemonId = pokemonId - 1;
+  if (currentPokemonId > 0) {
+    dialogRef.dataset.pokemonId = currentPokemonId;
+    renderDialog(dialogRef, currentPokemonId);
+  } else {
+    console.error("Keine vorherigen Pokemon vorhanden");
+  }
+}
+
 async function openDialog(pokemonId) {
-  const pokemon = getPokemonFromCacheById(pokemonId);
-  await checkIfEvoChainIsLoaded(pokemon);
   let dialogRef = document.getElementById("dialog");
-  renderDialog(dialogRef, pokemon);
+  dialogRef.dataset.pokemonId = pokemonId;
+  await renderDialog(dialogRef, pokemonId);
   dialogRef.showModal();
   document.body.classList.add("overFlowHidden");
 }
@@ -82,15 +103,19 @@ async function checkIfEvoChainIsLoaded(pokemon) {
 
 function buildEvoChainObject(pokemon) {
   const evoChain = evoChains[pokemon.evoChain.id];
-  addPokemonToEvoChainObject(getPokemonIdBySpeciesUrl(evoChain.species.url), evoChain, rank=1);
+  addPokemonToEvoChainObject(getPokemonIdBySpeciesUrl(evoChain.species.url), evoChain, (rank = 1));
   if (!evoChain.evolves_to[0]) {
     return;
   } else {
-    addPokemonToEvoChainObject(getPokemonIdBySpeciesUrl(evoChain.evolves_to[0].species.url), evoChain, rank=2);
+    addPokemonToEvoChainObject(getPokemonIdBySpeciesUrl(evoChain.evolves_to[0].species.url), evoChain, (rank = 2));
     if (!evoChain.evolves_to[0].evolves_to[0]) {
       return;
     } else {
-      addPokemonToEvoChainObject(getPokemonIdBySpeciesUrl(evoChain.evolves_to[0].evolves_to[0].species.url), evoChain, rank=3);
+      addPokemonToEvoChainObject(
+        getPokemonIdBySpeciesUrl(evoChain.evolves_to[0].evolves_to[0].species.url),
+        evoChain,
+        (rank = 3),
+      );
     }
   }
 }

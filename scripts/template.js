@@ -181,11 +181,19 @@ function getEvoChainArrowTemplate() {
 /** Footer templates */
 function getDialogFooterTemplate() {
   return `<div class="modal-footer justify-content-between bg-body-secondary text-body rounded-bottom-4 border-0">
-  <button type="button" class="btn">
-  Previous
+  <button
+  type="button"
+  class="btn"
+  data-id="prev-button"
+  onclick="showPreviousPokemonInDialog(Number(this.closest('dialog').dataset.pokemonId))">
+    Previous
   </button>
-  <button type="button" class="btn">
-  Next
+  <button
+  type="button"
+  class="btn"
+  data-id="next-button"
+  onclick="showNextPokemonInDialog(Number(this.closest('dialog').dataset.pokemonId))">
+    Next
   </button>
   </div>`;
 }
