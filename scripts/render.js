@@ -49,7 +49,7 @@ async function renderDialog(dialogRef, pokemonId) {
   const typeValues = Object.values(pokemon.base.types);
   await checkIfEvoChainIsLoaded(pokemon);
   let dialogHeaderHtml = getDialogHeaderHtmlString(pokemon, typeValues);
-  let dialogBodyHtml = getDialogBodyHtmlString(pokemon);
+  let dialogBodyHtml = getDialogBodyHtmlString(pokemon, typeValues);
   let dialogFooterHtml = getDialogFooterHtmlString(pokemon);
   dialogRef.innerHTML = getDialogContentTemplate(typeValues, dialogHeaderHtml, dialogBodyHtml, dialogFooterHtml);
 }
@@ -64,17 +64,17 @@ function getDialogTypeBadgeHtmlString(typeValues) {
   let badgesHtmlString = "";
   for (let indexType = 0; indexType < typeValues.length; indexType++) {
     const type = typeValues[indexType].type;
-    badgesHtmlString += getHeaderTypeBadgeTemplate(type.name);
+    badgesHtmlString += getHeaderTypeBadgeTemplate(capitalize(type.name));
   }
   return badgesHtmlString;
 }
 /** Get header html string END */
 
 /** Get body html string */
-function getDialogBodyHtmlString(pokemon) {
+function getDialogBodyHtmlString(pokemon, typeValues) {
   const abilityNames = getAbilityNamesAsString(pokemon);
   const aboutTabContentHtml = getAboutTabContentHtmlString(pokemon, abilityNames);
-  const statTabContentHtml = getStatsTabContentHtmlString(pokemon);
+  const statTabContentHtml = getStatsTabContentHtmlString(pokemon, typeValues);
   const evoChainTabContentHtml = getEvoChainTabContentHtmlString(pokemon);
 
   return getDialogBodyTemplate(aboutTabContentHtml, statTabContentHtml, evoChainTabContentHtml);
@@ -85,17 +85,20 @@ function getAboutTabContentHtmlString(pokemon, abilityNames) {
   let fullTabContentHtmlString = "";
   for (let index = 0; index < aboutTabContentArray.length; index++) {
     const element = aboutTabContentArray[index];
+    element.value = capitalize(element.value);
     fullTabContentHtmlString += getAboutTabContentTemplate(element);
   }
   return fullTabContentHtmlString;
 }
 
-function getStatsTabContentHtmlString(pokemon) {
+function getStatsTabContentHtmlString(pokemon, typeValues) {
   const statsTabContentArray = getStatsTabContentAsArray(pokemon.base.stats);
+  const typeName = typeValues[0].type.name;
   let fullTabContentHtmlString = "";
   for (let index = 0; index < statsTabContentArray.length; index++) {
     const element = statsTabContentArray[index];
-    fullTabContentHtmlString += getStatsTabContentTemplate(element);
+    element.title = capitalize(element.title);
+    fullTabContentHtmlString += getStatsTabContentTemplate(element, typeName);
   }
   return fullTabContentHtmlString;
 }

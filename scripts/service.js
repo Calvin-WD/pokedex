@@ -6,7 +6,7 @@ function getAbilityNamesAsString(pokemon) {
   let abilityNames = [];
   for (let abilityIndex = 0; abilityIndex < pokemon.base.abilities.length; abilityIndex++) {
     const abilityName = pokemon.base.abilities[abilityIndex].ability.name;
-    abilityNames.push(abilityName);
+    abilityNames.push(capitalize(abilityName));
   }
   return abilityNames.join(", ");
 }
@@ -24,7 +24,7 @@ function getStatsTabContentAsArray(pokemonStatsArray) {
   let statsTabContentArray = [];
   for (let statsIndex = 0; statsIndex < pokemonStatsArray.length; statsIndex++) {
     const currentStat = pokemonStatsArray[statsIndex];
-    statsTabContentArray.push({"title":currentStat.stat.name, "value":currentStat.base_stat});
+    statsTabContentArray.push({ title: currentStat.stat.name, value: currentStat.base_stat });
   }
   return statsTabContentArray;
 }
@@ -42,4 +42,10 @@ function cachePokemonBaseData(pokemonApiObject) {
       stats: pokemonApiObject.stats,
     },
   };
+}
+
+function capitalize(string) {
+  if (typeof string === "string") {
+    return string.replace(string.charAt(0), string.charAt(0).toUpperCase());
+  } else return string;
 }

@@ -2,7 +2,8 @@ body {
   font-family: "Baloo 2";
 }
 
-h3, h4 {
+h3,
+h4 {
   margin: 0;
 }
 h5,
@@ -24,13 +25,40 @@ ul {
 }
 
 .nav button {
-  color: #FFF;
+  color: #fff;
 }
 
 .nav-link {
   padding: 0;
 }
 
+.nav-link:hover {
+  color: white;
+}
+
+/* .tab-content {
+  scrollbar-width: thin;
+  scrollbar-color: var(--bs-secondary-color) transparent;
+} */
+
+.tab-content::-webkit-scrollbar {
+  width: 16px;
+}
+
+.tab-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.tab-content::-webkit-scrollbar-thumb {
+  background-color: var(--bs-secondary-color);
+  border: 6px solid transparent;
+  background-clip: content-box;
+  border-radius: 50px;
+}
+
+.tab-content-maxHeight {
+  max-height: 200px;
+}
 
 .overFlowHidden {
   overflow: hidden;

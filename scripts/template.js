@@ -34,7 +34,7 @@ function getPokemonCardTypeImageTemplate(typeImgUrl) {
 /** Content Template */
 function getDialogContentTemplate(typesArray, headerHtml, dialogBodyHtml, dialogFooterHtml) {
   return `<div class="modal-dialog">
-        <div class="modal-content bg-type-${typesArray[0].type.name} rounded-4">
+        <div class="modal-content bg-type-${typesArray[0].type.name} rounded-3">
           ${headerHtml}
           ${dialogBodyHtml}
           ${dialogFooterHtml}
@@ -73,14 +73,14 @@ function getHeaderTypeBadgeTemplate(typeName) {
 
 /** Body templates */
 function getDialogBodyTemplate(aboutTabContentHtml, statTabContentHtml, evoChainTabContentHtml) {
-  return `<div class="modal-body bg-body-secondary text-body rounded-top-4 p-3">
+  return `<div class="modal-body bg-body-secondary text-body rounded-top-3 px-3 py-2">
       ${getDialogBodyNavTabsTemplate()}
       ${getDialogBodyNavContentTemplate(aboutTabContentHtml, statTabContentHtml, evoChainTabContentHtml)}
     </div>`;
 }
 
 function getDialogBodyNavTabsTemplate() {
-  return `<ul class="nav nav-underline justify-content-around" id="myTab" role="tablist">
+  return `<ul class="nav nav-underline justify-content-around mb-3" id="myTab" role="tablist">
       <li class="nav-item" role="presentation">
         <button
           class="nav-link active"
@@ -127,7 +127,7 @@ function getDialogBodyNavTabsTemplate() {
 }
 
 function getDialogBodyNavContentTemplate(aboutTabContentHtml, statTabContentHtml, evoChainTabContentHtml) {
-  return `<div class="tab-content" id="myTabContent">
+  return `<div class="tab-content tab-content-maxHeight overflow-y-auto overflow-x-hidden" id="myTabContent">
       <div
         class="tab-pane fade show active"
         id="about-tab-pane"
@@ -161,16 +161,20 @@ function getDialogBodyNavContentTemplate(aboutTabContentHtml, statTabContentHtml
 }
 
 function getAboutTabContentTemplate(aboutObject) {
-  return `<dl class="row pt-2 mb-0">
-      <dt class="col-5">${aboutObject.title}</dt>
-      <dd class="col-7">${aboutObject.value}</dd>
+  return `<dl class="row flex-column flex-sm-row align-items-start align-items-sm-center pt-2 mb-0">
+      <dt class="col-12 col-sm-4">${aboutObject.title}:</dt>
+      <dd class="col-12 col-sm-8 mb-0">${aboutObject.value}</dd>
     </dl>`;
 }
 
-function getStatsTabContentTemplate(statsObject) {
-  return `<dl class="row pt-2 mb-0">
-      <dt class="col-5">${statsObject.title}</dt>
-      <dd class="col-7">${statsObject.value}</dd>
+function getStatsTabContentTemplate(statsObject, typeName) {
+  return `<dl class="row flex-column flex-sm-row align-items-start align-items-sm-center pt-2 mb-0">
+      <dt class="col-12 col-sm-4">${statsObject.title}:</dt>
+      <dd class="col-12 col-sm-8 mb-0">
+        <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+          <div class="progress-bar bg-type-${typeName} h-75 rounded" style="width: ${statsObject.value}%"></div>
+        </div>
+      </dd>
     </dl>`;
 }
 
@@ -185,17 +189,17 @@ function getEvoChainArrowTemplate() {
 
 /** Footer templates */
 function getDialogFooterTemplate() {
-  return `<div class="modal-footer justify-content-between bg-body-secondary text-body rounded-bottom-4 border-0">
+  return `<div class="modal-footer justify-content-between bg-body-secondary text-body p-2 rounded-bottom-3 border-0">
   <button
   type="button"
-  class="btn"
+  class="btn bg-gradient"
   data-id="prev-button"
   onclick="showPreviousPokemonInDialog(Number(this.closest('dialog').dataset.pokemonId))">
     Previous
   </button>
   <button
   type="button"
-  class="btn"
+  class="btn bg-gradient"
   data-id="next-button"
   onclick="showNextPokemonInDialog(Number(this.closest('dialog').dataset.pokemonId))">
     Next
