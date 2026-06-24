@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" type="image/x-icon">
     <title>Pokedex</title>
 
     <!-- Bootstrap CSS import -->
@@ -38,7 +39,6 @@
                 placeholder="Search"
                 aria-label="Search"
               />
-              <button class="btn btn-light" type="submit" data-id="search-button">Search</button>
             </form>
           </div>
         </div>
@@ -49,7 +49,7 @@
         <div id="content-wrapper" class="d-flex justify-content-center align-items-center flex-wrap gap-3"></div>
         <button
           type="button"
-          class="btn text-bg-dark w-25"
+          class="btn bg-gradient mw-25"
           data-id="load-more-button"
           data-action="load-more"
           onclick="loadMorePokemon()"

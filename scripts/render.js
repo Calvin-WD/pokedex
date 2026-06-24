@@ -14,7 +14,7 @@ function renderCards(pokemons) {
 function renderFilteredCards(searchValue) {
   const contentWrapperRef = document.getElementById("content-wrapper");
   contentWrapperRef.innerHTML = "";
-  currentPokemons = filterPokemonsInArray(searchValue);
+  currentPokemons = filterPokemonsInArray(searchValue.toLowerCase());
   for (let index = 0; index < currentPokemons.length; index++) {
     const currentPokemon = currentPokemons[index][1];
     renderSingleCard(contentWrapperRef, currentPokemon);
