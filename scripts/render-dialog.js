@@ -1,57 +1,46 @@
-/**
- * Render Cards
- */
-
-function renderCards(pokemons) {
-  const contentWrapperRef = document.getElementById("content-wrapper");
-  const pokemonsEntries = Object.entries(pokemons);
-  for (let index = pokemonApiIndexCounter - POKEMON_LOADING_INTERVAL; index < pokemonsEntries.length; index++) {
-    const currentPokemon = pokemonsEntries[index][1];
-    renderSingleCard(contentWrapperRef, currentPokemon);
-  }
-}
-
-function renderFilteredCards(searchValue) {
-  const contentWrapperRef = document.getElementById("content-wrapper");
-  contentWrapperRef.innerHTML = "";
-  currentPokemons = filterPokemonsInArray(searchValue.toLowerCase());
-  for (let index = 0; index < currentPokemons.length; index++) {
-    const currentPokemon = currentPokemons[index][1];
-    renderSingleCard(contentWrapperRef, currentPokemon);
-  }
-}
-
-function renderSingleCard(contentWrapperRef, pokemon) {
-  const currentTypeValues = Object.values(pokemon.base.types);
-  const footerHtmlString = getCardFooterHtmlString(currentTypeValues);
-  contentWrapperRef.innerHTML += getPokemonCardTemplate(pokemon, footerHtmlString);
-}
-
-function getCardFooterHtmlString(typeValues) {
-  let footerHtmlString = "";
-  for (let typeIndex = 0; typeIndex < typeValues.length; typeIndex++) {
-    const currentTypeImgUrl = typeValues[typeIndex].type.typeImage;
-    footerHtmlString += getPokemonCardTypeImageTemplate(currentTypeImgUrl);
-  }
-  return footerHtmlString;
-}
-
-/**
- * Render Cards END
- */
-
-/**
- * Render Dialog
- */
-
 async function renderDialog(dialogRef, pokemonId) {
   const pokemon = getPokemonFromCacheById(pokemonId);
   const typeValues = Object.values(pokemon.base.types);
-  await checkIfEvoChainIsLoaded(pokemon);
+  await ensureEvoChainIsLoaded(pokemon);
   let dialogHeaderHtml = getDialogHeaderHtmlString(pokemon, typeValues);
   let dialogBodyHtml = getDialogBodyHtmlString(pokemon, typeValues);
   let dialogFooterHtml = getDialogFooterHtmlString(pokemon);
   dialogRef.innerHTML = getDialogContentTemplate(typeValues, dialogHeaderHtml, dialogBodyHtml, dialogFooterHtml);
+}
+
+function showNextPokemonInDialog(pokemonId) {
+  const dialogRef = document.getElementById("dialog");
+  const currentPokemonId = pokemonId + 1;
+  if (currentPokemonId <= Object.keys(pokemons).length) {
+    dialogRef.dataset.pokemonId = currentPokemonId;
+    renderDialog(dialogRef, currentPokemonId);
+  } else {
+    console.error("Keine weiteren Pokemon geladen");
+  }
+}
+
+function showPreviousPokemonInDialog(pokemonId) {
+  const dialogRef = document.getElementById("dialog");
+  const currentPokemonId = pokemonId - 1;
+  if (currentPokemonId > 0) {
+    dialogRef.dataset.pokemonId = currentPokemonId;
+    renderDialog(dialogRef, currentPokemonId);
+  } else {
+    console.error("Keine vorherigen Pokemon vorhanden");
+  }
+}
+
+async function openDialog(pokemonId) {
+  let dialogRef = document.getElementById("dialog");
+  dialogRef.dataset.pokemonId = pokemonId;
+  await renderDialog(dialogRef, pokemonId);
+  dialogRef.showModal();
+  document.body.classList.add("overFlowHidden");
+}
+
+function closeDialog() {
+  let dialogRef = document.getElementById("dialog");
+  dialogRef.close();
 }
 
 /** Get header html string */
@@ -109,7 +98,7 @@ function getEvoChainTabContentHtmlString(pokemon) {
   let fullTapContentHtmlString = "";
   for (let index = 1; index <= Object.keys(evoChainPokemons).length; index++) {
     const element = evoChainPokemons[index];
-    if (index <= 3 && index > 1) {
+    if (index > 1) {
       fullTapContentHtmlString += getEvoChainArrowTemplate();
     }
     fullTapContentHtmlString += getEvoChainTabContentTemplate(element.image);
@@ -123,7 +112,3 @@ function getDialogFooterHtmlString() {
   return getDialogFooterTemplate();
 }
 /** Get footer html string END */
-
-/**
- * Render Dialog END
- */

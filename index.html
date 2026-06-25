@@ -52,13 +52,13 @@
           class="btn bg-gradient mw-25"
           data-id="load-more-button"
           data-action="load-more"
-          onclick="loadMorePokemon()"
+          onclick="loadMorePokemons()"
         >
           Load more
         </button>
       </section>
       <aside id="dialog-wrapper" class="container">
-        <dialog id="dialog" class="border-0 bg-transparent" closedby="any" onclose="disableBodyScrollability()"></dialog>
+        <dialog id="dialog" class="border-0 bg-transparent" closedby="any" onclose="removeBodyScrollLock()"></dialog>
       </aside>
     </main>
     <footer class="bg-body-tertiary">
@@ -81,9 +81,11 @@
     <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Custom JavaScript import -->
     <script src="./scripts/template.js"></script>
-    <script src="./scripts/pokeapi.js"></script>
-    <script src="./scripts/service.js"></script>
-    <script src="./scripts/render.js"></script>
+    <script src="./scripts/api.js"></script>
+    <script src="./scripts/utils.js"></script>
+    <script src="./scripts/pokemon-service.js"></script>
+    <script src="./scripts/render-cards.js"></script>
+    <script src="./scripts/render-dialog.js"></script>
     <script src="./script.js"></script>
   </body>
 </html>

@@ -2,7 +2,7 @@
  * Card Templates
  */
 
-function getPokemonCardTemplate(pokemon, footerHtml) {
+function getPokemonCardTemplate(pokemon, cardTypeIconsHtml) {
   return `<button 
     type="button"
     class="card bg-body-tertiary card-width h-100 p-0"
@@ -15,7 +15,7 @@ function getPokemonCardTemplate(pokemon, footerHtml) {
       class="card-body position-relative d-flex justify-content-center card-body-height bg-type-${pokemon.base.types[0].type.name} p-0">
         <img src="${pokemon.base.sprites.other.home.front_default}" class="card-image w-75" data-id="card-image">
       </div>
-      <div class="d-flex justify-content-center gap-5 p-1">${footerHtml}</div>
+      <div class="d-flex justify-content-center gap-5 p-1">${cardTypeIconsHtml}</div>
     </button>`;
 }
 
