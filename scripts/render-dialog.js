@@ -1,3 +1,7 @@
+
+/**
+ * Renders the full dialog content for a cached Pokémon.
+ */
 async function renderDialog(dialogRef, pokemonId) {
   const pokemon = getPokemonFromCacheById(pokemonId);
   const typeValues = Object.values(pokemon.base.types);
@@ -8,6 +12,9 @@ async function renderDialog(dialogRef, pokemonId) {
   dialogRef.innerHTML = getDialogContentTemplate(typeValues, dialogHeaderHtml, dialogBodyHtml, dialogFooterHtml);
 }
 
+/**
+ * Shows the next loaded Pokémon in the open dialog.
+ */
 function showNextPokemonInDialog(pokemonId) {
   const dialogRef = document.getElementById("dialog");
   const currentPokemonId = pokemonId + 1;
@@ -19,6 +26,9 @@ function showNextPokemonInDialog(pokemonId) {
   }
 }
 
+/**
+ * Shows the previous Pokémon in the open dialog.
+ */
 function showPreviousPokemonInDialog(pokemonId) {
   const dialogRef = document.getElementById("dialog");
   const currentPokemonId = pokemonId - 1;
@@ -30,6 +40,9 @@ function showPreviousPokemonInDialog(pokemonId) {
   }
 }
 
+/**
+ * Opens the dialog after rendering the selected Pokémon.
+ */
 async function openDialog(pokemonId) {
   let dialogRef = document.getElementById("dialog");
   dialogRef.dataset.pokemonId = pokemonId;
@@ -38,17 +51,25 @@ async function openDialog(pokemonId) {
   document.body.classList.add("overFlowHidden");
 }
 
+/**
+ * Closes the Pokémon dialog.
+ */
 function closeDialog() {
   let dialogRef = document.getElementById("dialog");
   dialogRef.close();
 }
 
-/** Get header html string */
+/**
+ * Creates the dialog header HTML for a Pokémon.
+ */
 function getDialogHeaderHtmlString(pokemon, typeValues) {
   let fullBadgesHtmlString = getDialogTypeBadgeHtmlString(typeValues);
   return getDialogHeaderTemplate(pokemon, fullBadgesHtmlString);
 }
 
+/**
+ * Creates the type badge HTML for the dialog header.
+ */
 function getDialogTypeBadgeHtmlString(typeValues) {
   let badgesHtmlString = "";
   for (let indexType = 0; indexType < typeValues.length; indexType++) {
@@ -57,9 +78,10 @@ function getDialogTypeBadgeHtmlString(typeValues) {
   }
   return badgesHtmlString;
 }
-/** Get header html string END */
 
-/** Get body html string */
+/**
+ * Creates the dialog body HTML with about, stats, and evolution content.
+ */
 function getDialogBodyHtmlString(pokemon, typeValues) {
   const abilityNames = getAbilityNamesAsString(pokemon);
   const aboutTabContentHtml = getAboutTabContentHtmlString(pokemon, abilityNames);
@@ -69,6 +91,9 @@ function getDialogBodyHtmlString(pokemon, typeValues) {
   return getDialogBodyTemplate(aboutTabContentHtml, statTabContentHtml, evoChainTabContentHtml);
 }
 
+/**
+ * Creates the HTML for the dialog's about tab.
+ */
 function getAboutTabContentHtmlString(pokemon, abilityNames) {
   const aboutTabContentArray = getAboutTabContentAsArray(pokemon, abilityNames);
   let fullTabContentHtmlString = "";
@@ -80,6 +105,9 @@ function getAboutTabContentHtmlString(pokemon, abilityNames) {
   return fullTabContentHtmlString;
 }
 
+/**
+ * Creates the HTML for the dialog's stats tab.
+ */
 function getStatsTabContentHtmlString(pokemon, typeValues) {
   const statsTabContentArray = getStatsTabContentAsArray(pokemon.base.stats);
   const typeName = typeValues[0].type.name;
@@ -92,6 +120,9 @@ function getStatsTabContentHtmlString(pokemon, typeValues) {
   return fullTabContentHtmlString;
 }
 
+/**
+ * Creates the HTML for the dialog's evolution tab.
+ */
 function getEvoChainTabContentHtmlString(pokemon) {
   const evoChain = evoChains[pokemon.evoChain.id];
   const evoChainPokemons = evoChain.pokemons;
@@ -105,10 +136,10 @@ function getEvoChainTabContentHtmlString(pokemon) {
   }
   return fullTapContentHtmlString;
 }
-/** Get body html string END */
 
-/** Get footer html string */
+/**
+ * Creates the dialog footer HTML.
+ */
 function getDialogFooterHtmlString() {
   return getDialogFooterTemplate();
 }
-/** Get footer html string END */

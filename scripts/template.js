@@ -1,7 +1,7 @@
-/**
- * Card Templates
- */
 
+/**
+ * Creates the HTML for a Pokémon card.
+ */
 function getPokemonCardTemplate(pokemon, cardTypeIconsHtml) {
   return `<button 
     type="button"
@@ -19,19 +19,16 @@ function getPokemonCardTemplate(pokemon, cardTypeIconsHtml) {
     </button>`;
 }
 
+/**
+ * Creates the HTML for a Pokémon type icon.
+ */
 function getPokemonCardTypeImageTemplate(typeImgUrl) {
   return `<img src="${typeImgUrl}" class="card-type-image">`;
 }
 
 /**
- * Card Templates END
+ * Creates the complete dialog content wrapper.
  */
-
-/**
- * Dialog Templates
- */
-
-/** Content Template */
 function getDialogContentTemplate(typesArray, headerHtml, dialogBodyHtml, dialogFooterHtml) {
   return `<div class="modal-dialog">
         <div class="modal-content bg-type-${typesArray[0].type.name} rounded-3">
@@ -41,9 +38,10 @@ function getDialogContentTemplate(typesArray, headerHtml, dialogBodyHtml, dialog
         </div>
       </div>`;
 }
-/** Content Template END */
 
-/** Header templates */
+/**
+ * Creates the dialog header with Pokémon details and type badges.
+ */
 function getDialogHeaderTemplate(pokemon, badgesHtml) {
   return `<div class="modal-header flex-column p-3 border-0">
       <button type="button" class="btn-close" data-bs-theme="dark" onclick="closeDialog()"></button>
@@ -66,12 +64,16 @@ function getDialogHeaderTemplate(pokemon, badgesHtml) {
     </div>`;
 }
 
+/**
+ * Creates a type badge for the dialog header.
+ */
 function getHeaderTypeBadgeTemplate(typeName) {
   return `<span class="badge bg-body-secondary">${typeName}</span>`;
 }
-/** Header templates END */
 
-/** Body templates */
+/**
+ * Creates the dialog body with its tab navigation and tab content.
+ */
 function getDialogBodyTemplate(aboutTabContentHtml, statTabContentHtml, evoChainTabContentHtml) {
   return `<div class="modal-body bg-body-secondary text-body rounded-top-3 px-3 py-2">
       ${getDialogBodyNavTabsTemplate()}
@@ -79,6 +81,9 @@ function getDialogBodyTemplate(aboutTabContentHtml, statTabContentHtml, evoChain
     </div>`;
 }
 
+/**
+ * Creates the navigation tabs for the dialog body.
+ */
 function getDialogBodyNavTabsTemplate() {
   return `<ul class="nav nav-underline justify-content-around mb-3" id="myTab" role="tablist">
       <li class="nav-item" role="presentation">
@@ -126,6 +131,9 @@ function getDialogBodyNavTabsTemplate() {
     </ul>`;
 }
 
+/**
+ * Creates the tab panels for the dialog body.
+ */
 function getDialogBodyNavContentTemplate(aboutTabContentHtml, statTabContentHtml, evoChainTabContentHtml) {
   return `<div class="tab-content tab-content-maxHeight overflow-y-auto overflow-x-hidden" id="myTabContent">
       <div
@@ -160,6 +168,9 @@ function getDialogBodyNavContentTemplate(aboutTabContentHtml, statTabContentHtml
   </div>`;
 }
 
+/**
+ * Creates one row for the dialog's about tab.
+ */
 function getAboutTabContentTemplate(aboutObject) {
   return `<dl class="row flex-column flex-sm-row align-items-start align-items-sm-center pt-2 mb-0">
       <dt class="col-12 col-sm-4">${aboutObject.title}:</dt>
@@ -167,6 +178,9 @@ function getAboutTabContentTemplate(aboutObject) {
     </dl>`;
 }
 
+/**
+ * Creates one row for the dialog's stats tab.
+ */
 function getStatsTabContentTemplate(statsObject, typeName) {
   return `<dl class="row flex-column flex-sm-row align-items-start align-items-sm-center pt-2 mb-0">
       <dt class="col-12 col-sm-4">${statsObject.title}:</dt>
@@ -178,16 +192,23 @@ function getStatsTabContentTemplate(statsObject, typeName) {
     </dl>`;
 }
 
+/**
+ * Creates one evolution image for the dialog's evolution tab.
+ */
 function getEvoChainTabContentTemplate(evoChainImage) {
   return `<img src="${evoChainImage}" class="evoChain-image">`;
 }
 
+/**
+ * Creates the arrow shown between evolution stages.
+ */
 function getEvoChainArrowTemplate() {
   return `<i class="bi bi-arrow-right"></i>`;
 }
-/** Body templates END */
 
-/** Footer templates */
+/**
+ * Creates the dialog footer with previous and next controls.
+ */
 function getDialogFooterTemplate() {
   return `<div class="modal-footer justify-content-between bg-body-secondary text-body p-2 rounded-bottom-3 border-0">
   <button
@@ -206,8 +227,3 @@ function getDialogFooterTemplate() {
   </button>
   </div>`;
 }
-/** Footer templates END */
-
-/**
- * Dialog Templates END
- */

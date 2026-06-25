@@ -2,6 +2,9 @@ let pokemons = {};
 let evoChains = {};
 let pokemonApiIndexCounter = 0;
 
+/**
+ * Loads the next batch of Pokémon and stores their card-ready data.
+ */
 async function loadPokemons() {
   let loadedPokemons = [];
   for (let index = 0; index < POKEMON_LOADING_INTERVAL; index++) {
@@ -14,11 +17,17 @@ async function loadPokemons() {
   return loadedPokemons;
 }
 
+/**
+ * Stores the relevant base data for one Pokémon in the cache.
+ */
 function cachePokemonBaseData(pokemonApiObject) {
   const baseData = createPokemonBaseData(pokemonApiObject);
   pokemons[pokemonApiObject.id] = baseData;
 }
 
+/**
+ * Creates the local base data structure from a Pokémon API response.
+ */
 function createPokemonBaseData(pokemonApiObject) {
   return {
     base: {
@@ -34,6 +43,9 @@ function createPokemonBaseData(pokemonApiObject) {
   };
 }
 
+/**
+ * Loads and adds icon images for each type of a cached Pokémon.
+ */
 async function loadTypeImages(pokemonApiObject) {
   const types = pokemons[pokemonApiObject.id].base.types;
 
@@ -45,6 +57,9 @@ async function loadTypeImages(pokemonApiObject) {
   }
 }
 
+/**
+ * Loads species data and stores the Pokémon's evolution chain reference.
+ */
 async function loadPokemonSpecies(pokemon) {
   const species = await fetchPokeApiData(POKEAPI_SPECIES + pokemon.base.id);
   const evoChainUrl = species.evolution_chain.url;
@@ -52,11 +67,17 @@ async function loadPokemonSpecies(pokemon) {
   pokemon["evoChain"] = { id: evoChainId, url: evoChainUrl };
 }
 
+/**
+ * Loads and caches an evolution chain by its id.
+ */
 async function loadPokemonEvoChain(evoChainId, evoChainUrl) {
   const evoChain = await fetchPokeApiData(evoChainUrl.substring(POKEAPI_BASE_URL.length));
   evoChains[`${evoChainId}`] = evoChain.chain;
 }
 
+/**
+ * Loads another Pokémon batch and updates the card list based on the current search.
+ */
 async function loadMorePokemons() {
   const loadMoreButtonRef = document.querySelector('[data-id="load-more-button"]');
   toggleDisable(loadMoreButtonRef);
@@ -70,6 +91,9 @@ async function loadMorePokemons() {
   toggleDisable(loadMoreButtonRef);
 }
 
+/**
+ * Ensures the selected Pokémon has its evolution chain data available.
+ */
 async function ensureEvoChainIsLoaded(pokemon) {
   if (!pokemon["evoChain"]) {
     await loadPokemonSpecies(pokemon);
@@ -80,6 +104,9 @@ async function ensureEvoChainIsLoaded(pokemon) {
   }
 }
 
+/**
+ * Builds a simplified evolution chain object with Pokémon image references.
+ */
 function buildEvoChainObject(pokemon) {
   let evoChain = evoChains[pokemon.evoChain.id];
   let nextEvoChain = evoChain;
@@ -91,6 +118,9 @@ function buildEvoChainObject(pokemon) {
   }
 }
 
+/**
+ * Adds one evolution stage to the simplified evolution chain object.
+ */
 function addPokemonToEvoChainObject(pokemonId, evoChain, nextEvoChain, evoRank) {
   ensureEvoChainHasPokemonObject(evoChain);
   evoChain.pokemons[evoRank] = {
@@ -99,20 +129,32 @@ function addPokemonToEvoChainObject(pokemonId, evoChain, nextEvoChain, evoRank) 
   return nextEvoChain.evolves_to[0];
 }
 
+/**
+ * Ensures the evolution chain has a container for its Pokémon stages.
+ */
 function ensureEvoChainHasPokemonObject(evoChain) {
   if (!evoChain["pokemons"]) {
     evoChain["pokemons"] = {};
   }
 }
 
+/**
+ * Returns a cached Pokémon by its id.
+ */
 function getPokemonFromCacheById(pokemonId) {
   return pokemons[pokemonId];
 }
 
+/**
+ * Extracts a Pokémon id from a species API URL.
+ */
 function getPokemonIdBySpeciesUrl(url) {
   return `${url}`.substring(POKEAPI_BASE_URL.length + POKEAPI_SPECIES.length, `${url}`.length - 1);
 }
 
+/**
+ * Returns cached Pokémon whose names include the search value.
+ */
 function filterPokemonValuesByName(searchValue) {
   // currentPokemons = pokemons;
   let filteredPokemonsArray = Object.values(pokemons);
@@ -120,6 +162,9 @@ function filterPokemonValuesByName(searchValue) {
   return filteredPokemonsArray;
 }
 
+/**
+ * Returns the Pokémon's ability names as a readable string.
+ */
 function getAbilityNamesAsString(pokemon) {
   let abilityNames = [];
   for (let abilityIndex = 0; abilityIndex < pokemon.base.abilities.length; abilityIndex++) {
@@ -129,6 +174,9 @@ function getAbilityNamesAsString(pokemon) {
   return abilityNames.join(", ");
 }
 
+/**
+ * Creates the data rows used in the dialog's about tab.
+ */
 function getAboutTabContentAsArray(pokemon, abilityNames) {
   return [
     { value: pokemon.base.name, title: "Name" },
@@ -138,6 +186,9 @@ function getAboutTabContentAsArray(pokemon, abilityNames) {
   ];
 }
 
+/**
+ * Creates the data rows used in the dialog's stats tab.
+ */
 function getStatsTabContentAsArray(pokemonStatsArray) {
   let statsTabContentArray = [];
   for (let statsIndex = 0; statsIndex < pokemonStatsArray.length; statsIndex++) {
