@@ -141,7 +141,6 @@ function getDialogBodyNavContentTemplate(aboutTabContentHtml, statTabContentHtml
         id="about-tab-pane"
         role="tabpanel"
         aria-labelledby="about-tab"
-        tabindex="0"
       >
         ${aboutTabContentHtml}
       </div>
@@ -150,7 +149,6 @@ function getDialogBodyNavContentTemplate(aboutTabContentHtml, statTabContentHtml
         id="stat-tab-pane"
         role="tabpanel"
         aria-labelledby="stat-tab"
-        tabindex="0"
       >
         ${statTabContentHtml}
       </div>
@@ -159,7 +157,6 @@ function getDialogBodyNavContentTemplate(aboutTabContentHtml, statTabContentHtml
         id="evolution-tab-pane"
         role="tabpanel"
         aria-labelledby="evolution-tab"
-        tabindex="0"
       >
         <div class="d-flex justify-content-center align-items-center gap-2 py-2">
           ${evoChainTabContentHtml}

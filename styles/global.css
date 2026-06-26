@@ -32,8 +32,18 @@ ul {
   padding: 0;
 }
 
-.nav-link:hover {
+.nav-link:hover,
+.nav-link:focus {
   color: white;
+}
+
+.btn:hover {
+  opacity: 0.8;
+}
+
+.btn:focus-visible {
+  outline: 2px solid white;
+  /* outline-offset: 2px; */
 }
 
 /* .tab-content {

@@ -1,4 +1,3 @@
-
 /**
  * Renders the full dialog content for a cached Pokémon.
  */
@@ -17,13 +16,16 @@ async function renderDialog(dialogRef, pokemonId) {
  */
 function showNextPokemonInDialog(pokemonId) {
   const dialogRef = document.getElementById("dialog");
+  const nextButtonRef = document.querySelector('[data-id="next-button"]');
   const currentPokemonId = pokemonId + 1;
+  toggleDisable(nextButtonRef);
   if (currentPokemonId <= Object.keys(pokemons).length) {
     dialogRef.dataset.pokemonId = currentPokemonId;
     renderDialog(dialogRef, currentPokemonId);
   } else {
     console.error("Keine weiteren Pokemon geladen");
   }
+  toggleDisable(nextButtonRef);
 }
 
 /**
@@ -31,13 +33,16 @@ function showNextPokemonInDialog(pokemonId) {
  */
 function showPreviousPokemonInDialog(pokemonId) {
   const dialogRef = document.getElementById("dialog");
+  const prevButtonRef = document.querySelector('[data-id="prev-button"]');
   const currentPokemonId = pokemonId - 1;
+  toggleDisable(prevButtonRef);
   if (currentPokemonId > 0) {
     dialogRef.dataset.pokemonId = currentPokemonId;
     renderDialog(dialogRef, currentPokemonId);
   } else {
     console.error("Keine vorherigen Pokemon vorhanden");
   }
+  toggleDisable(prevButtonRef);
 }
 
 /**
