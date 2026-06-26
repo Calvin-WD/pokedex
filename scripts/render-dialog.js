@@ -1,48 +1,33 @@
 /**
+ * Shows the next loaded Pokémon in the open dialog.
+ */
+async function showDialogPokemon(pokemonId) {
+  const dialogRef = document.getElementById("dialog");
+  const nextButtonRef = document.querySelector('[data-id="next-button"]');
+  let typeValues = [];
+
+  pokemon = getPokemonFromCacheById(pokemonId);
+  typeValues = Object.values(pokemon.base.types);
+  await ensureEvoChainIsLoaded(pokemon);
+
+  updateDialog();
+}
+
+/**
  * Renders the full dialog content for a cached Pokémon.
  */
 async function renderDialog(dialogRef, pokemonId) {
+  renderDialogWrapper(dialogRef, pokemonId);
+  await showDialogPokemon(pokemonId);
+}
+
+function renderDialogWrapper(dialogRef, pokemonId) {
   const pokemon = getPokemonFromCacheById(pokemonId);
   const typeValues = Object.values(pokemon.base.types);
-  await ensureEvoChainIsLoaded(pokemon);
-  let dialogHeaderHtml = getDialogHeaderHtmlString(pokemon, typeValues);
-  let dialogBodyHtml = getDialogBodyHtmlString(pokemon, typeValues);
+  let dialogNavTabHtml = getDialogNavTabHtmlString();
+  let dialogNavContentHtml = getDialogNavContentTemplate();
   let dialogFooterHtml = getDialogFooterHtmlString(pokemon);
-  dialogRef.innerHTML = getDialogContentTemplate(typeValues, dialogHeaderHtml, dialogBodyHtml, dialogFooterHtml);
-}
-
-/**
- * Shows the next loaded Pokémon in the open dialog.
- */
-function showNextPokemonInDialog(pokemonId) {
-  const dialogRef = document.getElementById("dialog");
-  const nextButtonRef = document.querySelector('[data-id="next-button"]');
-  const currentPokemonId = pokemonId + 1;
-  toggleDisable(nextButtonRef);
-  if (currentPokemonId <= Object.keys(pokemons).length) {
-    dialogRef.dataset.pokemonId = currentPokemonId;
-    renderDialog(dialogRef, currentPokemonId);
-  } else {
-    console.error("Keine weiteren Pokemon geladen");
-  }
-  toggleDisable(nextButtonRef);
-}
-
-/**
- * Shows the previous Pokémon in the open dialog.
- */
-function showPreviousPokemonInDialog(pokemonId) {
-  const dialogRef = document.getElementById("dialog");
-  const prevButtonRef = document.querySelector('[data-id="prev-button"]');
-  const currentPokemonId = pokemonId - 1;
-  toggleDisable(prevButtonRef);
-  if (currentPokemonId > 0) {
-    dialogRef.dataset.pokemonId = currentPokemonId;
-    renderDialog(dialogRef, currentPokemonId);
-  } else {
-    console.error("Keine vorherigen Pokemon vorhanden");
-  }
-  toggleDisable(prevButtonRef);
+  dialogRef.innerHTML = getDialogContentTemplate(typeValues, dialogNavTabHtml, dialogNavContentHtml, dialogFooterHtml);
 }
 
 /**
@@ -64,10 +49,71 @@ function closeDialog() {
   dialogRef.close();
 }
 
+function updateDialog() {
+  dialogRef.dataset.pokemonId = pokemonId;
+  setDialogContent(pokemon, typeValues);
+}
+
+function setDialogContent(pokemon, typeValues) {
+  setDialogBg(typeValues);
+  setDialogHeader(pokemon, typeValues);
+  setDialogNavContent(pokemon, typeValues);
+}
+
+function setDialogBg(typeValues) {
+  const dialogBgWrapperRef = document.querySelector('[data-id="dialog-bg-wrapper"]');
+  const classPrefix = "bg-type-";
+  const currentTypeClassName = classPrefix + typeValues[0].type.name;
+  removeOldDialogBg(dialogBgWrapperRef, classPrefix, currentTypeClassName);
+  dialogBgWrapperRef.classList.add(currentTypeClassName);
+}
+
+function removeOldDialogBg(dialogBgWrapperRef, classPrefix, currentTypeClassName) {
+  dialogBgWrapperRef.classList.forEach((typeClassName) => {
+    if (typeClassName.startsWith(classPrefix) && typeClassName != currentTypeClassName) {
+      dialogBgWrapperRef.classList.remove(typeClassName);
+    }
+  });
+}
+
+function setDialogHeader(pokemon, typeValues) {
+  const dialogHeaderRef = document.querySelector('[data-id="dialog-header-content"]');
+  dialogHeaderRef.innerHTML = getDialogHeaderContentHtmlString(pokemon, typeValues);
+}
+
+function setDialogNavContent(pokemon, typeValues) {
+  const abilityNames = getAbilityNamesAsString(pokemon);
+  const aboutContentRef = document.querySelector('[data-id="about-tab-pane"]');
+  const statContentRef = document.querySelector('[data-id="stat-tab-pane"]');
+  const evolutionContentRef = document.querySelector('[data-id="evolution-tab-pane"]');
+
+  aboutContentRef.innerHTML = getAboutTabContentHtmlString(pokemon, abilityNames);
+  statContentRef.innerHTML = getStatsTabContentHtmlString(pokemon, typeValues);
+  evolutionContentRef.innerHTML = getEvoChainTabContentHtmlString(pokemon);
+}
+
+async function nextDialogPokemon(pokemonId) {
+  pokemonId = pokemonId + 1;
+  await showDialogPokemon(pokemonId);
+
+  toggleDisable(nextButtonRef);
+  if (pokemonId <= Object.keys(pokemons).length) {
+    renderDialog(dialogRef, pokemonId);
+  } else {
+    console.error("Keine weiteren Pokemon geladen");
+  }
+  toggleDisable(nextButtonRef);
+}
+
+async function previousDialogPokemon(pokemonId) {
+  pokemonId = pokemonId - 1;
+  await showDialogPokemon(pokemonId);
+}
+
 /**
  * Creates the dialog header HTML for a Pokémon.
  */
-function getDialogHeaderHtmlString(pokemon, typeValues) {
+function getDialogHeaderContentHtmlString(pokemon, typeValues) {
   let fullBadgesHtmlString = getDialogTypeBadgeHtmlString(typeValues);
   return getDialogHeaderTemplate(pokemon, fullBadgesHtmlString);
 }
@@ -84,16 +130,8 @@ function getDialogTypeBadgeHtmlString(typeValues) {
   return badgesHtmlString;
 }
 
-/**
- * Creates the dialog body HTML with about, stats, and evolution content.
- */
-function getDialogBodyHtmlString(pokemon, typeValues) {
-  const abilityNames = getAbilityNamesAsString(pokemon);
-  const aboutTabContentHtml = getAboutTabContentHtmlString(pokemon, abilityNames);
-  const statTabContentHtml = getStatsTabContentHtmlString(pokemon, typeValues);
-  const evoChainTabContentHtml = getEvoChainTabContentHtmlString(pokemon);
-
-  return getDialogBodyTemplate(aboutTabContentHtml, statTabContentHtml, evoChainTabContentHtml);
+function getDialogNavTabHtmlString() {
+  return getDialogNavTabsTemplate();
 }
 
 /**

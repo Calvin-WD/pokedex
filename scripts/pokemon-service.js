@@ -142,7 +142,11 @@ function ensureEvoChainHasPokemonObject(evoChain) {
  * Returns a cached Pokémon by its id.
  */
 function getPokemonFromCacheById(pokemonId) {
-  return pokemons[pokemonId];
+  if (pokemons[pokemonId]) {
+    return pokemons[pokemonId];
+  } else {
+    console.error("Pokemon is not cached yet!");
+  }
 }
 
 /**
@@ -156,10 +160,11 @@ function getPokemonIdBySpeciesUrl(url) {
  * Returns cached Pokémon whose names include the search value.
  */
 function filterPokemonValuesByName(searchValue) {
-  // currentPokemons = pokemons;
-  let filteredPokemonsArray = Object.values(pokemons);
-  filteredPokemonsArray = filteredPokemonsArray.filter((element) => element.base.name.includes(searchValue));
-  return filteredPokemonsArray;
+  if (searchValue.length >= 3) {
+    let filteredPokemonsArray = Object.values(pokemons);
+    filteredPokemonsArray = filteredPokemonsArray.filter((element) => element.base.name.includes(searchValue));
+    return filteredPokemonsArray;
+  } else return;
 }
 
 /**

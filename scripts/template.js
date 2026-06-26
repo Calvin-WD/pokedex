@@ -1,4 +1,3 @@
-
 /**
  * Creates the HTML for a Pokémon card.
  */
@@ -29,11 +28,23 @@ function getPokemonCardTypeImageTemplate(typeImgUrl) {
 /**
  * Creates the complete dialog content wrapper.
  */
-function getDialogContentTemplate(typesArray, headerHtml, dialogBodyHtml, dialogFooterHtml) {
+function getDialogContentTemplate(typesArray, dialogNavTabHtml, dialogNavContentHtml, dialogFooterHtml) {
   return `<div class="modal-dialog">
-        <div class="modal-content bg-type-${typesArray[0].type.name} rounded-3">
-          ${headerHtml}
-          ${dialogBodyHtml}
+        <div class="modal-content bg-type-${typesArray[0].type.name} rounded-3"
+        data-id="dialog-bg-wrapper">
+          <div class="modal-header flex-column p-3 border-0">
+            <button type="button" class="btn-close" data-bs-theme="dark" onclick="closeDialog()"></button>
+            <div data-id="dialog-header-content">
+            </div>
+          </div>
+          <div class="modal-body bg-body-secondary text-body rounded-top-3 px-3 py-2">
+              ${dialogNavTabHtml}
+            <div class="tab-content tab-content-maxHeight overflow-y-auto overflow-x-hidden"
+            id="myTabContent"
+            data-id="dialog-nav-content">
+            ${dialogNavContentHtml}
+            </div>
+          </div>
           ${dialogFooterHtml}
         </div>
       </div>`;
@@ -43,9 +54,7 @@ function getDialogContentTemplate(typesArray, headerHtml, dialogBodyHtml, dialog
  * Creates the dialog header with Pokémon details and type badges.
  */
 function getDialogHeaderTemplate(pokemon, badgesHtml) {
-  return `<div class="modal-header flex-column p-3 border-0">
-      <button type="button" class="btn-close" data-bs-theme="dark" onclick="closeDialog()"></button>
-      <div class="d-flex flex-row-reverse align-items-center justify-content-end w-100 gap-2">
+  return `<div class="d-flex flex-row-reverse align-items-center justify-content-end w-100 gap-2">
         <h3 class="modal-title fs-5" id="cardExtensionLabel">
           ${pokemon.base.name.toUpperCase()}
         </h3>
@@ -60,8 +69,7 @@ function getDialogHeaderTemplate(pokemon, badgesHtml) {
           alt=""
           class="w-50 dialog-image-mw"
         />
-      </div>
-    </div>`;
+      </div>`;
 }
 
 /**
@@ -72,19 +80,9 @@ function getHeaderTypeBadgeTemplate(typeName) {
 }
 
 /**
- * Creates the dialog body with its tab navigation and tab content.
- */
-function getDialogBodyTemplate(aboutTabContentHtml, statTabContentHtml, evoChainTabContentHtml) {
-  return `<div class="modal-body bg-body-secondary text-body rounded-top-3 px-3 py-2">
-      ${getDialogBodyNavTabsTemplate()}
-      ${getDialogBodyNavContentTemplate(aboutTabContentHtml, statTabContentHtml, evoChainTabContentHtml)}
-    </div>`;
-}
-
-/**
  * Creates the navigation tabs for the dialog body.
  */
-function getDialogBodyNavTabsTemplate() {
+function getDialogNavTabsTemplate() {
   return `<ul class="nav nav-underline justify-content-around mb-3" id="myTab" role="tablist">
       <li class="nav-item" role="presentation">
         <button
@@ -134,23 +132,22 @@ function getDialogBodyNavTabsTemplate() {
 /**
  * Creates the tab panels for the dialog body.
  */
-function getDialogBodyNavContentTemplate(aboutTabContentHtml, statTabContentHtml, evoChainTabContentHtml) {
-  return `<div class="tab-content tab-content-maxHeight overflow-y-auto overflow-x-hidden" id="myTabContent">
-      <div
+function getDialogNavContentTemplate() {
+  return `<div
         class="tab-pane fade show active"
         id="about-tab-pane"
+        data-id="about-tab-pane"
         role="tabpanel"
         aria-labelledby="about-tab"
       >
-        ${aboutTabContentHtml}
       </div>
       <div
         class="tab-pane fade"
         id="stat-tab-pane"
+        data-id="stat-tab-pane"
         role="tabpanel"
         aria-labelledby="stat-tab"
       >
-        ${statTabContentHtml}
       </div>
       <div
         class="tab-pane fade"
@@ -158,11 +155,10 @@ function getDialogBodyNavContentTemplate(aboutTabContentHtml, statTabContentHtml
         role="tabpanel"
         aria-labelledby="evolution-tab"
       >
-        <div class="d-flex justify-content-center align-items-center gap-2 py-2">
-          ${evoChainTabContentHtml}
+        <div class="d-flex justify-content-center align-items-center gap-2 py-2"
+        data-id="evolution-tab-pane">
         </div>
-    </div>
-  </div>`;
+    </div>`;
 }
 
 /**
@@ -212,14 +208,14 @@ function getDialogFooterTemplate() {
   type="button"
   class="btn bg-gradient"
   data-id="prev-button"
-  onclick="showPreviousPokemonInDialog(Number(this.closest('dialog').dataset.pokemonId))">
+  onclick="previousDialogPokemon(Number(this.closest('dialog').dataset.pokemonId))">
     Previous
   </button>
   <button
   type="button"
   class="btn bg-gradient"
   data-id="next-button"
-  onclick="showNextPokemonInDialog(Number(this.closest('dialog').dataset.pokemonId))">
+  onclick="nextDialogPokemon(Number(this.closest('dialog').dataset.pokemonId))">
     Next
   </button>
   </div>`;
