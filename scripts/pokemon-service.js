@@ -139,7 +139,7 @@ function ensureEvoChainHasPokemonObject(evoChain) {
 }
 
 /**
- * Returns a cached Pokémon by its id.
+ * Returns a cached Pokémon by its id or logs an error if it is missing.
  */
 function getPokemonFromCacheById(pokemonId) {
   if (pokemons[pokemonId]) {
@@ -157,7 +157,7 @@ function getPokemonIdBySpeciesUrl(url) {
 }
 
 /**
- * Returns cached Pokémon whose names include the search value.
+ * Returns cached Pokémon whose names include a search value with at least three characters.
  */
 function filterPokemonValuesByName(searchValue) {
   if (searchValue.length >= 3) {

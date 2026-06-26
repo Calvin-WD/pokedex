@@ -26,7 +26,7 @@ function getPokemonCardTypeImageTemplate(typeImgUrl) {
 }
 
 /**
- * Creates the complete dialog content wrapper.
+ * Creates the complete dialog shell with stable dynamic content areas.
  */
 function getDialogContentTemplate(typesArray, dialogNavTabHtml, dialogNavContentHtml, dialogFooterHtml) {
   return `<div class="modal-dialog">
@@ -130,7 +130,7 @@ function getDialogNavTabsTemplate() {
 }
 
 /**
- * Creates the tab panels for the dialog body.
+ * Creates empty tab panels for dynamic dialog content.
  */
 function getDialogNavContentTemplate() {
   return `<div

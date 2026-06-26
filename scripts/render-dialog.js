@@ -1,5 +1,5 @@
 /**
- * Shows the next loaded Pokémon in the open dialog.
+ * Loads the selected Pokémon data and updates the open dialog content.
  */
 async function showDialogPokemon(pokemonId) {
   const dialogRef = document.getElementById("dialog");
@@ -10,7 +10,7 @@ async function showDialogPokemon(pokemonId) {
   typeValues = Object.values(pokemon.base.types);
   await ensureEvoChainIsLoaded(pokemon);
 
-  updateDialog();
+  updateDialog(dialogRef, pokemon, typeValues, pokemonId);
 }
 
 /**
@@ -21,6 +21,9 @@ async function renderDialog(dialogRef, pokemonId) {
   await showDialogPokemon(pokemonId);
 }
 
+/**
+ * Renders the stable dialog wrapper with empty dynamic content areas.
+ */
 function renderDialogWrapper(dialogRef, pokemonId) {
   const pokemon = getPokemonFromCacheById(pokemonId);
   const typeValues = Object.values(pokemon.base.types);
@@ -49,18 +52,27 @@ function closeDialog() {
   dialogRef.close();
 }
 
-function updateDialog() {
+/**
+ * Stores the current Pokémon id and refreshes all dynamic dialog areas.
+ */
+function updateDialog(dialogRef, pokemon, typeValues, pokemonId) {
   dialogRef.dataset.pokemonId = pokemonId;
-  setDialogContent(pokemon, typeValues);
+  updateDialogContent(pokemon, typeValues);
 }
 
-function setDialogContent(pokemon, typeValues) {
-  setDialogBg(typeValues);
-  setDialogHeader(pokemon, typeValues);
-  setDialogNavContent(pokemon, typeValues);
+/**
+ * Updates all Pokémon-specific dialog content for the current Pokémon.
+ */
+function updateDialogContent(pokemon, typeValues) {
+  updateDialogBg(typeValues);
+  updateDialogHeader(pokemon, typeValues);
+  updateDialogNavContent(pokemon, typeValues);
 }
 
-function setDialogBg(typeValues) {
+/**
+ * Updates the dialog background class based on the Pokémon's primary type.
+ */
+function updateDialogBg(typeValues) {
   const dialogBgWrapperRef = document.querySelector('[data-id="dialog-bg-wrapper"]');
   const classPrefix = "bg-type-";
   const currentTypeClassName = classPrefix + typeValues[0].type.name;
@@ -68,6 +80,9 @@ function setDialogBg(typeValues) {
   dialogBgWrapperRef.classList.add(currentTypeClassName);
 }
 
+/**
+ * Removes outdated type background classes from the dialog wrapper.
+ */
 function removeOldDialogBg(dialogBgWrapperRef, classPrefix, currentTypeClassName) {
   dialogBgWrapperRef.classList.forEach((typeClassName) => {
     if (typeClassName.startsWith(classPrefix) && typeClassName != currentTypeClassName) {
@@ -76,12 +91,18 @@ function removeOldDialogBg(dialogBgWrapperRef, classPrefix, currentTypeClassName
   });
 }
 
-function setDialogHeader(pokemon, typeValues) {
+/**
+ * Updates the dialog header with the current Pokémon details.
+ */
+function updateDialogHeader(pokemon, typeValues) {
   const dialogHeaderRef = document.querySelector('[data-id="dialog-header-content"]');
   dialogHeaderRef.innerHTML = getDialogHeaderContentHtmlString(pokemon, typeValues);
 }
 
-function setDialogNavContent(pokemon, typeValues) {
+/**
+ * Updates the about, stats and evolution tab contents for the current Pokémon.
+ */
+function updateDialogNavContent(pokemon, typeValues) {
   const abilityNames = getAbilityNamesAsString(pokemon);
   const aboutContentRef = document.querySelector('[data-id="about-tab-pane"]');
   const statContentRef = document.querySelector('[data-id="stat-tab-pane"]');
@@ -92,6 +113,9 @@ function setDialogNavContent(pokemon, typeValues) {
   evolutionContentRef.innerHTML = getEvoChainTabContentHtmlString(pokemon);
 }
 
+/**
+ * Shows the next loaded Pokémon in the open dialog.
+ */
 async function nextDialogPokemon(pokemonId) {
   pokemonId = pokemonId + 1;
   await showDialogPokemon(pokemonId);
@@ -105,6 +129,9 @@ async function nextDialogPokemon(pokemonId) {
   toggleDisable(nextButtonRef);
 }
 
+/**
+ * Shows the previous Pokémon in the open dialog.
+ */
 async function previousDialogPokemon(pokemonId) {
   pokemonId = pokemonId - 1;
   await showDialogPokemon(pokemonId);
@@ -130,6 +157,9 @@ function getDialogTypeBadgeHtmlString(typeValues) {
   return badgesHtmlString;
 }
 
+/**
+ * Creates the dialog tab navigation HTML.
+ */
 function getDialogNavTabHtmlString() {
   return getDialogNavTabsTemplate();
 }
