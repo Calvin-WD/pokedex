@@ -13,13 +13,14 @@ function renderCards(pokemonsToRender) {
 /**
  * Clears the card list and renders Pokémon that match the search value.
  */
-function renderFilteredCards(searchValue) {
+function renderFilteredCards(filteredPokemons) {
   const contentWrapperRef = document.getElementById("content-wrapper");
-  let filteredPokemons = [];
   contentWrapperRef.innerHTML = "";
-
-  filteredPokemons = filterPokemonValuesByName(searchValue.toLowerCase());
-  renderCards(filteredPokemons);
+    renderCards(filteredPokemons);
+    if (filteredPokemons.length === 0) {
+      console.error("No match found!");
+      
+    }
 }
 
 /**

@@ -3,7 +3,6 @@
  */
 async function showDialogPokemon(pokemonId) {
   const dialogRef = document.getElementById("dialog");
-  const nextButtonRef = document.querySelector('[data-id="next-button"]');
   let typeValues = [];
 
   pokemon = getPokemonFromCacheById(pokemonId);
@@ -116,25 +115,29 @@ function updateDialogNavContent(pokemon, typeValues) {
 /**
  * Shows the next loaded Pokémon in the open dialog.
  */
-async function nextDialogPokemon(pokemonId) {
+async function nextDialogPokemon(buttonRef, pokemonId) {
   pokemonId = pokemonId + 1;
-  await showDialogPokemon(pokemonId);
-
-  toggleDisable(nextButtonRef);
-  if (pokemonId <= Object.keys(pokemons).length) {
-    renderDialog(dialogRef, pokemonId);
+  if (pokemons[pokemonId]) {
+    toggleDisable(buttonRef);
+    await showDialogPokemon(pokemonId);
+    toggleDisable(buttonRef);
   } else {
-    console.error("Keine weiteren Pokemon geladen");
+    console.error("No more Pokemons are loaded!");
   }
-  toggleDisable(nextButtonRef);
 }
 
 /**
  * Shows the previous Pokémon in the open dialog.
  */
-async function previousDialogPokemon(pokemonId) {
+async function previousDialogPokemon(buttonRef, pokemonId) {
   pokemonId = pokemonId - 1;
-  await showDialogPokemon(pokemonId);
+  if (pokemons[pokemonId]) {
+    toggleDisable(buttonRef);
+    await showDialogPokemon(pokemonId);
+    toggleDisable(buttonRef);
+  } else {
+    console.error("You already reached the first Pokemon!");
+  }
 }
 
 /**

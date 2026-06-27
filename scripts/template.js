@@ -208,14 +208,14 @@ function getDialogFooterTemplate() {
   type="button"
   class="btn bg-gradient"
   data-id="prev-button"
-  onclick="previousDialogPokemon(Number(this.closest('dialog').dataset.pokemonId))">
+  onclick="previousDialogPokemon(this, Number(this.closest('dialog').dataset.pokemonId))">
     Previous
   </button>
   <button
   type="button"
   class="btn bg-gradient"
   data-id="next-button"
-  onclick="nextDialogPokemon(Number(this.closest('dialog').dataset.pokemonId))">
+  onclick="nextDialogPokemon(this, Number(this.closest('dialog').dataset.pokemonId))">
     Next
   </button>
   </div>`;

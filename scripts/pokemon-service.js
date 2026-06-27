@@ -86,7 +86,7 @@ async function loadMorePokemons() {
   if (!inputRef.value) {
     renderCards(loadedPokemons);
   } else {
-    renderFilteredCards(inputRef.value);
+    filterPokemonValuesByName(inputRef.value);
   }
   toggleDisable(loadMoreButtonRef);
 }
@@ -160,11 +160,11 @@ function getPokemonIdBySpeciesUrl(url) {
  * Returns cached Pokémon whose names include a search value with at least three characters.
  */
 function filterPokemonValuesByName(searchValue) {
-  if (searchValue.length >= 3) {
     let filteredPokemonsArray = Object.values(pokemons);
-    filteredPokemonsArray = filteredPokemonsArray.filter((element) => element.base.name.includes(searchValue));
-    return filteredPokemonsArray;
-  } else return;
+    if (searchValue.length >= 3) {
+      filteredPokemonsArray = filteredPokemonsArray.filter((element) => element.base.name.includes(searchValue));
+    }
+    renderFilteredCards(filteredPokemonsArray);
 }
 
 /**
