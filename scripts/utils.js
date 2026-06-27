@@ -20,3 +20,17 @@ function capitalize(string) {
 function toggleDisable(element) {
   element.disabled = !element.disabled;
 }
+
+function toggleVisibility(element) {
+  element.classList.toggle("visually-hidden");
+}
+
+function changeLoadingButtonState(loadMoreButtonRef) {
+  const loadTextRef = document.querySelector('[data-id="button-load-text"]');
+  const loadingTextRef = document.querySelector('[data-id="button-loading-text"]');
+  const spinnerRef = document.querySelector('[data-id="button-loading-spinner"]');
+  toggleDisable(loadMoreButtonRef);
+  toggleVisibility(loadTextRef);
+  toggleVisibility(loadingTextRef);
+  toggleVisibility(spinnerRef);
+}

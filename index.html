@@ -3,7 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" type="image/x-icon">
+    <link
+      rel="shortcut icon"
+      href="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png"
+      type="image/x-icon"
+    />
     <title>Pokedex</title>
 
     <!-- Bootstrap CSS import -->
@@ -55,7 +59,9 @@
           onclick="loadMorePokemons()"
           tabindex="0"
         >
-          Load more
+          <span class="" data-id="button-load-text">Load more</span>
+          <span class="spinner-border spinner-border-sm visually-hidden" data-id="button-loading-spinner"></span>
+          <span class="visually-hidden" role="status" data-id="button-loading-text">Loading . . .</span>
         </button>
       </section>
       <aside id="dialog-wrapper" class="container">

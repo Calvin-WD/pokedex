@@ -80,7 +80,7 @@ async function loadPokemonEvoChain(evoChainId, evoChainUrl) {
  */
 async function loadMorePokemons() {
   const loadMoreButtonRef = document.querySelector('[data-id="load-more-button"]');
-  toggleDisable(loadMoreButtonRef);
+  changeLoadingButtonState(loadMoreButtonRef);
   const loadedPokemons = await loadPokemons();
   const inputRef = document.querySelector('[data-id="search-input"]');
   if (!inputRef.value) {
@@ -88,7 +88,7 @@ async function loadMorePokemons() {
   } else {
     renderFilteredCards(inputRef.value);
   }
-  toggleDisable(loadMoreButtonRef);
+  changeLoadingButtonState(loadMoreButtonRef);
 }
 
 /**
