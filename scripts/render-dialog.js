@@ -3,9 +3,8 @@
  */
 async function showDialogPokemon(pokemonId) {
   const dialogRef = document.getElementById("dialog");
+  const pokemon = getPokemonFromCacheById(pokemonId);
   let typeValues = [];
-
-  pokemon = getPokemonFromCacheById(pokemonId);
   typeValues = Object.values(pokemon.base.types);
   await ensureEvoChainIsLoaded(pokemon);
 

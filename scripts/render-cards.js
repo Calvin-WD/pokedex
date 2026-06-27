@@ -1,4 +1,3 @@
-
 /**
  * Renders all provided Pokémon as cards in the main content area.
  */
@@ -13,14 +12,15 @@ function renderCards(pokemonsToRender) {
 /**
  * Clears the card list and renders Pokémon that match the search value.
  */
-function renderFilteredCards(filteredPokemons) {
+function renderFilteredCards(searchValue) {
   const contentWrapperRef = document.getElementById("content-wrapper");
+  let filteredPokemons = filterPokemonValuesByName(searchValue);
   contentWrapperRef.innerHTML = "";
-    renderCards(filteredPokemons);
-    if (filteredPokemons.length === 0) {
-      console.error("No match found!");
-      
-    }
+  renderCards(filteredPokemons);
+
+  if (filteredPokemons.length === 0) {
+    console.error("No match found!");
+  }
 }
 
 /**
