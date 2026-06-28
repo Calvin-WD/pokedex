@@ -54,3 +54,10 @@ function getCardTypeIconsHtml(typeValues) {
   }
   return cardTypeIconsHtml;
 }
+
+function showHideLoadingSpinner() {
+  const loadingSpinnerRef = document.querySelector('[data-id="loading-spinner"]');
+  const contentRef = document.querySelector('[data-id="content"]');
+  toggleVisibility(contentRef);
+  toggleVisibility(loadingSpinnerRef);
+}

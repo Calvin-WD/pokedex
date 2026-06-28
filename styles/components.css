@@ -1,7 +1,7 @@
 /* Header Nav */
 .nav-image {
   width: calc(1.375rem + 1.5vw);
-  filter: drop-shadow(0 0px 7px rgba(255, 255, 255, 0.7))
+  filter: drop-shadow(0 0px 7px rgba(255, 255, 255, 0.7));
 }
 /* Header Nav END */
 
@@ -175,3 +175,23 @@
   border: 2px solid var(--bs-body-color);
 }
 /* Badge Type END */
+
+/* Loading Spinner */
+#loading-spinner {
+  flex-grow: 1;
+}
+
+.loading-spinner-image {
+  filter: drop-shadow(0 0 24px rgba(255, 255, 255, 0.7));
+  animation: spinner 3s linear infinite;
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+/* Loading Spinner END */

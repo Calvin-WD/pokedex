@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="./assets/icon/pokeball.png" type="image/x-icon" />
+    <link rel="shortcut icon" href="./assets/img/pokeball.png" type="image/x-icon" />
     <title>Pokedex</title>
 
     <!-- Bootstrap CSS import -->
@@ -17,8 +17,7 @@
       <nav class="navbar navbar-expand-sm bg-body-tertiary">
         <div class="container-xxl">
           <h1 class="">
-            <span>
-              <img src="./assets/icon/pokeball.png" alt="A closed Pokeball" class="img-fluid nav-image" /> </span
+            <span> <img src="./assets/img/pokeball.png" alt="A closed Pokeball" class="img-fluid nav-image" /> </span
             >Pokedéx
           </h1>
           <button
@@ -48,7 +47,7 @@
         </div>
       </nav>
     </header>
-    <main class="bg-body flex-grow-1">
+    <main class="d-flex flex-column bg-body flex-grow-1">
       <section class="container d-flex flex-column align-items-center p-4 gap-4" data-id="content">
         <div id="content-wrapper" class="d-flex justify-content-center align-items-center flex-wrap gap-3"></div>
         <button
@@ -71,6 +70,12 @@
           closedby="any"
           onclose="removeBodyScrollLock()"
         ></dialog>
+      </aside>
+      <aside
+      id="loading-spinner"
+      data-id="loading-spinner"
+      class="d-flex justify-content-center align-items-center visually-hidden">
+        <img src="./assets/img/pokeball-loading-spinner.png" alt="A spinning Pokeball" class="img-fluid loading-spinner-image w-50" />
       </aside>
     </main>
     <footer class="bg-body-tertiary">
