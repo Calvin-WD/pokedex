@@ -1,37 +1,37 @@
 /**
  * Creates the HTML for a Pokémon card.
  */
-function getPokemonCardTemplate(pokemon, cardTypeIconsHtml) {
+function getPokemonCardTemplate(pokemonTemplateData) {
   return `<button 
     type="button"
     class="card button-reset button-card bg-body-tertiary card-width h-100 p-0"
     data-id="card"
-    data-pokemon-id="${pokemon.base.id}"
-    onclick="openDialog(${pokemon.base.id})">
+    data-pokemon-id="${pokemonTemplateData.id}"
+    onclick="openDialog(${pokemonTemplateData.id})">
       <header class="card-header d-flex flex-row-reverse justify-content-between align-items-center">
-        <h5 class="text-end">${pokemon.base.name.toUpperCase()}</h5> <h6>#${pokemon.base.id}</h6>
+        <h5 class="text-end">${pokemonTemplateData.nameUpperCase}</h5> <h6>#${pokemonTemplateData.id}</h6>
       </header>
       <div
-      class="card-body position-relative d-flex justify-content-center card-body-height bg-type-${pokemon.base.types[0].type.name} p-0">
-        <img src="${pokemon.base.sprites.other.home.front_default}" class="card-image w-75" data-id="card-image">
+      class="card-body position-relative d-flex justify-content-center card-body-height bg-type-${pokemonTemplateData.primaryTypeName} p-0">
+        <img src="${pokemonTemplateData.image}" alt="Pokemon: ${pokemonTemplateData.name}" class="card-image w-75" data-id="card-image">
       </div>
-      <footer class="d-flex justify-content-center gap-5 p-1">${cardTypeIconsHtml}</footer>
+      <footer class="d-flex justify-content-center gap-5 p-1">${pokemonTemplateData.typeIconsHtml}</footer>
     </button>`;
 }
 
 /**
  * Creates the HTML for a Pokémon type icon.
  */
-function getPokemonCardTypeImageTemplate(typeImgUrl) {
-  return `<img src="${typeImgUrl}" class="card-type-image">`;
+function getPokemonCardTypeImageTemplate(typeTemplateData) {
+  return `<img src="${typeTemplateData.image}" alt="Type: ${typeTemplateData.name}" class="card-type-image">`;
 }
 
 /**
  * Creates the complete dialog shell with stable dynamic content areas.
  */
-function getDialogContentTemplate(typesArray, dialogNavTabHtml, dialogNavContentHtml) {
+function getDialogContentTemplate(dialogContentTemplateData) {
   return `<div class="modal-dialog">
-        <div class="modal-content bg-type-${typesArray[0].type.name} rounded-3"
+        <div class="modal-content bg-type-${dialogContentTemplateData.primaryTypeName} rounded-3"
         data-id="dialog-bg-wrapper">
           <header class="modal-header flex-column p-3 border-0"
           data-id="overlay-pokemon-name">
@@ -46,12 +46,12 @@ function getDialogContentTemplate(typesArray, dialogNavTabHtml, dialogNavContent
             </div>
           </header>
           <div class="modal-body bg-body-secondary text-body rounded-3 px-3 py-2">
-              ${dialogNavTabHtml}
+              ${dialogContentTemplateData.navTabHtml}
             <div class="tab-content tab-content-maxHeight overflow-y-auto overflow-x-hidden"
             id="myTabContent"
             data-id="dialog-nav-content"
             tabindex="-1">
-            ${dialogNavContentHtml}
+            ${dialogContentTemplateData.navContentHtml}
             </div>
           </div>
         </div>
@@ -61,12 +61,12 @@ function getDialogContentTemplate(typesArray, dialogNavTabHtml, dialogNavContent
 /**
  * Creates the dialog header with Pokémon details and type badges.
  */
-function getDialogHeaderTemplate(pokemon, badgesHtml) {
+function getDialogHeaderTemplate(pokemonTemplateData) {
   return `<div class="d-flex flex-row-reverse align-items-center justify-content-end w-100 gap-2">
         <h3 class="modal-title fs-5" id="cardExtensionLabel">
-          ${pokemon.base.name.toUpperCase()}
+          ${pokemonTemplateData.name}
         </h3>
-        <h4>#${pokemon.base.id}</h4>
+        <h4>#${pokemonTemplateData.id}</h4>
       </div>
       <div class="d-flex flex-column gap-4">
         <div class="d-flex justify-content-around align-items-center">
@@ -78,7 +78,7 @@ function getDialogHeaderTemplate(pokemon, badgesHtml) {
             <i class="bi bi-caret-left-fill"></i>
           </button>
           <img
-          src="${pokemon.base.sprites.other.home.front_default}"
+          src="${pokemonTemplateData.image}"
           alt=""
           class="w-50 dialog-image dialog-image-minwidth"
           data-id="dialog-image"
@@ -92,7 +92,7 @@ function getDialogHeaderTemplate(pokemon, badgesHtml) {
           </button>
         </div>
         <div class="d-flex flex-row justify-content-center gap-3">
-          ${badgesHtml}
+          ${pokemonTemplateData.badgesHtml}
         </div>
       </div>`;
 }
@@ -100,9 +100,9 @@ function getDialogHeaderTemplate(pokemon, badgesHtml) {
 /**
  * Creates a type badge for the dialog header.
  */
-function getHeaderTypeBadgeTemplate(typeName, typeBackground) {
-  return `<span class="badge badge-type ${typeBackground} rounded-5">
-    ${typeName}
+function getHeaderTypeBadgeTemplate(type) {
+  return `<span class="badge badge-type ${type.bg} rounded-5">
+    ${type.name}
   </span>`;
 }
 
@@ -201,12 +201,12 @@ function getAboutTabContentTemplate(aboutObject) {
 /**
  * Creates one row for the dialog's stats tab.
  */
-function getStatsTabContentTemplate(statsObject, typeName) {
+function getStatsTabContentTemplate(statTemplateData) {
   return `<dl class="row flex-column flex-sm-row align-items-start align-items-sm-center pt-2 mb-0">
-      <dt class="col-12 col-sm-4">${statsObject.title}:</dt>
+      <dt class="col-12 col-sm-4">${statTemplateData.title}:</dt>
       <dd class="col-12 col-sm-8 mb-0">
-        <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-          <div class="progress-bar bg-type-${typeName} h-75 rounded" style="width: ${statsObject.value}%"></div>
+        <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="${statTemplateData.value}" aria-valuemin="0" aria-valuemax="100">
+          <div class="progress-bar bg-type-${statTemplateData.primaryTypeName} h-75 rounded" style="width: ${statTemplateData.value}%"></div>
         </div>
       </dd>
     </dl>`;
@@ -215,8 +215,8 @@ function getStatsTabContentTemplate(statsObject, typeName) {
 /**
  * Creates one evolution image for the dialog's evolution tab.
  */
-function getEvoChainTabContentTemplate(evoChainImage) {
-  return `<img src="${evoChainImage}" class="evoChain-image">`;
+function getEvoChainTabContentTemplate(evoChainTemplateData) {
+  return `<img src="${evoChainTemplateData.image}" class="evoChain-image">`;
 }
 
 /**

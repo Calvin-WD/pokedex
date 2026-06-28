@@ -25,9 +25,12 @@ async function renderDialog(dialogRef, pokemonId) {
 function renderDialogWrapper(dialogRef, pokemonId) {
   const pokemon = getPokemonFromCacheById(pokemonId);
   const typeValues = Object.values(pokemon.base.types);
-  let dialogNavTabHtml = getDialogNavTabHtmlString();
-  let dialogNavContentHtml = getDialogNavContentTemplate();
-  dialogRef.innerHTML = getDialogContentTemplate(typeValues, dialogNavTabHtml, dialogNavContentHtml);
+  const dialogContentTemplateData = {
+    primaryTypeName: typeValues[0].type.name,
+    navTabHtml: getDialogNavTabHtmlString(),
+    navContentHtml: getDialogNavContentTemplate(),
+  };
+  dialogRef.innerHTML = getDialogContentTemplate(dialogContentTemplateData);
 }
 
 /**
@@ -101,13 +104,14 @@ function updateDialogHeader(pokemon, typeValues) {
  */
 function updateDialogNavContent(pokemon, typeValues) {
   const abilityNames = getAbilityNamesAsString(pokemon);
+  const evoChainTemplateData = getEvoChainTemplateData(pokemon);
   const aboutContentRef = document.querySelector('[data-id="about-tab-pane"]');
   const statContentRef = document.querySelector('[data-id="stat-tab-pane"]');
   const evolutionContentRef = document.querySelector('[data-id="evolution-tab-pane"]');
 
   aboutContentRef.innerHTML = getAboutTabContentHtmlString(pokemon, abilityNames);
   statContentRef.innerHTML = getStatsTabContentHtmlString(pokemon, typeValues);
-  evolutionContentRef.innerHTML = getEvoChainTabContentHtmlString(pokemon);
+  evolutionContentRef.innerHTML = getEvoChainTabContentHtmlString(evoChainTemplateData);
 }
 
 /**
@@ -142,8 +146,13 @@ async function previousDialogPokemon(buttonRef, pokemonId) {
  * Creates the dialog header HTML for a Pokémon.
  */
 function getDialogHeaderContentHtmlString(pokemon, typeValues) {
-  let fullBadgesHtmlString = getDialogTypeBadgeHtmlString(typeValues);
-  return getDialogHeaderTemplate(pokemon, fullBadgesHtmlString);
+  const pokemonTemplateData = {
+    id: pokemon.base.id,
+    name: pokemon.base.name.toUpperCase(),
+    image: pokemon.base.sprites.other.home.front_default,
+    badgesHtml: getDialogTypeBadgeHtmlString(typeValues),
+  };
+  return getDialogHeaderTemplate(pokemonTemplateData);
 }
 
 /**
@@ -155,7 +164,11 @@ function getDialogTypeBadgeHtmlString(typeValues) {
   for (let indexType = 0; indexType < typeValues.length; indexType++) {
     const type = typeValues[indexType].type;
     const typeBackground = classPrefix + type.name;
-    badgesHtmlString += getHeaderTypeBadgeTemplate(capitalize(type.name), typeBackground);
+    const typeTemplateData = {
+      name: capitalize(type.name),
+      bg: typeBackground,
+    };
+    badgesHtmlString += getHeaderTypeBadgeTemplate(typeTemplateData);
   }
   return badgesHtmlString;
 }
@@ -171,12 +184,12 @@ function getDialogNavTabHtmlString() {
  * Creates the HTML for the dialog's about tab.
  */
 function getAboutTabContentHtmlString(pokemon, abilityNames) {
-  const aboutTabContentArray = getAboutTabContentAsArray(pokemon, abilityNames);
+  const aboutTabTemplateData = getAboutTabTemplateData(pokemon, abilityNames);
   let fullTabContentHtmlString = "";
-  for (let index = 0; index < aboutTabContentArray.length; index++) {
-    const element = aboutTabContentArray[index];
-    element.value = capitalize(element.value);
-    fullTabContentHtmlString += getAboutTabContentTemplate(element);
+  for (let index = 0; index < aboutTabTemplateData.length; index++) {
+    const currentTemplateData = aboutTabTemplateData[index];
+    currentTemplateData.value = capitalize(currentTemplateData.value);
+    fullTabContentHtmlString += getAboutTabContentTemplate(currentTemplateData);
   }
   return fullTabContentHtmlString;
 }
@@ -186,12 +199,15 @@ function getAboutTabContentHtmlString(pokemon, abilityNames) {
  */
 function getStatsTabContentHtmlString(pokemon, typeValues) {
   const statsTabContentArray = getStatsTabContentAsArray(pokemon.base.stats);
-  const typeName = typeValues[0].type.name;
   let fullTabContentHtmlString = "";
   for (let index = 0; index < statsTabContentArray.length; index++) {
-    const element = statsTabContentArray[index];
-    element.title = capitalize(element.title);
-    fullTabContentHtmlString += getStatsTabContentTemplate(element, typeName);
+    const currentStat = statsTabContentArray[index];
+    const statTemplateData = {
+      title: capitalize(currentStat.title),
+      value: currentStat.value,
+      primaryTypeName: typeValues[0].type.name,
+    };
+    fullTabContentHtmlString += getStatsTabContentTemplate(statTemplateData);
   }
   return fullTabContentHtmlString;
 }
@@ -199,17 +215,37 @@ function getStatsTabContentHtmlString(pokemon, typeValues) {
 /**
  * Creates the HTML for the dialog's evolution tab.
  */
-function getEvoChainTabContentHtmlString(pokemon) {
-  const evoChain = evoChains[pokemon.evoChain.id];
-  const evoChainPokemons = evoChain.pokemons;
+function getEvoChainTabContentHtmlString(evoChainTemplateData) {
   let fullTapContentHtmlString = "";
-  for (let index = 1; index <= Object.keys(evoChainPokemons).length; index++) {
-    const element = evoChainPokemons[index];
-    if (index > 1) {
+  for (let index = 0; index < evoChainTemplateData.length; index++) {
+    const currentTemplateData = evoChainTemplateData[index];
+    if (index > 0) {
       fullTapContentHtmlString += getEvoChainArrowTemplate();
     }
-    fullTapContentHtmlString += getEvoChainTabContentTemplate(element.image);
+    fullTapContentHtmlString += getEvoChainTabContentTemplate(currentTemplateData);
   }
   return fullTapContentHtmlString;
 }
 
+/**
+ * Creates the data rows used in the dialog's about tab.
+ */
+function getAboutTabTemplateData(pokemon, abilityNames) {
+  return [
+    { value: pokemon.base.name, title: "Name" },
+    { value: pokemon.base.height, title: "Height" },
+    { value: pokemon.base.weight, title: "Weight" },
+    { value: abilityNames, title: "Abilities" },
+  ];
+}
+
+function getEvoChainTemplateData(pokemon) {
+  const evoChain = evoChains[pokemon.evoChain.id];
+  const evoChainPokemons = evoChain.pokemons;
+  let evoChainImages = [];
+  for (let index = 1; index <= Object.keys(evoChainPokemons).length; index++) {
+    const currentPokemonImage = evoChainPokemons[index].image;
+    evoChainImages.push({ image: currentPokemonImage });
+  }
+  return evoChainImages;
+}

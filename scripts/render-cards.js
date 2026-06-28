@@ -28,8 +28,15 @@ function renderFilteredCards(searchValue) {
  */
 function renderSingleCard(contentWrapperRef, pokemon) {
   const currentTypeValues = Object.values(pokemon.base.types);
-  const cardTypeIconsHtml = getCardTypeIconsHtml(currentTypeValues);
-  contentWrapperRef.innerHTML += getPokemonCardTemplate(pokemon, cardTypeIconsHtml);
+  const pokemonTemplateData = {
+    id: pokemon.base.id,
+    name: pokemon.base.name,
+    nameUpperCase: pokemon.base.name.toUpperCase(),
+    image: pokemon.base.sprites.other.home.front_default,
+    primaryTypeName: pokemon.base.types[0].type.name,
+    typeIconsHtml: getCardTypeIconsHtml(currentTypeValues),
+  };
+  contentWrapperRef.innerHTML += getPokemonCardTemplate(pokemonTemplateData);
 }
 
 /**
@@ -38,8 +45,12 @@ function renderSingleCard(contentWrapperRef, pokemon) {
 function getCardTypeIconsHtml(typeValues) {
   let cardTypeIconsHtml = "";
   for (let typeIndex = 0; typeIndex < typeValues.length; typeIndex++) {
-    const currentTypeImgUrl = typeValues[typeIndex].type.typeImage;
-    cardTypeIconsHtml += getPokemonCardTypeImageTemplate(currentTypeImgUrl);
+    const currentType = typeValues[typeIndex].type;
+    const typeTemplateData = {
+      name: currentType.name,
+      image: currentType.typeImage,
+    };
+    cardTypeIconsHtml += getPokemonCardTypeImageTemplate(typeTemplateData);
   }
   return cardTypeIconsHtml;
 }

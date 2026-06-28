@@ -182,18 +182,6 @@ function getAbilityNamesAsString(pokemon) {
 }
 
 /**
- * Creates the data rows used in the dialog's about tab.
- */
-function getAboutTabContentAsArray(pokemon, abilityNames) {
-  return [
-    { value: pokemon.base.name, title: "Name" },
-    { value: pokemon.base.height, title: "Height" },
-    { value: pokemon.base.weight, title: "Weight" },
-    { value: abilityNames, title: "Abilities" },
-  ];
-}
-
-/**
  * Creates the data rows used in the dialog's stats tab.
  */
 function getStatsTabContentAsArray(pokemonStatsArray) {

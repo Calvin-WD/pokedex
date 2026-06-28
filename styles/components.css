@@ -89,6 +89,10 @@
 .button-card:hover {
   transform: scale(1.06);
 }
+
+.button-card:hover .card-image {
+  filter: drop-shadow(2px 4px 6px black);
+}
 /* Button Card END */
 
 /* Button Dialog */
