@@ -199,7 +199,7 @@ function getAboutTabContentTemplate(aboutObject) {
 }
 
 /**
- * Creates one row for the dialog's stats tab.
+ * Creates one stat row for the dialog's stats tab.
  */
 function getStatsTabContentTemplate(statTemplateData) {
   return `<dl class="row flex-column flex-sm-row align-items-start align-items-sm-center pt-2 mb-0">
@@ -226,6 +226,9 @@ function getEvoChainArrowTemplate() {
   return `<i class="bi bi-arrow-right"></i>`;
 }
 
+/**
+ * Creates the message shown when no Pokémon matches the search.
+ */
 function getNoMatchFoundTemplate() {
   return `<p class="container d-flex justify-content-center" data-id="not-found">No match found!</p>`;
 }

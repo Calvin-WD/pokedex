@@ -21,10 +21,16 @@ function toggleDisable(element) {
   element.disabled = !element.disabled;
 }
 
+/**
+ * Toggles the Bootstrap utility class that visually hides an element.
+ */
 function toggleVisibility(element) {
   element.classList.toggle("visually-hidden");
 }
 
+/**
+ * Toggles the load-more button between idle and loading states.
+ */
 function changeLoadingButtonState(loadMoreButtonRef) {
   const loadTextRef = document.querySelector('[data-id="button-load-text"]');
   const loadingTextRef = document.querySelector('[data-id="button-loading-text"]');

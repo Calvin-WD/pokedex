@@ -3,7 +3,7 @@ let evoChains = {};
 let pokemonApiIndexCounter = 0;
 
 /**
- * Loads the next batch of Pokémon and stores their card-ready data.
+ * Loads the next batch of Pokémon and stores their base data.
  */
 async function loadPokemons() {
   let loadedPokemons = [];
@@ -182,7 +182,7 @@ function getAbilityNamesAsString(pokemon) {
 }
 
 /**
- * Creates the data rows used in the dialog's stats tab.
+ * Creates the data rows used to render the dialog's stats tab.
  */
 function getStatsTabContentAsArray(pokemonStatsArray) {
   let statsTabContentArray = [];

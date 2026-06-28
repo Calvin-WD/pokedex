@@ -143,7 +143,7 @@ async function previousDialogPokemon(buttonRef, pokemonId) {
 }
 
 /**
- * Creates the dialog header HTML for a Pokémon.
+ * Creates the dialog header HTML from prepared Pokémon template data.
  */
 function getDialogHeaderContentHtmlString(pokemon, typeValues) {
   const pokemonTemplateData = {
@@ -156,7 +156,7 @@ function getDialogHeaderContentHtmlString(pokemon, typeValues) {
 }
 
 /**
- * Creates the type badge HTML for the dialog header.
+ * Creates the type badge HTML for all dialog header types.
  */
 function getDialogTypeBadgeHtmlString(typeValues) {
   const classPrefix = "bg-type-";
@@ -195,7 +195,7 @@ function getAboutTabContentHtmlString(pokemon, abilityNames) {
 }
 
 /**
- * Creates the HTML for the dialog's stats tab.
+ * Creates the HTML for the dialog's stats tab from prepared stat data.
  */
 function getStatsTabContentHtmlString(pokemon, typeValues) {
   const statsTabContentArray = getStatsTabContentAsArray(pokemon.base.stats);
@@ -228,7 +228,7 @@ function getEvoChainTabContentHtmlString(evoChainTemplateData) {
 }
 
 /**
- * Creates the data rows used in the dialog's about tab.
+ * Creates the template data rows used in the dialog's about tab.
  */
 function getAboutTabTemplateData(pokemon, abilityNames) {
   return [
@@ -239,6 +239,9 @@ function getAboutTabTemplateData(pokemon, abilityNames) {
   ];
 }
 
+/**
+ * Creates the template data used in the dialog's evolution tab.
+ */
 function getEvoChainTemplateData(pokemon) {
   const evoChain = evoChains[pokemon.evoChain.id];
   const evoChainPokemons = evoChain.pokemons;
