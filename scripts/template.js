@@ -110,7 +110,7 @@ function getHeaderTypeBadgeTemplate(typeName, typeBackground) {
  * Creates the navigation tabs for the dialog body.
  */
 function getDialogNavTabsTemplate() {
-  return `<ul class="nav nav-underline justify-content-around mb-3" id="myTab" role="tablist">
+  return `<ul class="nav nav-underline justify-content-around" id="myTab" role="tablist">
       <li class="nav-item" role="presentation">
         <button
           class="nav-link button-reset button-nav active"

@@ -1,3 +1,10 @@
+/* Header Nav */
+.nav-image {
+  width: calc(1.375rem + 1.5vw);
+  filter: drop-shadow(0 0px 7px rgba(255, 255, 255, 0.7))
+}
+/* Header Nav END */
+
 /* Search Input */
 .search-input:focus {
   border-color: var(--bs-body-color);
