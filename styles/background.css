@@ -2,109 +2,109 @@
 
 .bg-type-grass {
   background-color: rgb(67,154,55);
-  color: white;
+  color: var(--bs-body-color);
   --bs-card-subtitle-color: #64C864;
 }
 
 .bg-type-water {
   background-color: rgb(48,154,226);
-  color: white;
+  color: var(--bs-body-color);
   --bs-card-subtitle-color: rgba(101, 99, 99, 0.7);
 }
 
 .bg-type-fire {
   background-color: rgb(229,97,62);
-  color: white;
+  color: var(--bs-body-color);
   --bs-card-subtitle-color: rgba(101, 99, 99, 0.7);
 }
 
 .bg-type-flying {
   background-color: rgb(116,171,209);
-  color: white;
+  color: var(--bs-body-color);
   --bs-card-subtitle-color: rgba(101, 99, 99, 0.7);
 }
 
 .bg-type-bug {
   background-color: rgb(160,160,40);
-  color: white;
+  color: var(--bs-body-color);
   --bs-card-subtitle-color: rgba(101, 99, 99, 0.7);
 }
 
 .bg-type-normal {
   background-color: rgb(130,130,130);
-  color: white;
+  color: var(--bs-body-color);
   --bs-card-subtitle-color: rgba(101, 99, 99, 0.7);
 }
 
 .bg-type-poison {
   background-color: rgb(148,84,204);
-  color: white;
+  color: var(--bs-body-color);
   --bs-card-subtitle-color: rgba(101, 99, 99, 0.7);
 }
 
 .bg-type-electric {
   background-color: rgb(224,189,40);
-  color: white;
+  color: var(--bs-body-color);
   --bs-card-subtitle-color: rgba(101, 99, 99, 0.7);
 }
 
 .bg-type-ground {
   background-color: rgb(165,115,60);
-  color: white;
+  color: var(--bs-body-color);
   --bs-card-subtitle-color: rgba(101, 99, 99, 0.7);
 }
 
 .bg-type-fairy {
   background-color: rgb(226,141,226);
-  color: white;
+  color: var(--bs-body-color);
   --bs-card-subtitle-color: rgba(101, 99, 99, 0.7);
 }
 
 .bg-type-fighting {
   background-color: rgb(229,145,33);
-  color: white;
+  color: var(--bs-body-color);
   --bs-card-subtitle-color: rgba(101, 99, 99, 0.7);
 }
 
 .bg-type-psychic {
   background-color: rgb(234,108,141);
-  color: white;
+  color: var(--bs-body-color);
   --bs-card-subtitle-color: rgba(101, 99, 99, 0.7);
 }
 
 .bg-type-rock {
   background-color: rgb(170,165,129);
-  color: white;
+  color: var(--bs-body-color);
   --bs-card-subtitle-color: rgba(101, 99, 99, 0.7);
 }
 
 .bg-type-ghost {
   background-color: rgb(111,69,112);
-  color: white;
+  color: var(--bs-body-color);
   --bs-card-subtitle-color: rgba(101, 99, 99, 0.7);
 }
 
 .bg-type-ice {
   background-color: rgb(71,201,201);
-  color: white;
+  color: var(--bs-body-color);
   --bs-card-subtitle-color: rgba(101, 99, 99, 0.7);
 }
 
 .bg-type-dragon {
   background-color: rgb(87,111,189);
-  color: white;
+  color: var(--bs-body-color);
   --bs-card-subtitle-color: rgba(101, 99, 99, 0.7);
 }
 
 .bg-type-dark {
   background-color: rgb(79,71,71);
-  color: white;
+  color: var(--bs-body-color);
   --bs-card-subtitle-color: rgba(101, 99, 99, 0.7);
 }
 
 .bg-type-steel {
   background-color: rgb(107,173,201);
-  color: white;
+  color: var(--bs-body-color);
   --bs-card-subtitle-color: rgba(101, 99, 99, 0.7);
 }
 

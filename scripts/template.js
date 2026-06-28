@@ -4,17 +4,18 @@
 function getPokemonCardTemplate(pokemon, cardTypeIconsHtml) {
   return `<button 
     type="button"
-    class="card bg-body-tertiary card-width h-100 p-0"
+    class="card button-reset button-card bg-body-tertiary card-width h-100 p-0"
+    data-id="card"
     data-pokemon-id="${pokemon.base.id}"
     onclick="openDialog(${pokemon.base.id})">
-      <div class="card-header d-flex flex-row-reverse justify-content-between align-items-center">
+      <header class="card-header d-flex flex-row-reverse justify-content-between align-items-center">
         <h5 class="text-end">${pokemon.base.name.toUpperCase()}</h5> <h6>#${pokemon.base.id}</h6>
-      </div>
+      </header>
       <div
       class="card-body position-relative d-flex justify-content-center card-body-height bg-type-${pokemon.base.types[0].type.name} p-0">
         <img src="${pokemon.base.sprites.other.home.front_default}" class="card-image w-75" data-id="card-image">
       </div>
-      <div class="d-flex justify-content-center gap-5 p-1">${cardTypeIconsHtml}</div>
+      <footer class="d-flex justify-content-center gap-5 p-1">${cardTypeIconsHtml}</footer>
     </button>`;
 }
 
@@ -28,24 +29,31 @@ function getPokemonCardTypeImageTemplate(typeImgUrl) {
 /**
  * Creates the complete dialog shell with stable dynamic content areas.
  */
-function getDialogContentTemplate(typesArray, dialogNavTabHtml, dialogNavContentHtml, dialogFooterHtml) {
+function getDialogContentTemplate(typesArray, dialogNavTabHtml, dialogNavContentHtml) {
   return `<div class="modal-dialog">
         <div class="modal-content bg-type-${typesArray[0].type.name} rounded-3"
         data-id="dialog-bg-wrapper">
-          <div class="modal-header flex-column p-3 border-0">
-            <button type="button" class="btn-close" data-bs-theme="dark" onclick="closeDialog()"></button>
+          <header class="modal-header flex-column p-3 border-0"
+          data-id="overlay-pokemon-name">
+            <div class="d-flex justify-content-end align-items-center w-100">
+              <button type="button" class="btn button-reset button-close" data-bs-theme="dark"
+              onclick="closeDialog()"
+              data-id="close-dialog-button">
+                <i class="bi bi-x-lg"></i>
+              </button>
+            </div>
             <div data-id="dialog-header-content">
             </div>
-          </div>
-          <div class="modal-body bg-body-secondary text-body rounded-top-3 px-3 py-2">
+          </header>
+          <div class="modal-body bg-body-secondary text-body rounded-3 px-3 py-2">
               ${dialogNavTabHtml}
             <div class="tab-content tab-content-maxHeight overflow-y-auto overflow-x-hidden"
             id="myTabContent"
-            data-id="dialog-nav-content">
+            data-id="dialog-nav-content"
+            tabindex="-1">
             ${dialogNavContentHtml}
             </div>
           </div>
-          ${dialogFooterHtml}
         </div>
       </div>`;
 }
@@ -60,23 +68,42 @@ function getDialogHeaderTemplate(pokemon, badgesHtml) {
         </h3>
         <h4>#${pokemon.base.id}</h4>
       </div>
-      <div class="d-flex flex-sm-row flex-column-reverse justify-content-center align-items-center gap-4">
-        <div class="d-flex flex-row flex-sm-column justify-content-center gap-3">
-          ${badgesHtml}
-        </div>
-        <img
+      <div class="d-flex flex-column gap-4">
+        <div class="d-flex justify-content-around align-items-center">
+          <button
+          type="button"
+          class="btn button-reset button-skip"
+          data-id="prev-button"
+          onclick="previousDialogPokemon(this, Number(this.closest('dialog').dataset.pokemonId))">
+            <i class="bi bi-caret-left-fill"></i>
+          </button>
+          <img
           src="${pokemon.base.sprites.other.home.front_default}"
           alt=""
-          class="w-50 dialog-image-mw"
-        />
+          class="w-50 dialog-image dialog-image-minwidth"
+          data-id="dialog-image"
+          />
+          <button
+          type="button"
+          class="btn button-reset button-skip"
+          data-id="next-button"
+          onclick="nextDialogPokemon(this, Number(this.closest('dialog').dataset.pokemonId))">
+            <i class="bi bi-caret-right-fill"></i>
+          </button>
+        </div>
+        <div class="d-flex flex-row justify-content-center gap-3">
+          ${badgesHtml}
+        </div>
       </div>`;
 }
 
 /**
  * Creates a type badge for the dialog header.
  */
-function getHeaderTypeBadgeTemplate(typeName) {
-  return `<span class="badge bg-body-secondary">${typeName}</span>`;
+function getHeaderTypeBadgeTemplate(typeName, typeBackground) {
+  return `<span class="badge badge-type ${typeBackground} rounded-5">
+    ${typeName}
+  </span>`;
 }
 
 /**
@@ -86,7 +113,7 @@ function getDialogNavTabsTemplate() {
   return `<ul class="nav nav-underline justify-content-around mb-3" id="myTab" role="tablist">
       <li class="nav-item" role="presentation">
         <button
-          class="nav-link active"
+          class="nav-link button-reset button-nav active"
           id="about-tab"
           data-bs-toggle="tab"
           data-bs-target="#about-tab-pane"
@@ -100,7 +127,7 @@ function getDialogNavTabsTemplate() {
       </li>
       <li class="nav-item" role="presentation">
         <button
-          class="nav-link"
+          class="nav-link button-reset button-nav"
           id="stat-tab"
           data-bs-toggle="tab"
           data-bs-target="#stat-tab-pane"
@@ -114,7 +141,7 @@ function getDialogNavTabsTemplate() {
       </li>
       <li class="nav-item" role="presentation">
         <button
-          class="nav-link"
+          class="nav-link button-reset button-nav"
           id="evolution-tab"
           data-bs-toggle="tab"
           data-bs-target="#evolution-tab-pane"
@@ -199,24 +226,6 @@ function getEvoChainArrowTemplate() {
   return `<i class="bi bi-arrow-right"></i>`;
 }
 
-/**
- * Creates the dialog footer with previous and next controls.
- */
-function getDialogFooterTemplate() {
-  return `<div class="modal-footer justify-content-between bg-body-secondary text-body p-2 rounded-bottom-3 border-0">
-  <button
-  type="button"
-  class="btn bg-gradient"
-  data-id="prev-button"
-  onclick="previousDialogPokemon(this, Number(this.closest('dialog').dataset.pokemonId))">
-    Previous
-  </button>
-  <button
-  type="button"
-  class="btn bg-gradient"
-  data-id="next-button"
-  onclick="nextDialogPokemon(this, Number(this.closest('dialog').dataset.pokemonId))">
-    Next
-  </button>
-  </div>`;
+function getNoMatchFoundTemplate() {
+  return `<p class="container d-flex justify-content-center" data-id="not-found">No match found!</p>`;
 }

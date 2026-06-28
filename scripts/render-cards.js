@@ -19,7 +19,7 @@ function renderFilteredCards(searchValue) {
   renderCards(filteredPokemons);
 
   if (filteredPokemons.length === 0) {
-    console.error("No match found!");
+    contentWrapperRef.innerHTML = getNoMatchFoundTemplate();
   }
 }
 

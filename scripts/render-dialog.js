@@ -27,8 +27,7 @@ function renderDialogWrapper(dialogRef, pokemonId) {
   const typeValues = Object.values(pokemon.base.types);
   let dialogNavTabHtml = getDialogNavTabHtmlString();
   let dialogNavContentHtml = getDialogNavContentTemplate();
-  let dialogFooterHtml = getDialogFooterHtmlString(pokemon);
-  dialogRef.innerHTML = getDialogContentTemplate(typeValues, dialogNavTabHtml, dialogNavContentHtml, dialogFooterHtml);
+  dialogRef.innerHTML = getDialogContentTemplate(typeValues, dialogNavTabHtml, dialogNavContentHtml);
 }
 
 /**
@@ -151,10 +150,12 @@ function getDialogHeaderContentHtmlString(pokemon, typeValues) {
  * Creates the type badge HTML for the dialog header.
  */
 function getDialogTypeBadgeHtmlString(typeValues) {
+  const classPrefix = "bg-type-";
   let badgesHtmlString = "";
   for (let indexType = 0; indexType < typeValues.length; indexType++) {
     const type = typeValues[indexType].type;
-    badgesHtmlString += getHeaderTypeBadgeTemplate(capitalize(type.name));
+    const typeBackground = classPrefix + type.name;
+    badgesHtmlString += getHeaderTypeBadgeTemplate(capitalize(type.name), typeBackground);
   }
   return badgesHtmlString;
 }
@@ -212,9 +213,3 @@ function getEvoChainTabContentHtmlString(pokemon) {
   return fullTapContentHtmlString;
 }
 
-/**
- * Creates the dialog footer HTML.
- */
-function getDialogFooterHtmlString() {
-  return getDialogFooterTemplate();
-}

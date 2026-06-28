@@ -20,7 +20,7 @@
     <header>
       <nav class="navbar navbar-expand-sm bg-body-tertiary">
         <div class="container-xxl">
-          <a class="navbar-brand">Pokedéx</a>
+          <h1 class="">Pokedéx</h1>
           <button
             class="navbar-toggler"
             type="button"
@@ -53,7 +53,7 @@
         <div id="content-wrapper" class="d-flex justify-content-center align-items-center flex-wrap gap-3"></div>
         <button
           type="button"
-          class="btn bg-gradient mw-25"
+          class="btn button-load bg-gradient mw-25"
           data-id="load-more-button"
           data-action="load-more"
           onclick="loadMorePokemons()"
@@ -65,7 +65,7 @@
         </button>
       </section>
       <aside id="dialog-wrapper" class="container">
-        <dialog id="dialog" class="border-0 bg-transparent" closedby="any" onclose="removeBodyScrollLock()"></dialog>
+        <dialog id="dialog" class="bg-transparent border-0 p-0" closedby="any" onclose="removeBodyScrollLock()"></dialog>
       </aside>
     </main>
     <footer class="bg-body-tertiary">
