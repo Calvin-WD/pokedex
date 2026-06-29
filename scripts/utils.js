@@ -27,16 +27,3 @@ function toggleDisable(element) {
 function toggleVisibility(element) {
   element.classList.toggle("visually-hidden");
 }
-
-/**
- * Toggles the load-more button between idle and loading states.
- */
-function changeLoadingButtonState(loadMoreButtonRef) {
-  const loadTextRef = document.querySelector('[data-id="button-load-text"]');
-  const loadingTextRef = document.querySelector('[data-id="button-loading-text"]');
-  const spinnerRef = document.querySelector('[data-id="button-loading-spinner"]');
-  toggleDisable(loadMoreButtonRef);
-  toggleVisibility(loadTextRef);
-  toggleVisibility(loadingTextRef);
-  toggleVisibility(spinnerRef);
-}

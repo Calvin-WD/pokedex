@@ -3,10 +3,12 @@
  */
 function renderCards(pokemonsToRender) {
   const contentWrapperRef = document.getElementById("content-wrapper");
+  let contentHtmlString = "";
   for (let index = 0; index < pokemonsToRender.length; index++) {
     const currentPokemon = pokemonsToRender[index];
-    renderSingleCard(contentWrapperRef, currentPokemon);
+    contentHtmlString += renderSingleCard(currentPokemon);
   }
+  contentWrapperRef.innerHTML += contentHtmlString;
 }
 
 /**
@@ -26,7 +28,7 @@ function renderFilteredCards(searchValue) {
 /**
  * Builds and appends one Pokémon card with its type icons.
  */
-function renderSingleCard(contentWrapperRef, pokemon) {
+function renderSingleCard(pokemon) {
   const currentTypeValues = Object.values(pokemon.base.types);
   const pokemonTemplateData = {
     id: pokemon.base.id,
@@ -36,7 +38,7 @@ function renderSingleCard(contentWrapperRef, pokemon) {
     primaryTypeName: pokemon.base.types[0].type.name,
     typeIconsHtml: getCardTypeIconsHtml(currentTypeValues),
   };
-  contentWrapperRef.innerHTML += getPokemonCardTemplate(pokemonTemplateData);
+  return getPokemonCardTemplate(pokemonTemplateData);
 }
 
 /**

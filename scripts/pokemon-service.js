@@ -7,6 +7,7 @@ let pokemonApiIndexCounter = 0;
  */
 async function loadPokemons() {
   let loadedPokemons = [];
+  showHideLoadingSpinner();
   for (let index = 0; index < POKEMON_LOADING_INTERVAL; index++) {
     pokemonApiIndexCounter++;
     const pokemonApiObject = await fetchPokeApiData(POKEAPI_POKEMON + pokemonApiIndexCounter);
@@ -14,6 +15,7 @@ async function loadPokemons() {
     await loadTypeImages(pokemonApiObject);
     loadedPokemons.push(pokemons[pokemonApiObject.id]);
   }
+  showHideLoadingSpinner();
   return loadedPokemons;
 }
 
@@ -80,8 +82,6 @@ async function loadPokemonEvoChain(evoChainId, evoChainUrl) {
  */
 async function loadMorePokemons() {
   const loadMoreButtonRef = document.querySelector('[data-id="load-more-button"]');
-  showHideLoadingSpinner();
-  // changeLoadingButtonState(loadMoreButtonRef);
   const loadedPokemons = await loadPokemons();
   const inputRef = document.querySelector('[data-id="search-input"]');
   if (!inputRef.value) {
@@ -89,8 +89,6 @@ async function loadMorePokemons() {
   } else {
     renderFilteredCards(inputRef.value);
   }
-  showHideLoadingSpinner();
-  // changeLoadingButtonState(loadMoreButtonRef);
 }
 
 /**
