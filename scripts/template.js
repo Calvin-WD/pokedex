@@ -177,14 +177,12 @@ function getDialogNavContentTemplate() {
       >
       </div>
       <div
-        class="tab-pane fade"
+        class="tab-pane fade d-flex justify-content-center align-items-center gap-2 py-2"
         id="evolution-tab-pane"
+        data-id="evolution-tab-pane"
         role="tabpanel"
         aria-labelledby="evolution-tab"
       >
-        <div class="d-flex justify-content-center align-items-center gap-2 py-2"
-        data-id="evolution-tab-pane">
-        </div>
     </div>`;
 }
 
@@ -229,6 +227,6 @@ function getEvoChainArrowTemplate() {
 /**
  * Creates the message shown when no Pokémon matches the search.
  */
-function getNoMatchFoundTemplate() {
-  return `<p class="container d-flex justify-content-center" data-id="not-found">No match found!</p>`;
+function getMessageTemplate(string) {
+  return `<p class="container d-flex justify-content-center" data-id="not-found">${string}</p>`;
 }

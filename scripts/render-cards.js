@@ -21,7 +21,7 @@ function renderFilteredCards(searchValue) {
   renderCards(filteredPokemons);
 
   if (filteredPokemons.length === 0) {
-    contentWrapperRef.innerHTML = getNoMatchFoundTemplate();
+    contentWrapperRef.innerHTML = getMessageTemplate("No match found!");
   }
 }
 

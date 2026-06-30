@@ -1,3 +1,10 @@
+const POKEAPI_BASE_URL = "https://pokeapi.co/api/v2/";
+const POKEAPI_POKEMON = "pokemon/";
+const POKEAPI_TYPE = "type/";
+const POKEAPI_SPECIES = "pokemon-species/";
+const POKEAPI_EVOCHAIN = "evolution-chain/";
+const POKEAPI_IMG_URL = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/";
+const POKEMON_LOADING_INTERVAL = 40;
 let pokemons = {};
 let evoChains = {};
 let pokemonApiIndexCounter = 0;
@@ -6,25 +13,81 @@ let pokemonApiIndexCounter = 0;
  * Loads the next batch of Pokémon and stores their base data.
  */
 async function loadPokemons() {
-  let loadedPokemons = [];
   showHideLoadingSpinner();
-  for (let index = 0; index < POKEMON_LOADING_INTERVAL; index++) {
-    pokemonApiIndexCounter++;
-    const pokemonApiObject = await fetchPokeApiData(POKEAPI_POKEMON + pokemonApiIndexCounter);
-    cachePokemonBaseData(pokemonApiObject);
-    await loadTypeImages(pokemonApiObject);
-    loadedPokemons.push(pokemons[pokemonApiObject.id]);
+  try {
+    const pokemonBatchList = await loadPokemonBatchListFromPokeApi();
+    const loadedPokemons = await Promise.all(
+      pokemonBatchList.results.map((pokemon) => loadPokemonByListEntry(pokemon)),
+    );
+    pokemonApiIndexCounter += POKEMON_LOADING_INTERVAL;
+    return loadedPokemons;
+  } finally {
+    showHideLoadingSpinner();
   }
-  showHideLoadingSpinner();
-  return loadedPokemons;
+}
+
+async function loadPokemonByListEntry(pokemon) {
+  const id = getPokemonIdByUrl(pokemon.url, POKEAPI_POKEMON);
+  const pokemonApiObject = await fetchPokeApiData(POKEAPI_POKEMON + id);
+  cachePokemonBaseData(pokemonApiObject);
+  await loadTypeImages(pokemonApiObject);
+  return pokemons[pokemonApiObject.id];
 }
 
 /**
- * Stores the relevant base data for one Pokémon in the cache.
+ * Loads another Pokémon batch and updates the card list based on the current search.
  */
-function cachePokemonBaseData(pokemonApiObject) {
-  const baseData = createPokemonBaseData(pokemonApiObject);
-  pokemons[pokemonApiObject.id] = baseData;
+async function loadMorePokemons() {
+  try {
+    const loadedPokemons = await loadPokemons();
+    const inputRef = document.querySelector('[data-id="search-input"]');
+    if (!inputRef.value) {
+      renderCards(loadedPokemons);
+    } else {
+      renderFilteredCards(inputRef.value);
+    }
+  } catch (error) {
+    const contentWrapperRef = document.getElementById("content-wrapper");
+    contentWrapperRef.innerHTML = getMessageTemplate("Loading more Failure!");
+    console.error(error);
+  }
+}
+
+/**
+ * Loads and adds icon images for each type of a cached Pokémon.
+ */
+async function loadTypeImages(pokemonApiObject) {
+  const types = pokemons[pokemonApiObject.id].base.types;
+  await Promise.all(
+    types.map(async (currentType) => {
+      const type = currentType.type;
+      let typeId = type.url.substring(POKEAPI_BASE_URL.length + POKEAPI_TYPE.length);
+      const currentTypeObject = await fetchPokeApiData(POKEAPI_TYPE + typeId);
+      type["typeImage"] = currentTypeObject.sprites["generation-viii"]["legends-arceus"]["symbol_icon"];
+    }),
+  );
+}
+
+/**
+ * Loads species data and stores the Pokémon's evolution chain reference.
+ */
+async function loadPokemonSpecies(pokemon) {
+  const species = await fetchPokeApiData(POKEAPI_SPECIES + pokemon.base.id);
+  const evoChainUrl = species.evolution_chain.url;
+  const evoChainId = evoChainUrl.substring(POKEAPI_BASE_URL.length + POKEAPI_EVOCHAIN.length, evoChainUrl.length - 1);
+  pokemon["evoChain"] = { id: evoChainId, url: evoChainUrl };
+}
+
+/**
+ * Loads and caches an evolution chain by its id.
+ */
+async function loadPokemonEvoChain(evoChainId, evoChainUrl) {
+  const evoChain = await fetchPokeApiData(evoChainUrl.substring(POKEAPI_BASE_URL.length));
+  evoChains[`${evoChainId}`] = evoChain.chain;
+}
+
+async function loadPokemonBatchListFromPokeApi() {
+  return await fetchPokeApiData(`pokemon?limit=${POKEMON_LOADING_INTERVAL}&offset=${pokemonApiIndexCounter}`);
 }
 
 /**
@@ -46,62 +109,24 @@ function createPokemonBaseData(pokemonApiObject) {
 }
 
 /**
- * Loads and adds icon images for each type of a cached Pokémon.
+ * Stores the relevant base data for one Pokémon in the cache.
  */
-async function loadTypeImages(pokemonApiObject) {
-  const types = pokemons[pokemonApiObject.id].base.types;
-
-  for (let typeIndex = 0; typeIndex < types.length; typeIndex++) {
-    const type = types[typeIndex].type;
-    let typeId = type.url.substring(POKEAPI_BASE_URL.length + POKEAPI_TYPE.length);
-    const currentTypeObject = await fetchPokeApiData(POKEAPI_TYPE + typeId);
-    type["typeImage"] = currentTypeObject.sprites["generation-viii"]["legends-arceus"]["symbol_icon"];
-  }
-}
-
-/**
- * Loads species data and stores the Pokémon's evolution chain reference.
- */
-async function loadPokemonSpecies(pokemon) {
-  const species = await fetchPokeApiData(POKEAPI_SPECIES + pokemon.base.id);
-  const evoChainUrl = species.evolution_chain.url;
-  const evoChainId = evoChainUrl.substring(POKEAPI_BASE_URL.length + POKEAPI_EVOCHAIN.length, evoChainUrl.length - 1);
-  pokemon["evoChain"] = { id: evoChainId, url: evoChainUrl };
-}
-
-/**
- * Loads and caches an evolution chain by its id.
- */
-async function loadPokemonEvoChain(evoChainId, evoChainUrl) {
-  const evoChain = await fetchPokeApiData(evoChainUrl.substring(POKEAPI_BASE_URL.length));
-  evoChains[`${evoChainId}`] = evoChain.chain;
-}
-
-/**
- * Loads another Pokémon batch and updates the card list based on the current search.
- */
-async function loadMorePokemons() {
-  const loadMoreButtonRef = document.querySelector('[data-id="load-more-button"]');
-  const loadedPokemons = await loadPokemons();
-  const inputRef = document.querySelector('[data-id="search-input"]');
-  if (!inputRef.value) {
-    renderCards(loadedPokemons);
-  } else {
-    renderFilteredCards(inputRef.value);
-  }
+function cachePokemonBaseData(pokemonApiObject) {
+  const baseData = createPokemonBaseData(pokemonApiObject);
+  pokemons[pokemonApiObject.id] = baseData;
 }
 
 /**
  * Ensures the selected Pokémon has its evolution chain data available.
  */
 async function ensureEvoChainIsLoaded(pokemon) {
-  if (!pokemon["evoChain"]) {
-    await loadPokemonSpecies(pokemon);
-  }
-  if (!evoChains[`${pokemon.evoChain.id}`]) {
-    await loadPokemonEvoChain(pokemon.evoChain.id, pokemon.evoChain.url);
-    buildEvoChainObject(pokemon);
-  }
+    if (!pokemon["evoChain"]) {
+      await loadPokemonSpecies(pokemon);
+    }
+    if (!evoChains[`${pokemon.evoChain.id}`]) {
+      await loadPokemonEvoChain(pokemon.evoChain.id, pokemon.evoChain.url);
+      buildEvoChainObject(pokemon);
+    }
 }
 
 /**
@@ -112,7 +137,7 @@ function buildEvoChainObject(pokemon) {
   let nextEvoChain = evoChain;
   let evoRank = 1;
   while (nextEvoChain) {
-    let currentPokemonId = getPokemonIdBySpeciesUrl(nextEvoChain.species.url);
+    let currentPokemonId = getPokemonIdByUrl(nextEvoChain.species.url, POKEAPI_SPECIES);
     nextEvoChain = addPokemonToEvoChainObject(currentPokemonId, evoChain, nextEvoChain, evoRank);
     evoRank++;
   }
@@ -150,10 +175,10 @@ function getPokemonFromCacheById(pokemonId) {
 }
 
 /**
- * Extracts a Pokémon id from a species API URL.
+ * Extracts a Pokémon id from a API URL.
  */
-function getPokemonIdBySpeciesUrl(url) {
-  return `${url}`.substring(POKEAPI_BASE_URL.length + POKEAPI_SPECIES.length, `${url}`.length - 1);
+function getPokemonIdByUrl(url, source) {
+  return `${url}`.substring(POKEAPI_BASE_URL.length + source.length, `${url}`.length - 1);
 }
 
 /**
