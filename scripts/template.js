@@ -225,7 +225,7 @@ function getEvoChainArrowTemplate() {
 }
 
 /**
- * Creates the message shown when no Pokémon matches the search.
+ * Creates a feedback message for loading failures and empty search results.
  */
 function getMessageTemplate(string) {
   return `<p class="container d-flex justify-content-center" data-id="not-found">${string}</p>`;

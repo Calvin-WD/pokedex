@@ -28,6 +28,9 @@ async function loadPokemons() {
   }
 }
 
+/**
+ * Loads one Pokémon from a batch list entry and prepares its cached data.
+ */
 async function loadPokemonByListEntry(pokemon) {
   const id = getPokemonIdByUrl(pokemon.url, POKEAPI_POKEMON);
   const pokemonApiObject = await fetchPokeApiData(POKEAPI_POKEMON + id);
@@ -56,7 +59,7 @@ async function loadMorePokemons() {
 }
 
 /**
- * Loads and adds icon images for each type of a cached Pokémon.
+ * Loads missing Pokémon type data and stores it in the shared type cache.
  */
 async function loadTypes(currentTypes) {
   await Promise.all(
@@ -78,11 +81,17 @@ async function loadTypes(currentTypes) {
   );
 }
 
+/**
+ * Ensures all type data for a cached Pokémon is available.
+ */
 async function ensureTypesAreLoaded(pokemonApiObject) {
   const currentTypes = pokemons[pokemonApiObject.id].base.types;
   await loadTypes(currentTypes);
 }
 
+/**
+ * Creates the local type data structure from a type API response.
+ */
 function createTypeCacheData(currentTypeObject) {
   return {
     name: currentTypeObject.name,
@@ -90,6 +99,9 @@ function createTypeCacheData(currentTypeObject) {
   };
 }
 
+/**
+ * Stores the relevant type data in the shared type cache.
+ */
 function cacheTypeData(typeData) {
   types[typeData.name] = {
     name: typeData.name,
@@ -115,6 +127,9 @@ async function loadPokemonEvoChain(evoChainId, evoChainUrl) {
   evoChains[`${evoChainId}`] = evoChain.chain;
 }
 
+/**
+ * Loads the next Pokémon batch list from the PokéAPI.
+ */
 async function loadPokemonBatchListFromPokeApi() {
   return await fetchPokeApiData(`pokemon?limit=${POKEMON_LOADING_INTERVAL}&offset=${pokemonApiIndexCounter}`);
 }
@@ -204,7 +219,7 @@ function getPokemonFromCacheById(pokemonId) {
 }
 
 /**
- * Extracts a Pokémon id from a API URL.
+ * Extracts a Pokémon id from an API URL.
  */
 function getPokemonIdByUrl(url, source) {
   return `${url}`.substring(POKEAPI_BASE_URL.length + source.length, `${url}`.length - 1);

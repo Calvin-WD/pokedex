@@ -26,7 +26,7 @@ function renderFilteredCards(searchValue) {
 }
 
 /**
- * Builds and appends one Pokémon card with its type icons.
+ * Builds one Pokémon card with its type icons.
  */
 function renderSingleCard(pokemon) {
   const currentTypeValues = Object.values(pokemon.base.types);
@@ -70,6 +70,9 @@ function getCardTypeIconsHtml(typeValues) {
 //   return cardTypeIconsHtml;
 // }
 
+/**
+ * Toggles the main content and full-content loading spinner visibility.
+ */
 function showHideLoadingSpinner() {
   const loadingSpinnerRef = document.querySelector('[data-id="loading-spinner"]');
   const contentRef = document.querySelector('[data-id="content"]');
