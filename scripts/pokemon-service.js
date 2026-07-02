@@ -6,6 +6,8 @@ const POKEAPI_EVOCHAIN = "evolution-chain/";
 const POKEAPI_IMG_URL = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/";
 const POKEMON_LOADING_INTERVAL = 40;
 let pokemons = {};
+let types = {};
+let typeRequests = {};
 let evoChains = {};
 let pokemonApiIndexCounter = 0;
 
@@ -30,7 +32,7 @@ async function loadPokemonByListEntry(pokemon) {
   const id = getPokemonIdByUrl(pokemon.url, POKEAPI_POKEMON);
   const pokemonApiObject = await fetchPokeApiData(POKEAPI_POKEMON + id);
   cachePokemonBaseData(pokemonApiObject);
-  await loadTypeImages(pokemonApiObject);
+  await ensureTypesAreLoaded(pokemonApiObject);
   return pokemons[pokemonApiObject.id];
 }
 
@@ -56,16 +58,43 @@ async function loadMorePokemons() {
 /**
  * Loads and adds icon images for each type of a cached Pokémon.
  */
-async function loadTypeImages(pokemonApiObject) {
-  const types = pokemons[pokemonApiObject.id].base.types;
+async function loadTypes(currentTypes) {
   await Promise.all(
-    types.map(async (currentType) => {
-      const type = currentType.type;
-      let typeId = type.url.substring(POKEAPI_BASE_URL.length + POKEAPI_TYPE.length);
-      const currentTypeObject = await fetchPokeApiData(POKEAPI_TYPE + typeId);
-      type["typeImage"] = currentTypeObject.sprites["generation-viii"]["legends-arceus"]["symbol_icon"];
+    currentTypes.map(async (currentType) => {
+      if (types[currentType.type.name]) {
+        console.log(`${currentType.type.name} is alreay loaded!`);
+        return;
+      }
+      if (!typeRequests[currentType.type.name]) {
+        const typeId = currentType.type.url.substring(POKEAPI_BASE_URL.length + POKEAPI_TYPE.length);
+        typeRequests[currentType.type.name] = fetchPokeApiData(POKEAPI_TYPE + typeId);
+      }
+      const currentTypeObject = await typeRequests[currentType.type.name];
+      if (!types[currentType.type.name]) {
+        cacheTypeData(createTypeCacheData(currentTypeObject));
+        console.log(`${currentType.type.name} has loaded!`);
+      }
     }),
   );
+}
+
+async function ensureTypesAreLoaded(pokemonApiObject) {
+  const currentTypes = pokemons[pokemonApiObject.id].base.types;
+  await loadTypes(currentTypes);
+}
+
+function createTypeCacheData(currentTypeObject) {
+  return {
+    name: currentTypeObject.name,
+    image: currentTypeObject.sprites["generation-viii"]["legends-arceus"]["symbol_icon"],
+  };
+}
+
+function cacheTypeData(typeData) {
+  types[typeData.name] = {
+    name: typeData.name,
+    image: typeData.image,
+  };
 }
 
 /**
@@ -120,13 +149,13 @@ function cachePokemonBaseData(pokemonApiObject) {
  * Ensures the selected Pokémon has its evolution chain data available.
  */
 async function ensureEvoChainIsLoaded(pokemon) {
-    if (!pokemon["evoChain"]) {
-      await loadPokemonSpecies(pokemon);
-    }
-    if (!evoChains[`${pokemon.evoChain.id}`]) {
-      await loadPokemonEvoChain(pokemon.evoChain.id, pokemon.evoChain.url);
-      buildEvoChainObject(pokemon);
-    }
+  if (!pokemon["evoChain"]) {
+    await loadPokemonSpecies(pokemon);
+  }
+  if (!evoChains[`${pokemon.evoChain.id}`]) {
+    await loadPokemonEvoChain(pokemon.evoChain.id, pokemon.evoChain.url);
+    buildEvoChainObject(pokemon);
+  }
 }
 
 /**

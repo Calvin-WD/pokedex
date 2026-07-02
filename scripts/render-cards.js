@@ -49,13 +49,26 @@ function getCardTypeIconsHtml(typeValues) {
   for (let typeIndex = 0; typeIndex < typeValues.length; typeIndex++) {
     const currentType = typeValues[typeIndex].type;
     const typeTemplateData = {
-      name: currentType.name,
-      image: currentType.typeImage,
+      name: types[currentType.name].name,
+      image: types[currentType.name].image,
     };
     cardTypeIconsHtml += getPokemonCardTypeImageTemplate(typeTemplateData);
   }
   return cardTypeIconsHtml;
 }
+
+// function getCardTypeIconsHtml(typeValues) {
+//   let cardTypeIconsHtml = "";
+//   for (let typeIndex = 0; typeIndex < typeValues.length; typeIndex++) {
+//     const currentType = typeValues[typeIndex].type;
+//     const typeTemplateData = {
+//       name: currentType.name,
+//       image: currentType.typeImage,
+//     };
+//     cardTypeIconsHtml += getPokemonCardTypeImageTemplate(typeTemplateData);
+//   }
+//   return cardTypeIconsHtml;
+// }
 
 function showHideLoadingSpinner() {
   const loadingSpinnerRef = document.querySelector('[data-id="loading-spinner"]');
