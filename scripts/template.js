@@ -177,12 +177,16 @@ function getDialogNavContentTemplate() {
       >
       </div>
       <div
-        class="tab-pane fade d-flex justify-content-center align-items-center gap-2 py-2"
+        class="tab-pane fade"
         id="evolution-tab-pane"
         data-id="evolution-tab-pane"
         role="tabpanel"
         aria-labelledby="evolution-tab"
       >
+        <div
+        class="d-flex justify-content-center align-items-center gap-2 py-2"
+        data-id="evolution-tab-pane-content">
+        </div>
     </div>`;
 }
 

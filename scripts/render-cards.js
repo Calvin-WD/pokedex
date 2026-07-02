@@ -57,19 +57,6 @@ function getCardTypeIconsHtml(typeValues) {
   return cardTypeIconsHtml;
 }
 
-// function getCardTypeIconsHtml(typeValues) {
-//   let cardTypeIconsHtml = "";
-//   for (let typeIndex = 0; typeIndex < typeValues.length; typeIndex++) {
-//     const currentType = typeValues[typeIndex].type;
-//     const typeTemplateData = {
-//       name: currentType.name,
-//       image: currentType.typeImage,
-//     };
-//     cardTypeIconsHtml += getPokemonCardTypeImageTemplate(typeTemplateData);
-//   }
-//   return cardTypeIconsHtml;
-// }
-
 /**
  * Toggles the main content and full-content loading spinner visibility.
  */

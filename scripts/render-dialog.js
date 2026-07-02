@@ -107,7 +107,7 @@ function updateDialogNavContent(pokemon, typeValues) {
   const evoChainTemplateData = getEvoChainTemplateData(pokemon);
   const aboutContentRef = document.querySelector('[data-id="about-tab-pane"]');
   const statContentRef = document.querySelector('[data-id="stat-tab-pane"]');
-  const evolutionContentRef = document.querySelector('[data-id="evolution-tab-pane"]');
+  const evolutionContentRef = document.querySelector('[data-id="evolution-tab-pane-content"]');
 
   aboutContentRef.innerHTML = getAboutTabContentHtmlString(pokemon, abilityNames);
   statContentRef.innerHTML = getStatsTabContentHtmlString(pokemon, typeValues);
