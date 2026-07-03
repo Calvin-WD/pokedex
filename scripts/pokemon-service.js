@@ -47,11 +47,16 @@ async function loadPokemonByListEntry(pokemon) {
  * Loads another Pokémon batch and updates the card list based on the current search.
  */
 async function loadMorePokemons() {
+  const buttonRef = document.querySelector(`[data-id="load-more-button"]`);
+
+  toggleDisable(buttonRef);
   try {
     const loadedPokemons = await loadPokemons();
     renderLoadedPokemonCards(loadedPokemons);
   } catch (error) {
     setLoadingErrorMessage(error);
+  } finally {
+    toggleDisable(buttonRef);
   }
 }
 
@@ -60,7 +65,7 @@ async function loadMorePokemons() {
  */
 async function ensureTypesAreLoaded(pokemonApiObject) {
   const currentTypes = pokemons[pokemonApiObject.id].base.types;
-  
+
   await loadTypes(currentTypes);
 }
 
@@ -71,7 +76,7 @@ async function loadTypes(currentTypes) {
   await Promise.all(
     currentTypes.map(async (currentType) => {
       if (isTypeLoaded(currentType)) {
-        return
+        return;
       }
       ensureTypeRequestIsStarted(currentType);
       await finishTypeRequest(currentType);
@@ -81,10 +86,10 @@ async function loadTypes(currentTypes) {
 
 function isTypeLoaded(currentType) {
   if (types[currentType.type.name]) {
-        return true;
-      } else {
-        return false;
-      }
+    return true;
+  } else {
+    return false;
+  }
 }
 
 function ensureTypeRequestIsStarted(currentType) {

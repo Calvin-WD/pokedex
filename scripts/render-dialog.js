@@ -2,7 +2,7 @@
  * Loads the selected Pokémon data and updates the open dialog content.
  */
 async function showDialogPokemon(visiblePokemonIndex) {
-  const dialogRef = document.getElementById("dialog");
+  const dialogRef = document.querySelector(`[data-id="dialog"]`);
   const pokemonId = visiblePokemonIds.at(visiblePokemonIndex);
   const pokemon = getPokemonFromCacheById(pokemonId);
   let typeValues = [];
@@ -40,7 +40,7 @@ function renderDialogWrapper(dialogRef, pokemonId) {
  * Opens the dialog after rendering the selected Pokémon.
  */
 async function openDialog(pokemonId, visiblePokemonIndex) {
-  let dialogRef = document.getElementById("dialog");
+  let dialogRef = document.querySelector(`[data-id="dialog"]`);
 
   dialogRef.dataset.pokemonId = pokemonId;
   dialogRef.dataset.visiblePokemonIndex = visiblePokemonIndex;
@@ -54,7 +54,7 @@ async function openDialog(pokemonId, visiblePokemonIndex) {
  * Closes the Pokémon dialog.
  */
 function closeDialog() {
-  let dialogRef = document.getElementById("dialog");
+  let dialogRef = document.querySelector(`[data-id="dialog"]`);
   dialogRef.close();
 }
 
@@ -104,7 +104,7 @@ function removeOldDialogBg(dialogBgWrapperRef, classPrefix, currentTypeClassName
  */
 function updateDialogHeader(pokemon, typeValues) {
   const dialogHeaderRef = document.querySelector('[data-id="dialog-header-content"]');
-  
+
   dialogHeaderRef.innerHTML = getDialogHeaderContentHtmlString(pokemon, typeValues);
 }
 

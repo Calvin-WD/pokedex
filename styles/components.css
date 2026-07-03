@@ -24,7 +24,7 @@
 .card-image {
   position: absolute;
   bottom: 0;
-  filter: drop-shadow(0 12px 14px rgba(0, 0, 0, 0.35));
+  filter: drop-shadow(0 12px 14px rgba(0, 0, 0, 0.6));
 }
 
 .card-type-image {
@@ -37,6 +37,10 @@
 /* Card END */
 
 /* Dialog */
+#dialog:open::backdrop {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
 .dialog-image {
   filter: drop-shadow(0 12px 14px rgba(0, 0, 0, 0.35));
 }

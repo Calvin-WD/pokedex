@@ -33,7 +33,7 @@
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarToggler">
-            <form class="d-flex ms-auto" role="search">
+            <div class="d-flex ms-auto" role="search">
               <input
                 class="form-control search-input"
                 type="search"
@@ -42,13 +42,13 @@
                 placeholder="Search"
                 aria-label="Search"
               />
-            </form>
+            </div>
           </div>
         </div>
       </nav>
     </header>
-    <main class="d-flex flex-column justify-content-center bg-body flex-grow-1">
-      <section class="container d-flex flex-column align-items-center p-4 gap-4" data-id="content">
+    <main class="d-flex flex-column justify-content-center bg-body flex-grow-1" data-id="content">
+      <section class="container d-flex flex-column align-items-center p-4 gap-4" data-id="content-cards">
         <div id="content-wrapper" class="d-flex justify-content-center align-items-center flex-wrap gap-3"></div>
         <button
           type="button"
@@ -64,6 +64,7 @@
       <aside id="dialog-wrapper" class="container">
         <dialog
           id="dialog"
+          data-id="dialog"
           class="bg-transparent border-0 p-0"
           closedby="any"
           onclose="removeBodyScrollLock()"

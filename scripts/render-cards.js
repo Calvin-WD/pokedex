@@ -85,8 +85,8 @@ function getCardTypeIconsHtml(typeValues) {
  */
 function showHideLoadingSpinner() {
   const loadingSpinnerRef = document.querySelector('[data-id="loading-spinner"]');
-  const contentRef = document.querySelector('[data-id="content"]');
-  
+  const contentRef = document.querySelector('[data-id="content-cards"]');
+
   toggleVisibility(contentRef);
   toggleVisibility(loadingSpinnerRef);
 }
