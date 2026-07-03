@@ -6,6 +6,7 @@ const POKEAPI_EVOCHAIN = "evolution-chain/";
 const POKEAPI_IMG_URL = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/";
 const POKEMON_LOADING_INTERVAL = 40;
 let pokemons = {};
+let visiblePokemons = [];
 let types = {};
 let typeRequests = {};
 let evoChains = {};
@@ -47,7 +48,9 @@ async function loadMorePokemons() {
     const loadedPokemons = await loadPokemons();
     const inputRef = document.querySelector('[data-id="search-input"]');
     if (!inputRef.value) {
-      renderCards(loadedPokemons);
+      let renderId = visiblePokemons.length;
+      visiblePokemons = visiblePokemons.concat(loadedPokemons);
+      renderCards(loadedPokemons, renderId);
     } else {
       renderFilteredCards(inputRef.value);
     }
@@ -65,7 +68,6 @@ async function loadTypes(currentTypes) {
   await Promise.all(
     currentTypes.map(async (currentType) => {
       if (types[currentType.type.name]) {
-        console.log(`${currentType.type.name} is alreay loaded!`);
         return;
       }
       if (!typeRequests[currentType.type.name]) {
@@ -75,7 +77,6 @@ async function loadTypes(currentTypes) {
       const currentTypeObject = await typeRequests[currentType.type.name];
       if (!types[currentType.type.name]) {
         cacheTypeData(createTypeCacheData(currentTypeObject));
-        console.log(`${currentType.type.name} has loaded!`);
       }
     }),
   );
@@ -260,4 +261,12 @@ function getStatsTabContentAsArray(pokemonStatsArray) {
     statsTabContentArray.push({ title: currentStat.stat.name, value: currentStat.base_stat });
   }
   return statsTabContentArray;
+}
+
+function isValidDialogId(dialogId) {
+  if (0 <= dialogId && visiblePokemons.length > dialogId) {
+    return true;
+  } else {
+    return false;
+  }
 }

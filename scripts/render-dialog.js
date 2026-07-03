@@ -1,22 +1,22 @@
 /**
  * Loads the selected Pokémon data and updates the open dialog content.
  */
-async function showDialogPokemon(pokemonId) {
+async function showDialogPokemon(dialogId) {
   const dialogRef = document.getElementById("dialog");
-  const pokemon = getPokemonFromCacheById(pokemonId);
+  const pokemon = visiblePokemons.at(dialogId);
   let typeValues = [];
   typeValues = Object.values(pokemon.base.types);
   await ensureEvoChainIsLoaded(pokemon);
 
-  updateDialog(dialogRef, pokemon, typeValues, pokemonId);
+  updateDialog(dialogRef, pokemon, typeValues, dialogId);
 }
 
 /**
  * Renders the full dialog content for a cached Pokémon.
  */
-async function renderDialog(dialogRef, pokemonId) {
+async function renderDialog(dialogRef, pokemonId, dialogId) {
   renderDialogWrapper(dialogRef, pokemonId);
-  await showDialogPokemon(pokemonId);
+  await showDialogPokemon(dialogId);
 }
 
 /**
@@ -36,10 +36,11 @@ function renderDialogWrapper(dialogRef, pokemonId) {
 /**
  * Opens the dialog after rendering the selected Pokémon.
  */
-async function openDialog(pokemonId) {
+async function openDialog(pokemonId, dialogId) {
   let dialogRef = document.getElementById("dialog");
   dialogRef.dataset.pokemonId = pokemonId;
-  await renderDialog(dialogRef, pokemonId);
+  dialogRef.dataset.dialogId = dialogId;
+  await renderDialog(dialogRef, pokemonId, dialogId);
   dialogRef.showModal();
   document.body.classList.add("overFlowHidden");
 }
@@ -55,8 +56,9 @@ function closeDialog() {
 /**
  * Stores the current Pokémon id and refreshes all dynamic dialog areas.
  */
-function updateDialog(dialogRef, pokemon, typeValues, pokemonId) {
-  dialogRef.dataset.pokemonId = pokemonId;
+function updateDialog(dialogRef, pokemon, typeValues, dialogId) {
+  dialogRef.dataset.dialogId = dialogId;
+  dialogRef.dataset.pokemonId = pokemon.base.id;
   updateDialogContent(pokemon, typeValues);
 }
 
@@ -117,11 +119,11 @@ function updateDialogNavContent(pokemon, typeValues) {
 /**
  * Shows the next loaded Pokémon in the open dialog.
  */
-async function nextDialogPokemon(buttonRef, pokemonId) {
-  pokemonId = pokemonId + 1;
-  if (pokemons[pokemonId]) {
+async function nextDialogPokemon(buttonRef, dialogId) {
+  dialogId = dialogId + 1;
+  if (isValidDialogId(dialogId)) {
     toggleDisable(buttonRef);
-    await showDialogPokemon(pokemonId);
+    await showDialogPokemon(dialogId);
     toggleDisable(buttonRef);
   } else {
     console.error("No more Pokemons are loaded!");
@@ -131,11 +133,11 @@ async function nextDialogPokemon(buttonRef, pokemonId) {
 /**
  * Shows the previous Pokémon in the open dialog.
  */
-async function previousDialogPokemon(buttonRef, pokemonId) {
-  pokemonId = pokemonId - 1;
-  if (pokemons[pokemonId]) {
+async function previousDialogPokemon(buttonRef, dialogId) {
+  dialogId = dialogId - 1;
+  if (isValidDialogId(dialogId)) {
     toggleDisable(buttonRef);
-    await showDialogPokemon(pokemonId);
+    await showDialogPokemon(dialogId);
     toggleDisable(buttonRef);
   } else {
     console.error("You already reached the first Pokemon!");

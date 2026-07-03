@@ -7,7 +7,8 @@ function getPokemonCardTemplate(pokemonTemplateData) {
     class="card button-reset button-card bg-body-tertiary card-width h-100 p-0"
     data-id="card"
     data-pokemon-id="${pokemonTemplateData.id}"
-    onclick="openDialog(${pokemonTemplateData.id})">
+    data-dialog-id="${pokemonTemplateData.dialogId}"
+    onclick="openDialog(${pokemonTemplateData.id}, ${pokemonTemplateData.dialogId})">
       <header class="card-header d-flex flex-row-reverse justify-content-between align-items-center">
         <h5 class="text-end">${pokemonTemplateData.nameUpperCase}</h5> <h6>#${pokemonTemplateData.id}</h6>
       </header>
@@ -74,7 +75,7 @@ function getDialogHeaderTemplate(pokemonTemplateData) {
           type="button"
           class="btn button-reset button-skip"
           data-id="prev-button"
-          onclick="previousDialogPokemon(this, Number(this.closest('dialog').dataset.pokemonId))">
+          onclick="previousDialogPokemon(this,Number(this.closest('dialog').dataset.dialogId))">
             <i class="bi bi-caret-left-fill"></i>
           </button>
           <img
@@ -87,7 +88,7 @@ function getDialogHeaderTemplate(pokemonTemplateData) {
           type="button"
           class="btn button-reset button-skip"
           data-id="next-button"
-          onclick="nextDialogPokemon(this, Number(this.closest('dialog').dataset.pokemonId))">
+          onclick="nextDialogPokemon(this,Number(this.closest('dialog').dataset.dialogId))">
             <i class="bi bi-caret-right-fill"></i>
           </button>
         </div>
