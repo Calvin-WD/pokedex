@@ -30,7 +30,7 @@ function renderDialogWrapper(dialogRef, pokemonId) {
   const dialogContentTemplateData = {
     primaryTypeName: typeValues[0].type.name,
     navTabHtml: getDialogNavTabHtmlString(),
-    navContentHtml: getDialogNavContentTemplate(),
+    navContentHtml: getDialogNavContentWrapper(),
   };
 
   dialogRef.innerHTML = getDialogContentTemplate(dialogContentTemplateData);
@@ -191,7 +191,23 @@ function getDialogTypeBadgeHtmlString(typeValues) {
  * Creates the dialog tab navigation HTML.
  */
 function getDialogNavTabHtmlString() {
-  return getDialogNavTabsTemplate();
+  let navTabsHtmlString = "";
+
+  navTabsHtmlString = getDialogAboutTabTemplate();
+  navTabsHtmlString += getDialogStatsTabTemplate();
+  navTabsHtmlString += getDialogEvolutionTabTemplate();
+
+  return getDialogNavTabsTemplate(navTabsHtmlString);
+}
+
+function getDialogNavContentWrapper() {
+  let navContentWrapperHtml = "";
+
+  navContentWrapperHtml = getDialogAboutContentTemplate();
+  navContentWrapperHtml += getDialogStatsContentTemplate();
+  navContentWrapperHtml += getDialogEvolutionContentTemplate();
+
+  return navContentWrapperHtml;
 }
 
 /**

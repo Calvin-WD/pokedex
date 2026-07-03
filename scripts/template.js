@@ -110,84 +110,93 @@ function getHeaderTypeBadgeTemplate(type) {
 /**
  * Creates the navigation tabs for the dialog body.
  */
-function getDialogNavTabsTemplate() {
-  return `<ul class="nav nav-underline justify-content-around" id="myTab" role="tablist">
-      <li class="nav-item" role="presentation">
-        <button
-          class="nav-link button-reset button-nav active"
-          id="about-tab"
-          data-bs-toggle="tab"
-          data-bs-target="#about-tab-pane"
-          type="button"
-          role="tab"
-          aria-controls="about-tab-pane"
-          aria-selected="true"
-        >
-          About
-        </button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button
-          class="nav-link button-reset button-nav"
-          id="stat-tab"
-          data-bs-toggle="tab"
-          data-bs-target="#stat-tab-pane"
-          type="button"
-          role="tab"
-          aria-controls="stat-tab-pane"
-          aria-selected="false"
-        >
-          Stats
-        </button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button
-          class="nav-link button-reset button-nav"
-          id="evolution-tab"
-          data-bs-toggle="tab"
-          data-bs-target="#evolution-tab-pane"
-          type="button"
-          role="tab"
-          aria-controls="evolution-tab-pane"
-          aria-selected="false"
-        >
-          Evolution
-        </button>
-      </li>
-    </ul>`;
+function getDialogNavTabsTemplate(navTabHtml) {
+  return `<ul class="nav nav-underline justify-content-around" id="myTab" role="tablist">${navTabHtml}</ul>`;
 }
 
-/**
- * Creates empty tab panels for dynamic dialog content.
- */
-function getDialogNavContentTemplate() {
+function getDialogAboutTabTemplate() {
+  return `<li class="nav-item" role="presentation">
+      <button
+        class="nav-link button-reset button-nav active"
+        id="about-tab"
+        data-bs-toggle="tab"
+        data-bs-target="#about-tab-pane"
+        type="button"
+        role="tab"
+        aria-controls="about-tab-pane"
+        aria-selected="true"
+      >
+        About
+      </button>
+    </li>`;
+}
+
+function getDialogStatsTabTemplate() {
+  return `<li class="nav-item" role="presentation">
+      <button
+        class="nav-link button-reset button-nav"
+        id="stat-tab"
+        data-bs-toggle="tab"
+        data-bs-target="#stat-tab-pane"
+        type="button"
+        role="tab"
+        aria-controls="stat-tab-pane"
+        aria-selected="false"
+      >
+        Stats
+      </button>
+    </li>`;
+}
+
+function getDialogEvolutionTabTemplate() {
+  return `<li class="nav-item" role="presentation">
+      <button
+        class="nav-link button-reset button-nav"
+        id="evolution-tab"
+        data-bs-toggle="tab"
+        data-bs-target="#evolution-tab-pane"
+        type="button"
+        role="tab"
+        aria-controls="evolution-tab-pane"
+        aria-selected="false"
+      >
+        Evolution
+      </button>
+    </li>`;
+}
+
+function getDialogAboutContentTemplate() {
   return `<div
-        class="tab-pane fade show active"
-        id="about-tab-pane"
-        data-id="about-tab-pane"
-        role="tabpanel"
-        aria-labelledby="about-tab"
-      >
-      </div>
+      class="tab-pane fade show active"
+      id="about-tab-pane"
+      data-id="about-tab-pane"
+      role="tabpanel"
+      aria-labelledby="about-tab"
+    ></div>`;
+}
+
+function getDialogStatsContentTemplate() {
+  return `<div
+      class="tab-pane fade"
+      id="stat-tab-pane"
+      data-id="stat-tab-pane"
+      role="tabpanel"
+      aria-labelledby="stat-tab"
+    ></div>`;
+}
+
+function getDialogEvolutionContentTemplate() {
+  return `<div
+      class="tab-pane fade"
+      id="evolution-tab-pane"
+      data-id="evolution-tab-pane"
+      role="tabpanel"
+      aria-labelledby="evolution-tab"
+    >
       <div
-        class="tab-pane fade"
-        id="stat-tab-pane"
-        data-id="stat-tab-pane"
-        role="tabpanel"
-        aria-labelledby="stat-tab"
-      >
-      </div>
-      <div
-        class="tab-pane fade"
-        id="evolution-tab-pane"
-        data-id="evolution-tab-pane"
-        role="tabpanel"
-        aria-labelledby="evolution-tab"
-      >
-        <div
         class="d-flex justify-content-center align-items-center gap-2 py-2"
-        data-id="evolution-tab-pane-content">
-        </div>
+        data-id="evolution-tab-pane-content"
+      ></div>
     </div>`;
 }
 
