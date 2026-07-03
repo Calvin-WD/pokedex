@@ -1,13 +1,13 @@
 /**
  * Renders all provided Pokémon as cards in the main content area.
  */
-function renderCards(pokemonsToRender, renderId) {
+function renderCards(pokemonIdsToRender, visiblePokemonIndex) {
   const contentWrapperRef = document.getElementById("content-wrapper");
   let contentHtmlString = "";
-  for (let index = 0; index < pokemonsToRender.length; index++) {
-    const currentPokemon = pokemonsToRender[index];
-    contentHtmlString += renderSingleCard(currentPokemon, renderId);
-    renderId++;
+  for (let index = 0; index < pokemonIdsToRender.length; index++) {
+    const currentPokemon = getPokemonFromCacheById(pokemonIdsToRender[index]);
+    contentHtmlString += renderSingleCard(currentPokemon, visiblePokemonIndex);
+    visiblePokemonIndex++;
   }
   contentWrapperRef.innerHTML += contentHtmlString;
 }
@@ -17,13 +17,15 @@ function renderCards(pokemonsToRender, renderId) {
  */
 function renderFilteredCards(searchValue) {
   const contentWrapperRef = document.getElementById("content-wrapper");
-  let renderId = 0;
-  visiblePokemons = filterPokemonValuesByName(searchValue);
-  
-  contentWrapperRef.innerHTML = "";
-  renderCards(visiblePokemons, renderId);
+  let visiblePokemonIndex = 0;
+  let filteredPokemons = filterPokemonValuesByName(searchValue);
 
-  if (visiblePokemons.length === 0) {
+  visiblePokemonIds = getPokemonIds(filteredPokemons);
+
+  contentWrapperRef.innerHTML = "";
+  renderCards(visiblePokemonIds, visiblePokemonIndex);
+
+  if (visiblePokemonIds.length === 0) {
     contentWrapperRef.innerHTML = getMessageTemplate("No match found!");
   }
 }
@@ -40,7 +42,7 @@ function renderSingleCard(pokemon, index) {
     image: pokemon.base.sprites.other.home.front_default,
     primaryTypeName: pokemon.base.types[0].type.name,
     typeIconsHtml: getCardTypeIconsHtml(currentTypeValues),
-    dialogId: index,
+    visiblePokemonIndex: index,
   };
   return getPokemonCardTemplate(pokemonTemplateData);
 }

@@ -4,9 +4,9 @@
 async function init() {
   try {
     const loadedPokemon = await loadPokemons();
-    let renderId = 0;
-    visiblePokemons = loadedPokemon;
-    renderCards(loadedPokemon, renderId);
+    let visiblePokemonIndex = 0;
+    visiblePokemonIds = getPokemonIds(loadedPokemon);
+    renderCards(visiblePokemonIds, visiblePokemonIndex);
   } catch (error) {
     const contentWrapperRef = document.getElementById("content-wrapper");
     contentWrapperRef.innerHTML = getMessageTemplate("Loading Failure!");

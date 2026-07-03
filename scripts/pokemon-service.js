@@ -6,7 +6,7 @@ const POKEAPI_EVOCHAIN = "evolution-chain/";
 const POKEAPI_IMG_URL = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/";
 const POKEMON_LOADING_INTERVAL = 40;
 let pokemons = {};
-let visiblePokemons = [];
+let visiblePokemonIds = [];
 let types = {};
 let typeRequests = {};
 let evoChains = {};
@@ -48,9 +48,10 @@ async function loadMorePokemons() {
     const loadedPokemons = await loadPokemons();
     const inputRef = document.querySelector('[data-id="search-input"]');
     if (!inputRef.value) {
-      let renderId = visiblePokemons.length;
-      visiblePokemons = visiblePokemons.concat(loadedPokemons);
-      renderCards(loadedPokemons, renderId);
+      const loadedPokemonIds = getPokemonIds(loadedPokemons);
+      let visiblePokemonIndex = visiblePokemonIds.length;
+      visiblePokemonIds = visiblePokemonIds.concat(loadedPokemonIds);
+      renderCards(loadedPokemonIds, visiblePokemonIndex);
     } else {
       renderFilteredCards(inputRef.value);
     }
@@ -208,6 +209,14 @@ function ensureEvoChainHasPokemonObject(evoChain) {
   }
 }
 
+function getPokemonId(pokemon) {
+  return pokemon.base.id;
+}
+
+function getPokemonIds(pokemonsToMap) {
+  return pokemonsToMap.map((pokemon) => getPokemonId(pokemon));
+}
+
 /**
  * Returns a cached Pokémon by its id or logs an error if it is missing.
  */
@@ -263,8 +272,8 @@ function getStatsTabContentAsArray(pokemonStatsArray) {
   return statsTabContentArray;
 }
 
-function isValidDialogId(dialogId) {
-  if (0 <= dialogId && visiblePokemons.length > dialogId) {
+function isValidVisiblePokemonIndex(visiblePokemonIndex) {
+  if (0 <= visiblePokemonIndex && visiblePokemonIds.length > visiblePokemonIndex) {
     return true;
   } else {
     return false;
