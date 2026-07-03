@@ -17,6 +17,7 @@ let pokemonApiIndexCounter = 0;
  */
 async function loadPokemons() {
   showHideLoadingSpinner();
+
   try {
     const pokemonBatchList = await loadPokemonBatchListFromPokeApi();
     const loadedPokemons = await Promise.all(
@@ -35,8 +36,10 @@ async function loadPokemons() {
 async function loadPokemonByListEntry(pokemon) {
   const id = getPokemonIdByUrl(pokemon.url, POKEAPI_POKEMON);
   const pokemonApiObject = await fetchPokeApiData(POKEAPI_POKEMON + id);
+
   cachePokemonBaseData(pokemonApiObject);
   await ensureTypesAreLoaded(pokemonApiObject);
+
   return pokemons[pokemonApiObject.id];
 }
 
@@ -46,20 +49,19 @@ async function loadPokemonByListEntry(pokemon) {
 async function loadMorePokemons() {
   try {
     const loadedPokemons = await loadPokemons();
-    const inputRef = document.querySelector('[data-id="search-input"]');
-    if (!inputRef.value) {
-      const loadedPokemonIds = getPokemonIds(loadedPokemons);
-      let visiblePokemonIndex = visiblePokemonIds.length;
-      visiblePokemonIds = visiblePokemonIds.concat(loadedPokemonIds);
-      renderCards(loadedPokemonIds, visiblePokemonIndex);
-    } else {
-      renderFilteredCards(inputRef.value);
-    }
+    renderLoadedPokemonCards(loadedPokemons);
   } catch (error) {
-    const contentWrapperRef = document.getElementById("content-wrapper");
-    contentWrapperRef.innerHTML = getMessageTemplate("Loading more Failure!");
-    console.error(error);
+    setLoadingErrorMessage(error);
   }
+}
+
+/**
+ * Ensures all type data for a cached Pokémon is available.
+ */
+async function ensureTypesAreLoaded(pokemonApiObject) {
+  const currentTypes = pokemons[pokemonApiObject.id].base.types;
+  
+  await loadTypes(currentTypes);
 }
 
 /**
@@ -68,27 +70,36 @@ async function loadMorePokemons() {
 async function loadTypes(currentTypes) {
   await Promise.all(
     currentTypes.map(async (currentType) => {
-      if (types[currentType.type.name]) {
-        return;
+      if (isTypeLoaded(currentType)) {
+        return
       }
-      if (!typeRequests[currentType.type.name]) {
-        const typeId = currentType.type.url.substring(POKEAPI_BASE_URL.length + POKEAPI_TYPE.length);
-        typeRequests[currentType.type.name] = fetchPokeApiData(POKEAPI_TYPE + typeId);
-      }
-      const currentTypeObject = await typeRequests[currentType.type.name];
-      if (!types[currentType.type.name]) {
-        cacheTypeData(createTypeCacheData(currentTypeObject));
-      }
+      ensureTypeRequestIsStarted(currentType);
+      await finishTypeRequest(currentType);
     }),
   );
 }
 
-/**
- * Ensures all type data for a cached Pokémon is available.
- */
-async function ensureTypesAreLoaded(pokemonApiObject) {
-  const currentTypes = pokemons[pokemonApiObject.id].base.types;
-  await loadTypes(currentTypes);
+function isTypeLoaded(currentType) {
+  if (types[currentType.type.name]) {
+        return true;
+      } else {
+        return false;
+      }
+}
+
+function ensureTypeRequestIsStarted(currentType) {
+  if (!typeRequests[currentType.type.name]) {
+    const typeId = currentType.type.url.substring(POKEAPI_BASE_URL.length + POKEAPI_TYPE.length);
+    typeRequests[currentType.type.name] = fetchPokeApiData(POKEAPI_TYPE + typeId);
+  }
+}
+
+async function finishTypeRequest(currentType) {
+  const currentTypeObject = await typeRequests[currentType.type.name];
+
+  if (!types[currentType.type.name]) {
+    cacheTypeData(createTypeCacheData(currentTypeObject));
+  }
 }
 
 /**
@@ -118,6 +129,7 @@ async function loadPokemonSpecies(pokemon) {
   const species = await fetchPokeApiData(POKEAPI_SPECIES + pokemon.base.id);
   const evoChainUrl = species.evolution_chain.url;
   const evoChainId = evoChainUrl.substring(POKEAPI_BASE_URL.length + POKEAPI_EVOCHAIN.length, evoChainUrl.length - 1);
+
   pokemon["evoChain"] = { id: evoChainId, url: evoChainUrl };
 }
 
@@ -169,6 +181,7 @@ async function ensureEvoChainIsLoaded(pokemon) {
   if (!pokemon["evoChain"]) {
     await loadPokemonSpecies(pokemon);
   }
+
   if (!evoChains[`${pokemon.evoChain.id}`]) {
     await loadPokemonEvoChain(pokemon.evoChain.id, pokemon.evoChain.url);
     buildEvoChainObject(pokemon);
@@ -182,6 +195,7 @@ function buildEvoChainObject(pokemon) {
   let evoChain = evoChains[pokemon.evoChain.id];
   let nextEvoChain = evoChain;
   let evoRank = 1;
+
   while (nextEvoChain) {
     let currentPokemonId = getPokemonIdByUrl(nextEvoChain.species.url, POKEAPI_SPECIES);
     nextEvoChain = addPokemonToEvoChainObject(currentPokemonId, evoChain, nextEvoChain, evoRank);
@@ -194,9 +208,11 @@ function buildEvoChainObject(pokemon) {
  */
 function addPokemonToEvoChainObject(pokemonId, evoChain, nextEvoChain, evoRank) {
   ensureEvoChainHasPokemonObject(evoChain);
+
   evoChain.pokemons[evoRank] = {
     image: `${POKEAPI_IMG_URL + pokemonId}.png`,
   };
+
   return nextEvoChain.evolves_to[0];
 }
 
@@ -240,11 +256,13 @@ function getPokemonIdByUrl(url, source) {
  */
 function filterPokemonValuesByName(searchValue) {
   let filteredPokemonsArray = Object.values(pokemons);
+
   if (searchValue.length >= 3) {
     filteredPokemonsArray = filteredPokemonsArray.filter((element) =>
       element.base.name.includes(searchValue.toLowerCase()),
     );
   }
+
   return filteredPokemonsArray;
 }
 
@@ -253,10 +271,12 @@ function filterPokemonValuesByName(searchValue) {
  */
 function getAbilityNamesAsString(pokemon) {
   let abilityNames = [];
+
   for (let abilityIndex = 0; abilityIndex < pokemon.base.abilities.length; abilityIndex++) {
     const abilityName = pokemon.base.abilities[abilityIndex].ability.name;
     abilityNames.push(capitalize(abilityName));
   }
+
   return abilityNames.join(", ");
 }
 
@@ -265,10 +285,12 @@ function getAbilityNamesAsString(pokemon) {
  */
 function getStatsTabContentAsArray(pokemonStatsArray) {
   let statsTabContentArray = [];
+
   for (let statsIndex = 0; statsIndex < pokemonStatsArray.length; statsIndex++) {
     const currentStat = pokemonStatsArray[statsIndex];
     statsTabContentArray.push({ title: currentStat.stat.name, value: currentStat.base_stat });
   }
+
   return statsTabContentArray;
 }
 
@@ -278,4 +300,11 @@ function isValidVisiblePokemonIndex(visiblePokemonIndex) {
   } else {
     return false;
   }
+}
+
+function setLoadingErrorMessage(error) {
+  const contentWrapperRef = document.getElementById("content-wrapper");
+
+  contentWrapperRef.innerHTML = getMessageTemplate("Currently we have Problems with loading more Pokemon!");
+  console.error(error);
 }

@@ -6,6 +6,7 @@ async function showDialogPokemon(visiblePokemonIndex) {
   const pokemonId = visiblePokemonIds.at(visiblePokemonIndex);
   const pokemon = getPokemonFromCacheById(pokemonId);
   let typeValues = [];
+
   typeValues = Object.values(pokemon.base.types);
   await ensureEvoChainIsLoaded(pokemon);
 
@@ -31,6 +32,7 @@ function renderDialogWrapper(dialogRef, pokemonId) {
     navTabHtml: getDialogNavTabHtmlString(),
     navContentHtml: getDialogNavContentTemplate(),
   };
+
   dialogRef.innerHTML = getDialogContentTemplate(dialogContentTemplateData);
 }
 
@@ -39,9 +41,11 @@ function renderDialogWrapper(dialogRef, pokemonId) {
  */
 async function openDialog(pokemonId, visiblePokemonIndex) {
   let dialogRef = document.getElementById("dialog");
+
   dialogRef.dataset.pokemonId = pokemonId;
   dialogRef.dataset.visiblePokemonIndex = visiblePokemonIndex;
   await renderDialog(dialogRef, pokemonId, visiblePokemonIndex);
+
   dialogRef.showModal();
   document.body.classList.add("overFlowHidden");
 }
@@ -79,6 +83,7 @@ function updateDialogBg(typeValues) {
   const dialogBgWrapperRef = document.querySelector('[data-id="dialog-bg-wrapper"]');
   const classPrefix = "bg-type-";
   const currentTypeClassName = classPrefix + typeValues[0].type.name;
+
   removeOldDialogBg(dialogBgWrapperRef, classPrefix, currentTypeClassName);
   dialogBgWrapperRef.classList.add(currentTypeClassName);
 }
@@ -99,6 +104,7 @@ function removeOldDialogBg(dialogBgWrapperRef, classPrefix, currentTypeClassName
  */
 function updateDialogHeader(pokemon, typeValues) {
   const dialogHeaderRef = document.querySelector('[data-id="dialog-header-content"]');
+  
   dialogHeaderRef.innerHTML = getDialogHeaderContentHtmlString(pokemon, typeValues);
 }
 
@@ -122,6 +128,7 @@ function updateDialogNavContent(pokemon, typeValues) {
  */
 async function nextDialogPokemon(buttonRef, visiblePokemonIndex) {
   visiblePokemonIndex = visiblePokemonIndex + 1;
+
   if (isValidVisiblePokemonIndex(visiblePokemonIndex)) {
     toggleDisable(buttonRef);
     await showDialogPokemon(visiblePokemonIndex);
@@ -136,6 +143,7 @@ async function nextDialogPokemon(buttonRef, visiblePokemonIndex) {
  */
 async function previousDialogPokemon(buttonRef, visiblePokemonIndex) {
   visiblePokemonIndex = visiblePokemonIndex - 1;
+  
   if (isValidVisiblePokemonIndex(visiblePokemonIndex)) {
     toggleDisable(buttonRef);
     await showDialogPokemon(visiblePokemonIndex);
@@ -155,6 +163,7 @@ function getDialogHeaderContentHtmlString(pokemon, typeValues) {
     image: pokemon.base.sprites.other.home.front_default,
     badgesHtml: getDialogTypeBadgeHtmlString(typeValues),
   };
+
   return getDialogHeaderTemplate(pokemonTemplateData);
 }
 
@@ -164,6 +173,7 @@ function getDialogHeaderContentHtmlString(pokemon, typeValues) {
 function getDialogTypeBadgeHtmlString(typeValues) {
   const classPrefix = "bg-type-";
   let badgesHtmlString = "";
+
   for (let indexType = 0; indexType < typeValues.length; indexType++) {
     const type = typeValues[indexType].type;
     const typeBackground = classPrefix + type.name;
@@ -173,6 +183,7 @@ function getDialogTypeBadgeHtmlString(typeValues) {
     };
     badgesHtmlString += getHeaderTypeBadgeTemplate(typeTemplateData);
   }
+
   return badgesHtmlString;
 }
 
@@ -189,11 +200,13 @@ function getDialogNavTabHtmlString() {
 function getAboutTabContentHtmlString(pokemon, abilityNames) {
   const aboutTabTemplateData = getAboutTabTemplateData(pokemon, abilityNames);
   let fullTabContentHtmlString = "";
+
   for (let index = 0; index < aboutTabTemplateData.length; index++) {
     const currentTemplateData = aboutTabTemplateData[index];
     currentTemplateData.value = capitalize(currentTemplateData.value);
     fullTabContentHtmlString += getAboutTabContentTemplate(currentTemplateData);
   }
+
   return fullTabContentHtmlString;
 }
 
@@ -203,6 +216,7 @@ function getAboutTabContentHtmlString(pokemon, abilityNames) {
 function getStatsTabContentHtmlString(pokemon, typeValues) {
   const statsTabContentArray = getStatsTabContentAsArray(pokemon.base.stats);
   let fullTabContentHtmlString = "";
+
   for (let index = 0; index < statsTabContentArray.length; index++) {
     const currentStat = statsTabContentArray[index];
     const statTemplateData = {
@@ -212,6 +226,7 @@ function getStatsTabContentHtmlString(pokemon, typeValues) {
     };
     fullTabContentHtmlString += getStatsTabContentTemplate(statTemplateData);
   }
+
   return fullTabContentHtmlString;
 }
 
@@ -220,13 +235,16 @@ function getStatsTabContentHtmlString(pokemon, typeValues) {
  */
 function getEvoChainTabContentHtmlString(evoChainTemplateData) {
   let fullTapContentHtmlString = "";
+
   for (let index = 0; index < evoChainTemplateData.length; index++) {
     const currentTemplateData = evoChainTemplateData[index];
+
     if (index > 0) {
       fullTapContentHtmlString += getEvoChainArrowTemplate();
     }
     fullTapContentHtmlString += getEvoChainTabContentTemplate(currentTemplateData);
   }
+
   return fullTapContentHtmlString;
 }
 
@@ -249,9 +267,11 @@ function getEvoChainTemplateData(pokemon) {
   const evoChain = evoChains[pokemon.evoChain.id];
   const evoChainPokemons = evoChain.pokemons;
   let evoChainImages = [];
+
   for (let index = 1; index <= Object.keys(evoChainPokemons).length; index++) {
     const currentPokemonImage = evoChainPokemons[index].image;
     evoChainImages.push({ image: currentPokemonImage });
   }
+
   return evoChainImages;
 }

@@ -4,12 +4,27 @@
 function renderCards(pokemonIdsToRender, visiblePokemonIndex) {
   const contentWrapperRef = document.getElementById("content-wrapper");
   let contentHtmlString = "";
+
   for (let index = 0; index < pokemonIdsToRender.length; index++) {
     const currentPokemon = getPokemonFromCacheById(pokemonIdsToRender[index]);
     contentHtmlString += renderSingleCard(currentPokemon, visiblePokemonIndex);
     visiblePokemonIndex++;
   }
+
   contentWrapperRef.innerHTML += contentHtmlString;
+}
+
+function renderLoadedPokemonCards(loadedPokemons) {
+  const inputRef = document.querySelector('[data-id="search-input"]');
+
+  if (!inputRef.value) {
+    const loadedPokemonIds = getPokemonIds(loadedPokemons);
+    const visiblePokemonIndex = visiblePokemonIds.length;
+    visiblePokemonIds = visiblePokemonIds.concat(loadedPokemonIds);
+    renderCards(loadedPokemonIds, visiblePokemonIndex);
+  } else {
+    renderFilteredCards(inputRef.value);
+  }
 }
 
 /**
@@ -21,7 +36,6 @@ function renderFilteredCards(searchValue) {
   let filteredPokemons = filterPokemonValuesByName(searchValue);
 
   visiblePokemonIds = getPokemonIds(filteredPokemons);
-
   contentWrapperRef.innerHTML = "";
   renderCards(visiblePokemonIds, visiblePokemonIndex);
 
@@ -44,6 +58,7 @@ function renderSingleCard(pokemon, index) {
     typeIconsHtml: getCardTypeIconsHtml(currentTypeValues),
     visiblePokemonIndex: index,
   };
+
   return getPokemonCardTemplate(pokemonTemplateData);
 }
 
@@ -52,6 +67,7 @@ function renderSingleCard(pokemon, index) {
  */
 function getCardTypeIconsHtml(typeValues) {
   let cardTypeIconsHtml = "";
+
   for (let typeIndex = 0; typeIndex < typeValues.length; typeIndex++) {
     const currentType = typeValues[typeIndex].type;
     const typeTemplateData = {
@@ -60,6 +76,7 @@ function getCardTypeIconsHtml(typeValues) {
     };
     cardTypeIconsHtml += getPokemonCardTypeImageTemplate(typeTemplateData);
   }
+
   return cardTypeIconsHtml;
 }
 
@@ -69,6 +86,7 @@ function getCardTypeIconsHtml(typeValues) {
 function showHideLoadingSpinner() {
   const loadingSpinnerRef = document.querySelector('[data-id="loading-spinner"]');
   const contentRef = document.querySelector('[data-id="content"]');
+  
   toggleVisibility(contentRef);
   toggleVisibility(loadingSpinnerRef);
 }
