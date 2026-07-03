@@ -108,12 +108,15 @@ function getHeaderTypeBadgeTemplate(type) {
 }
 
 /**
- * Creates the navigation tabs for the dialog body.
+ * Creates the navigation tab list for the dialog body.
  */
 function getDialogNavTabsTemplate(navTabHtml) {
   return `<ul class="nav nav-underline justify-content-around" id="myTab" role="tablist">${navTabHtml}</ul>`;
 }
 
+/**
+ * Creates the about tab button for the dialog navigation.
+ */
 function getDialogAboutTabTemplate() {
   return `<li class="nav-item" role="presentation">
       <button
@@ -131,6 +134,9 @@ function getDialogAboutTabTemplate() {
     </li>`;
 }
 
+/**
+ * Creates the stats tab button for the dialog navigation.
+ */
 function getDialogStatsTabTemplate() {
   return `<li class="nav-item" role="presentation">
       <button
@@ -148,6 +154,9 @@ function getDialogStatsTabTemplate() {
     </li>`;
 }
 
+/**
+ * Creates the evolution tab button for the dialog navigation.
+ */
 function getDialogEvolutionTabTemplate() {
   return `<li class="nav-item" role="presentation">
       <button
@@ -165,6 +174,9 @@ function getDialogEvolutionTabTemplate() {
     </li>`;
 }
 
+/**
+ * Creates the empty content panel for the dialog's about tab.
+ */
 function getDialogAboutContentTemplate() {
   return `<div
       class="tab-pane fade show active"
@@ -175,6 +187,9 @@ function getDialogAboutContentTemplate() {
     ></div>`;
 }
 
+/**
+ * Creates the empty content panel for the dialog's stats tab.
+ */
 function getDialogStatsContentTemplate() {
   return `<div
       class="tab-pane fade"
@@ -185,6 +200,9 @@ function getDialogStatsContentTemplate() {
     ></div>`;
 }
 
+/**
+ * Creates the content panel for the dialog's evolution tab.
+ */
 function getDialogEvolutionContentTemplate() {
   return `<div
       class="tab-pane fade"

@@ -1,5 +1,5 @@
 /**
- * Renders all provided Pokémon as cards in the main content area.
+ * Appends all provided Pokémon as cards to the main content area.
  */
 function renderCards(pokemonIdsToRender, visiblePokemonIndex) {
   const contentWrapperRef = document.getElementById("content-wrapper");
@@ -14,6 +14,9 @@ function renderCards(pokemonIdsToRender, visiblePokemonIndex) {
   contentWrapperRef.innerHTML += contentHtmlString;
 }
 
+/**
+ * Adds newly loaded Pokémon cards or refreshes the filtered card list.
+ */
 function renderLoadedPokemonCards(loadedPokemons) {
   const inputRef = document.querySelector('[data-id="search-input"]');
 

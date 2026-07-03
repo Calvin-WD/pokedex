@@ -84,6 +84,9 @@ async function loadTypes(currentTypes) {
   );
 }
 
+/**
+ * Checks whether data for a Pokémon type is already cached.
+ */
 function isTypeLoaded(currentType) {
   if (types[currentType.type.name]) {
     return true;
@@ -92,6 +95,9 @@ function isTypeLoaded(currentType) {
   }
 }
 
+/**
+ * Starts a shared type API request if no request is running yet.
+ */
 function ensureTypeRequestIsStarted(currentType) {
   if (!typeRequests[currentType.type.name]) {
     const typeId = currentType.type.url.substring(POKEAPI_BASE_URL.length + POKEAPI_TYPE.length);
@@ -99,6 +105,9 @@ function ensureTypeRequestIsStarted(currentType) {
   }
 }
 
+/**
+ * Waits for a type API request and stores the result if needed.
+ */
 async function finishTypeRequest(currentType) {
   const currentTypeObject = await typeRequests[currentType.type.name];
 
@@ -230,10 +239,16 @@ function ensureEvoChainHasPokemonObject(evoChain) {
   }
 }
 
+/**
+ * Returns the id from a cached Pokémon object.
+ */
 function getPokemonId(pokemon) {
   return pokemon.base.id;
 }
 
+/**
+ * Returns the ids from a list of cached Pokémon objects.
+ */
 function getPokemonIds(pokemonsToMap) {
   return pokemonsToMap.map((pokemon) => getPokemonId(pokemon));
 }
@@ -257,7 +272,7 @@ function getPokemonIdByUrl(url, source) {
 }
 
 /**
- * Returns cached Pokémon whose names include a search value with at least three characters.
+ * Returns all cached Pokémon until the search value has at least three characters, then filters by name.
  */
 function filterPokemonValuesByName(searchValue) {
   let filteredPokemonsArray = Object.values(pokemons);
@@ -299,6 +314,9 @@ function getStatsTabContentAsArray(pokemonStatsArray) {
   return statsTabContentArray;
 }
 
+/**
+ * Checks whether a visible Pokémon index can be shown in the dialog.
+ */
 function isValidVisiblePokemonIndex(visiblePokemonIndex) {
   if (0 <= visiblePokemonIndex && visiblePokemonIds.length > visiblePokemonIndex) {
     return true;
@@ -307,6 +325,9 @@ function isValidVisiblePokemonIndex(visiblePokemonIndex) {
   }
 }
 
+/**
+ * Shows the loading error message in the main content area.
+ */
 function setLoadingErrorMessage(error) {
   const contentWrapperRef = document.getElementById("content-wrapper");
 

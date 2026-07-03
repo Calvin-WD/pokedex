@@ -200,6 +200,9 @@ function getDialogNavTabHtmlString() {
   return getDialogNavTabsTemplate(navTabsHtmlString);
 }
 
+/**
+ * Creates the dialog tab content panel HTML.
+ */
 function getDialogNavContentWrapper() {
   let navContentWrapperHtml = "";
 
