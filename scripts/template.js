@@ -32,7 +32,7 @@ function getPokemonCardTypeImageTemplate(typeTemplateData) {
  */
 function getDialogContentTemplate(dialogContentTemplateData) {
   return `<div class="modal-dialog">
-        <div class="modal-content bg-type-${dialogContentTemplateData.primaryTypeName} rounded-3"
+        <div class="modal-content rounded-3"
         data-id="dialog-bg-wrapper">
           <header class="modal-header flex-column p-3 border-0"
           data-id="overlay-pokemon-name">
@@ -44,15 +44,16 @@ function getDialogContentTemplate(dialogContentTemplateData) {
               </button>
             </div>
             <div data-id="dialog-header-content">
+            ${dialogContentTemplateData.headerHtml}
             </div>
           </header>
           <div class="modal-body bg-body-secondary text-body rounded-3 px-3 py-2">
-              ${dialogContentTemplateData.navTabHtml}
+              ${dialogContentTemplateData.tabListHtml}
             <div class="tab-content dialog-tab-content overflow-y-auto overflow-x-hidden"
             id="myTabContent"
-            data-id="dialog-nav-content"
+            data-id="dialog-tab-panes"
             tabindex="-1">
-            ${dialogContentTemplateData.navContentHtml}
+            ${dialogContentTemplateData.tabPanesHtml}
             </div>
           </div>
         </div>
@@ -62,12 +63,11 @@ function getDialogContentTemplate(dialogContentTemplateData) {
 /**
  * Creates the dialog header with Pokémon details and type badges.
  */
-function getDialogHeaderTemplate(pokemonTemplateData) {
+function getDialogHeaderTemplate() {
   return `<div class="d-flex flex-row-reverse align-items-center justify-content-end w-100 gap-2">
-        <h3 class="modal-title fs-5" id="cardExtensionLabel">
-          ${pokemonTemplateData.name}
+        <h3 class="modal-title fs-5" id="cardExtensionLabel" data-id="dialog-pokemon-name">
         </h3>
-        <h4>#${pokemonTemplateData.id}</h4>
+        <h4 data-id="dialog-pokemon-id"></h4>
       </div>
       <div class="d-flex flex-column gap-4">
         <div class="d-flex justify-content-around align-items-center">
@@ -79,7 +79,6 @@ function getDialogHeaderTemplate(pokemonTemplateData) {
             <i class="bi bi-caret-left-fill"></i>
           </button>
           <img
-          src="${pokemonTemplateData.image}"
           alt=""
           class="dialog-image w-50"
           data-id="dialog-image"
@@ -92,8 +91,7 @@ function getDialogHeaderTemplate(pokemonTemplateData) {
             <i class="bi bi-caret-right-fill"></i>
           </button>
         </div>
-        <div class="d-flex flex-row justify-content-center gap-3">
-          ${pokemonTemplateData.badgesHtml}
+        <div class="d-flex flex-row justify-content-center gap-3" data-id="dialog-type-badges">
         </div>
       </div>`;
 }
@@ -110,14 +108,14 @@ function getHeaderTypeBadgeTemplate(type) {
 /**
  * Creates the navigation tab list for the dialog body.
  */
-function getDialogNavTabsTemplate(navTabHtml) {
+function getDialogTabListTemplate(navTabHtml) {
   return `<ul class="nav nav-underline justify-content-around" id="myTab" role="tablist">${navTabHtml}</ul>`;
 }
 
 /**
  * Creates the about tab button for the dialog navigation.
  */
-function getDialogAboutTabTemplate() {
+function getDialogAboutTabButtonTemplate() {
   return `<li class="nav-item" role="presentation">
       <button
         class="nav-link button-reset button-nav active"
@@ -137,7 +135,7 @@ function getDialogAboutTabTemplate() {
 /**
  * Creates the stats tab button for the dialog navigation.
  */
-function getDialogStatsTabTemplate() {
+function getDialogStatsTabButtonTemplate() {
   return `<li class="nav-item" role="presentation">
       <button
         class="nav-link button-reset button-nav"
@@ -157,7 +155,7 @@ function getDialogStatsTabTemplate() {
 /**
  * Creates the evolution tab button for the dialog navigation.
  */
-function getDialogEvolutionTabTemplate() {
+function getDialogEvolutionTabButtonTemplate() {
   return `<li class="nav-item" role="presentation">
       <button
         class="nav-link button-reset button-nav"
@@ -177,7 +175,7 @@ function getDialogEvolutionTabTemplate() {
 /**
  * Creates the empty content panel for the dialog's about tab.
  */
-function getDialogAboutContentTemplate() {
+function getDialogAboutTabPaneTemplate() {
   return `<div
       class="tab-pane fade show active"
       id="about-tab-pane"
@@ -190,7 +188,7 @@ function getDialogAboutContentTemplate() {
 /**
  * Creates the empty content panel for the dialog's stats tab.
  */
-function getDialogStatsContentTemplate() {
+function getDialogStatsTabPaneTemplate() {
   return `<div
       class="tab-pane fade"
       id="stat-tab-pane"
@@ -203,7 +201,7 @@ function getDialogStatsContentTemplate() {
 /**
  * Creates the content panel for the dialog's evolution tab.
  */
-function getDialogEvolutionContentTemplate() {
+function getDialogEvolutionTabPaneTemplate() {
   return `<div
       class="tab-pane fade"
       id="evolution-tab-pane"
@@ -221,7 +219,7 @@ function getDialogEvolutionContentTemplate() {
 /**
  * Creates one row for the dialog's about tab.
  */
-function getAboutTabContentTemplate(aboutObject) {
+function getAboutPaneRowTemplate(aboutObject) {
   return `<dl class="row flex-column flex-sm-row align-items-start align-items-sm-center pt-2 mb-0">
       <dt class="col-12 col-sm-4">${aboutObject.title}:</dt>
       <dd class="col-12 col-sm-8 mb-0">${aboutObject.value}</dd>
@@ -231,7 +229,7 @@ function getAboutTabContentTemplate(aboutObject) {
 /**
  * Creates one stat row for the dialog's stats tab.
  */
-function getStatsTabContentTemplate(statTemplateData) {
+function getStatsPaneRowTemplate(statTemplateData) {
   return `<dl class="row flex-column flex-sm-row align-items-start align-items-sm-center pt-2 mb-0">
       <dt class="col-12 col-sm-4">${statTemplateData.title}:</dt>
       <dd class="col-12 col-sm-8 mb-0">
@@ -245,14 +243,14 @@ function getStatsTabContentTemplate(statTemplateData) {
 /**
  * Creates one evolution image for the dialog's evolution tab.
  */
-function getEvoChainTabContentTemplate(evoChainTemplateData) {
+function getEvolutionPaneImageTemplate(evoChainTemplateData) {
   return `<img src="${evoChainTemplateData.image}" class="dialog-tab-content-evolution-image">`;
 }
 
 /**
  * Creates the arrow shown between evolution stages.
  */
-function getEvoChainArrowTemplate() {
+function getEvolutionPaneArrowTemplate() {
   return `<i class="bi bi-arrow-right"></i>`;
 }
 

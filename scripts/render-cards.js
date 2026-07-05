@@ -54,7 +54,7 @@ function renderSingleCard(pokemon, index) {
   const currentTypeValues = Object.values(pokemon.base.types);
   const pokemonTemplateData = {
     id: pokemon.base.id,
-    name: pokemon.base.name,
+    name: capitalize(pokemon.base.name),
     nameUpperCase: pokemon.base.name.toUpperCase(),
     image: pokemon.base.sprites.other.home.front_default,
     primaryTypeName: pokemon.base.types[0].type.name,

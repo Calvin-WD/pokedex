@@ -1,3 +1,5 @@
+let isChangingDialogPokemon = false;
+
 /**
  * Loads the selected Pokémon data and updates the open dialog content.
  */
@@ -14,26 +16,20 @@ async function showDialogPokemon(visiblePokemonIndex) {
 }
 
 /**
- * Renders the full dialog content for a cached Pokémon.
- */
-async function renderDialog(dialogRef, pokemonId, visiblePokemonIndex) {
-  renderDialogWrapper(dialogRef, pokemonId);
-  await showDialogPokemon(visiblePokemonIndex);
-}
-
-/**
  * Renders the stable dialog wrapper with empty dynamic content areas.
  */
-function renderDialogWrapper(dialogRef, pokemonId) {
-  const pokemon = getPokemonFromCacheById(pokemonId);
-  const typeValues = Object.values(pokemon.base.types);
-  const dialogContentTemplateData = {
-    primaryTypeName: typeValues[0].type.name,
-    navTabHtml: getDialogNavTabHtmlString(),
-    navContentHtml: getDialogNavContentWrapper(),
-  };
+function renderDialogWrapper(dialogRef) {
+  const dialogContentTemplateData = getDialogContentTemplateData();
 
   dialogRef.innerHTML = getDialogContentTemplate(dialogContentTemplateData);
+}
+
+function getDialogContentTemplateData() {
+  return {
+    headerHtml: getDialogHeaderTemplate(),
+    tabListHtml: getDialogTabListHtmlString(),
+    tabPanesHtml: getDialogTabPanesHtmlString(),
+  };
 }
 
 /**
@@ -44,7 +40,9 @@ async function openDialog(pokemonId, visiblePokemonIndex) {
 
   dialogRef.dataset.pokemonId = pokemonId;
   dialogRef.dataset.visiblePokemonIndex = visiblePokemonIndex;
-  await renderDialog(dialogRef, pokemonId, visiblePokemonIndex);
+
+  renderDialogWrapper(dialogRef);
+  await showDialogPokemon(visiblePokemonIndex);
 
   dialogRef.showModal();
   document.body.classList.add("overflow-hidden");
@@ -73,7 +71,7 @@ function updateDialog(dialogRef, pokemon, typeValues, visiblePokemonIndex) {
 function updateDialogContent(pokemon, typeValues) {
   updateDialogBg(typeValues);
   updateDialogHeader(pokemon, typeValues);
-  updateDialogNavContent(pokemon, typeValues);
+  updateDialogTabPaneContent(pokemon, typeValues);
 }
 
 /**
@@ -103,38 +101,52 @@ function removeOldDialogBg(dialogBgWrapperRef, classPrefix, currentTypeClassName
  * Updates the dialog header with the current Pokémon details.
  */
 function updateDialogHeader(pokemon, typeValues) {
-  const dialogHeaderRef = document.querySelector('[data-id="dialog-header-content"]');
+  const dialogPokemonNameRef = document.querySelector('[data-id="dialog-pokemon-name"]');
+  const dialogPokemonIdRef = document.querySelector('[data-id="dialog-pokemon-id"]');
+  const dialogPokemonImageRef = document.querySelector('[data-id="dialog-image"]');
+  const dialogPokemonBadgesRef = document.querySelector('[data-id="dialog-type-badges"]');
 
-  dialogHeaderRef.innerHTML = getDialogHeaderContentHtmlString(pokemon, typeValues);
+  const dialogHeaderPokemonData = getDialogHeaderPokemonData(pokemon, typeValues);
+
+  dialogPokemonNameRef.innerHTML = dialogHeaderPokemonData.name;
+  dialogPokemonIdRef.innerHTML = `#${dialogHeaderPokemonData.id}`;
+  dialogPokemonImageRef.src = dialogHeaderPokemonData.imageSrc;
+  dialogPokemonImageRef.alt = dialogHeaderPokemonData.imageAlt;
+  dialogPokemonBadgesRef.innerHTML = dialogHeaderPokemonData.typeBadgesHtml;
 }
 
 /**
  * Updates the about, stats and evolution tab contents for the current Pokémon.
  */
-function updateDialogNavContent(pokemon, typeValues) {
+function updateDialogTabPaneContent(pokemon, typeValues) {
   const abilityNames = getAbilityNamesAsString(pokemon);
-  const evoChainTemplateData = getEvoChainTemplateData(pokemon);
+  const evoChainTemplateData = getEvolutionPaneImagesData(pokemon);
   const aboutContentRef = document.querySelector('[data-id="about-tab-pane"]');
   const statContentRef = document.querySelector('[data-id="stat-tab-pane"]');
   const evolutionContentRef = document.querySelector('[data-id="evolution-tab-pane-content"]');
 
-  aboutContentRef.innerHTML = getAboutTabContentHtmlString(pokemon, abilityNames);
-  statContentRef.innerHTML = getStatsTabContentHtmlString(pokemon, typeValues);
-  evolutionContentRef.innerHTML = getEvoChainTabContentHtmlString(evoChainTemplateData);
+  aboutContentRef.innerHTML = getAboutPaneContentHtmlString(pokemon, abilityNames);
+  statContentRef.innerHTML = getStatsPaneContentHtmlString(pokemon, typeValues);
+  evolutionContentRef.innerHTML = getEvolutionPaneContentHtmlString(evoChainTemplateData);
 }
 
 /**
  * Shows the next loaded Pokémon in the open dialog.
  */
 async function nextDialogPokemon(buttonRef, visiblePokemonIndex) {
-  visiblePokemonIndex = visiblePokemonIndex + 1;
+  if (isChangingDialogPokemon) return;
 
-  if (isValidVisiblePokemonIndex(visiblePokemonIndex)) {
-    toggleDisable(buttonRef);
-    await showDialogPokemon(visiblePokemonIndex);
-    toggleDisable(buttonRef);
-  } else {
-    console.error("No more Pokemons are loaded!");
+  isChangingDialogPokemon = true;
+
+  try {
+    visiblePokemonIndex = visiblePokemonIndex + 1;
+    if (isValidVisiblePokemonIndex(visiblePokemonIndex)) {
+      await showDialogPokemon(visiblePokemonIndex);
+    } else {
+      console.error("No more Pokemons are loaded!");
+    }
+  } finally {
+    isChangingDialogPokemon = false;
   }
 }
 
@@ -142,29 +154,30 @@ async function nextDialogPokemon(buttonRef, visiblePokemonIndex) {
  * Shows the previous Pokémon in the open dialog.
  */
 async function previousDialogPokemon(buttonRef, visiblePokemonIndex) {
-  visiblePokemonIndex = visiblePokemonIndex - 1;
-  
-  if (isValidVisiblePokemonIndex(visiblePokemonIndex)) {
-    toggleDisable(buttonRef);
-    await showDialogPokemon(visiblePokemonIndex);
-    toggleDisable(buttonRef);
-  } else {
-    console.error("You already reached the first Pokemon!");
+  if (isChangingDialogPokemon) return;
+
+  isChangingDialogPokemon = true;
+
+  try {
+    visiblePokemonIndex = visiblePokemonIndex - 1;
+    if (isValidVisiblePokemonIndex(visiblePokemonIndex)) {
+      await showDialogPokemon(visiblePokemonIndex);
+    } else {
+      console.error("You already reached the first Pokemon!");
+    }
+  } finally {
+    isChangingDialogPokemon = false;
   }
 }
 
-/**
- * Creates the dialog header HTML from prepared Pokémon template data.
- */
-function getDialogHeaderContentHtmlString(pokemon, typeValues) {
-  const pokemonTemplateData = {
-    id: pokemon.base.id,
+function getDialogHeaderPokemonData(pokemon, typeValues) {
+ return {
     name: pokemon.base.name.toUpperCase(),
-    image: pokemon.base.sprites.other.home.front_default,
-    badgesHtml: getDialogTypeBadgeHtmlString(typeValues),
+    id: pokemon.base.id,
+    imageSrc: pokemon.base.sprites.other.home.front_default,
+    imageAlt: `Pokemon: ${capitalize(pokemon.base.name)}`,
+    typeBadgesHtml: getDialogTypeBadgeHtmlString(typeValues),
   };
-
-  return getDialogHeaderTemplate(pokemonTemplateData);
 }
 
 /**
@@ -190,40 +203,40 @@ function getDialogTypeBadgeHtmlString(typeValues) {
 /**
  * Creates the dialog tab navigation HTML.
  */
-function getDialogNavTabHtmlString() {
-  let navTabsHtmlString = "";
+function getDialogTabListHtmlString() {
+  let tabButtonsHtml = "";
 
-  navTabsHtmlString = getDialogAboutTabTemplate();
-  navTabsHtmlString += getDialogStatsTabTemplate();
-  navTabsHtmlString += getDialogEvolutionTabTemplate();
+  tabButtonsHtml = getDialogAboutTabButtonTemplate();
+  tabButtonsHtml += getDialogStatsTabButtonTemplate();
+  tabButtonsHtml += getDialogEvolutionTabButtonTemplate();
 
-  return getDialogNavTabsTemplate(navTabsHtmlString);
+  return getDialogTabListTemplate(tabButtonsHtml );
 }
 
 /**
  * Creates the dialog tab content panel HTML.
  */
-function getDialogNavContentWrapper() {
-  let navContentWrapperHtml = "";
+function getDialogTabPanesHtmlString() {
+  let tabPanesHtml = "";
 
-  navContentWrapperHtml = getDialogAboutContentTemplate();
-  navContentWrapperHtml += getDialogStatsContentTemplate();
-  navContentWrapperHtml += getDialogEvolutionContentTemplate();
+  tabPanesHtml = getDialogAboutTabPaneTemplate();
+  tabPanesHtml += getDialogStatsTabPaneTemplate();
+  tabPanesHtml += getDialogEvolutionTabPaneTemplate();
 
-  return navContentWrapperHtml;
+  return tabPanesHtml;
 }
 
 /**
  * Creates the HTML for the dialog's about tab.
  */
-function getAboutTabContentHtmlString(pokemon, abilityNames) {
-  const aboutTabTemplateData = getAboutTabTemplateData(pokemon, abilityNames);
+function getAboutPaneContentHtmlString(pokemon, abilityNames) {
+  const aboutTabTemplateData = getAboutPaneRowsData(pokemon, abilityNames);
   let fullTabContentHtmlString = "";
 
   for (let index = 0; index < aboutTabTemplateData.length; index++) {
     const currentTemplateData = aboutTabTemplateData[index];
     currentTemplateData.value = capitalize(currentTemplateData.value);
-    fullTabContentHtmlString += getAboutTabContentTemplate(currentTemplateData);
+    fullTabContentHtmlString += getAboutPaneRowTemplate(currentTemplateData);
   }
 
   return fullTabContentHtmlString;
@@ -232,7 +245,7 @@ function getAboutTabContentHtmlString(pokemon, abilityNames) {
 /**
  * Creates the HTML for the dialog's stats tab from prepared stat data.
  */
-function getStatsTabContentHtmlString(pokemon, typeValues) {
+function getStatsPaneContentHtmlString(pokemon, typeValues) {
   const statsTabContentArray = getStatsTabContentAsArray(pokemon.base.stats);
   let fullTabContentHtmlString = "";
 
@@ -243,7 +256,7 @@ function getStatsTabContentHtmlString(pokemon, typeValues) {
       value: currentStat.value,
       primaryTypeName: typeValues[0].type.name,
     };
-    fullTabContentHtmlString += getStatsTabContentTemplate(statTemplateData);
+    fullTabContentHtmlString += getStatsPaneRowTemplate(statTemplateData);
   }
 
   return fullTabContentHtmlString;
@@ -252,16 +265,16 @@ function getStatsTabContentHtmlString(pokemon, typeValues) {
 /**
  * Creates the HTML for the dialog's evolution tab.
  */
-function getEvoChainTabContentHtmlString(evoChainTemplateData) {
+function getEvolutionPaneContentHtmlString(evoChainTemplateData) {
   let fullTapContentHtmlString = "";
 
   for (let index = 0; index < evoChainTemplateData.length; index++) {
     const currentTemplateData = evoChainTemplateData[index];
 
     if (index > 0) {
-      fullTapContentHtmlString += getEvoChainArrowTemplate();
+      fullTapContentHtmlString += getEvolutionPaneArrowTemplate();
     }
-    fullTapContentHtmlString += getEvoChainTabContentTemplate(currentTemplateData);
+    fullTapContentHtmlString += getEvolutionPaneImageTemplate(currentTemplateData);
   }
 
   return fullTapContentHtmlString;
@@ -270,7 +283,7 @@ function getEvoChainTabContentHtmlString(evoChainTemplateData) {
 /**
  * Creates the template data rows used in the dialog's about tab.
  */
-function getAboutTabTemplateData(pokemon, abilityNames) {
+function getAboutPaneRowsData(pokemon, abilityNames) {
   return [
     { value: pokemon.base.name, title: "Name" },
     { value: pokemon.base.height, title: "Height" },
@@ -282,7 +295,7 @@ function getAboutTabTemplateData(pokemon, abilityNames) {
 /**
  * Creates the template data used in the dialog's evolution tab.
  */
-function getEvoChainTemplateData(pokemon) {
+function getEvolutionPaneImagesData(pokemon) {
   const evoChain = evoChains[pokemon.evoChain.id];
   const evoChainPokemons = evoChain.pokemons;
   let evoChainImages = [];

@@ -11,6 +11,7 @@ let types = {};
 let typeRequests = {};
 let evoChains = {};
 let pokemonApiIndexCounter = 0;
+let isLoadingMorePokemon = false;
 
 /**
  * Loads the next batch of Pokémon and stores their base data.
@@ -47,16 +48,17 @@ async function loadPokemonByListEntry(pokemon) {
  * Loads another Pokémon batch and updates the card list based on the current search.
  */
 async function loadMorePokemons() {
-  const buttonRef = document.querySelector(`[data-id="load-more-button"]`);
+  if (isLoadingMorePokemon) return;
+  
+  isLoadingMorePokemon = true;
 
-  toggleDisable(buttonRef);
   try {
     const loadedPokemons = await loadPokemons();
     renderLoadedPokemonCards(loadedPokemons);
   } catch (error) {
     setLoadingErrorMessage(error);
   } finally {
-    toggleDisable(buttonRef);
+    isLoadingMorePokemon = false;
   }
 }
 
