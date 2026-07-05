@@ -4,7 +4,7 @@
 function getPokemonCardTemplate(pokemonTemplateData) {
   return `<button 
     type="button"
-    class="card pokemon-card pokemon-card-width button-reset bg-body-tertiary h-100 p-0"
+    class="card pokemon-card button-reset bg-body-tertiary h-100 p-0"
     data-id="card"
     data-pokemon-id="${pokemonTemplateData.id}"
     data-visible-pokemon-index="${pokemonTemplateData.visiblePokemonIndex}"
@@ -13,7 +13,7 @@ function getPokemonCardTemplate(pokemonTemplateData) {
         <h5 class="text-end">${pokemonTemplateData.nameUpperCase}</h5> <h6>#${pokemonTemplateData.id}</h6>
       </header>
       <div
-      class="card-body pokemon-card-body-height position-relative d-flex justify-content-center bg-type-${pokemonTemplateData.primaryTypeName} p-0">
+      class="card-body pokemon-card-body position-relative d-flex justify-content-center bg-type-${pokemonTemplateData.primaryTypeName} p-0">
         <img src="${pokemonTemplateData.image}" alt="Pokemon: ${pokemonTemplateData.name}" class="pokemon-card-image w-75" data-id="pokemon-card-image">
       </div>
       <footer class="d-flex justify-content-center gap-5 p-1">${pokemonTemplateData.typeIconsHtml}</footer>
@@ -81,7 +81,7 @@ function getDialogHeaderTemplate(pokemonTemplateData) {
           <img
           src="${pokemonTemplateData.image}"
           alt=""
-          class="w-50 dialog-image dialog-image-min-width"
+          class="dialog-image w-50"
           data-id="dialog-image"
           />
           <button
@@ -259,6 +259,6 @@ function getEvoChainArrowTemplate() {
 /**
  * Creates a feedback message for loading failures and empty search results.
  */
-function getMessageTemplate(string) {
-  return `<p class="container d-flex justify-content-center" data-id="not-found">${string}</p>`;
+function getFeedbackMessageTemplate(string) {
+  return `<p class="container feedback-message d-flex justify-content-center text-center" data-id="not-found">${string}</p>`;
 }

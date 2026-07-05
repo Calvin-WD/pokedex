@@ -9,9 +9,9 @@ async function init() {
     visiblePokemonIds = getPokemonIds(loadedPokemon);
     renderCards(visiblePokemonIds, visiblePokemonIndex);
   } catch (error) {
-    const contentWrapperRef = document.getElementById("content-wrapper");
+    const contentWrapperRef = document.getElementById("pokemon-card-list");
     
-    contentWrapperRef.innerHTML = getMessageTemplate("Loading Failure!");
+    contentWrapperRef.innerHTML = getFeedbackMessageTemplate("Loading Failure!");
     console.log(error);
   }
 }

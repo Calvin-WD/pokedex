@@ -16,7 +16,7 @@
     <header>
       <nav class="navbar navbar-expand-sm bg-body-tertiary">
         <div class="container-xxl">
-          <h1 class="">
+          <h1>
             <span> <img src="./assets/img/pokeball.png" alt="A closed Pokeball" class="img-fluid navbar-image" /> </span
             >Pokédex
           </h1>
@@ -49,16 +49,16 @@
     </header>
     <main class="d-flex flex-column justify-content-center bg-body flex-grow-1" data-id="content">
       <section class="container d-flex flex-column align-items-center p-4 gap-4" data-id="content-cards">
-        <div id="content-wrapper" class="d-flex justify-content-center align-items-center flex-wrap gap-3"></div>
+        <div id="pokemon-card-list" class="d-flex justify-content-center align-items-center flex-wrap gap-3"></div>
         <button
           type="button"
-          class="btn button-load bg-gradient mw-25"
+          class="btn button-load bg-gradient"
           data-id="load-more-button"
           data-action="load-more"
           onclick="loadMorePokemons()"
           tabindex="0"
         >
-          <span class="" data-id="button-load-text">Load more</span>
+          <span data-id="button-load-text">Load more</span>
         </button>
       </section>
       <section id="dialog-wrapper" class="container">

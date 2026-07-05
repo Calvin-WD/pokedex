@@ -1,5 +1,6 @@
 /* Card */
 .pokemon-card {
+  width: 260px;
   transition: transform 255ms;
 }
 
@@ -17,11 +18,7 @@
   filter: drop-shadow(0 12px 14px rgba(0, 0, 0, 0.6));
 }
 
-.pokemon-card-width {
-  width: 260px;
-}
-
-.pokemon-card-body-height {
+.pokemon-card-body {
   height: 200px;
 }
 

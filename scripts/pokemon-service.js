@@ -329,8 +329,8 @@ function isValidVisiblePokemonIndex(visiblePokemonIndex) {
  * Shows the loading error message in the main content area.
  */
 function setLoadingErrorMessage(error) {
-  const contentWrapperRef = document.getElementById("content-wrapper");
+  const contentWrapperRef = document.getElementById("pokemon-card-list");
 
-  contentWrapperRef.innerHTML = getMessageTemplate("Currently we have Problems with loading more Pokemon!");
+  contentWrapperRef.innerHTML = getFeedbackMessageTemplate("Currently we have Problems with loading more Pokemon!");
   console.error(error);
 }

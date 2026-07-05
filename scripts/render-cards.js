@@ -2,7 +2,7 @@
  * Appends all provided Pokémon as cards to the main content area.
  */
 function renderCards(pokemonIdsToRender, visiblePokemonIndex) {
-  const contentWrapperRef = document.getElementById("content-wrapper");
+  const contentWrapperRef = document.getElementById("pokemon-card-list");
   let contentHtmlString = "";
 
   for (let index = 0; index < pokemonIdsToRender.length; index++) {
@@ -34,7 +34,7 @@ function renderLoadedPokemonCards(loadedPokemons) {
  * Clears the card list and renders Pokémon that match the search value.
  */
 function renderFilteredCards(searchValue) {
-  const contentWrapperRef = document.getElementById("content-wrapper");
+  const contentWrapperRef = document.getElementById("pokemon-card-list");
   let visiblePokemonIndex = 0;
   let filteredPokemons = filterPokemonValuesByName(searchValue);
 
@@ -43,7 +43,7 @@ function renderFilteredCards(searchValue) {
   renderCards(visiblePokemonIds, visiblePokemonIndex);
 
   if (visiblePokemonIds.length === 0) {
-    contentWrapperRef.innerHTML = getMessageTemplate("No match found!");
+    contentWrapperRef.innerHTML = getFeedbackMessageTemplate("No match found!");
   }
 }
 

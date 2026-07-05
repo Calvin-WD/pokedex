@@ -1,10 +1,9 @@
 /* Badge */
-.badge {
+.badge-type {
   font-size: 1rem;
   font-weight: 300;
-}
-
-.badge-type {
+  line-height: 1.1;
+  
   color: var(--bs-body-color);
   border: 2px solid var(--bs-body-color);
 }
