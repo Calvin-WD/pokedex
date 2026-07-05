@@ -1,0 +1,31 @@
+/* Card */
+.pokemon-card {
+  transition: transform 255ms;
+}
+
+.pokemon-card:hover {
+  transform: scale(1.06);
+}
+
+.pokemon-card:hover .pokemon-card-image {
+  filter: drop-shadow(2px 4px 6px black);
+}
+
+.pokemon-card-image {
+  position: absolute;
+  bottom: 0;
+  filter: drop-shadow(0 12px 14px rgba(0, 0, 0, 0.6));
+}
+
+.pokemon-card-width {
+  width: 260px;
+}
+
+.pokemon-card-body-height {
+  height: 200px;
+}
+
+.pokemon-card-type-image {
+  width: 12%;
+}
+/* Card END */

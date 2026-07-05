@@ -1,0 +1,11 @@
+/* Badge */
+.badge {
+  font-size: 1rem;
+  font-weight: 300;
+}
+
+.badge-type {
+  color: var(--bs-body-color);
+  border: 2px solid var(--bs-body-color);
+}
+/* Badge END */

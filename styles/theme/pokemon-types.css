@@ -1,5 +1,4 @@
 /* Background classes for the different pokemon types */
-
 .bg-type-grass {
   background-color: rgb(67,154,55);
   color: var(--bs-body-color);
@@ -107,5 +106,4 @@
   color: var(--bs-body-color);
   --bs-card-subtitle-color: rgba(101, 99, 99, 0.7);
 }
-
 /* Background classes for the different pokemon types END */

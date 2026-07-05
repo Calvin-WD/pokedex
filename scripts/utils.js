@@ -2,7 +2,7 @@
  * Removes the scroll lock from the page body.
  */
 function removeBodyScrollLock() {
-  document.body.classList.remove("overFlowHidden");
+  document.body.classList.remove("overflow-hidden");
 }
 
 /**

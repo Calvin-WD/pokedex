@@ -1,6 +1,10 @@
-@import url(./styles/font.css);
-@import url(./styles/global.css);
-@import url(./styles/components.css);
-@import url(./styles/pokemon.css);
-@import url(./styles/background.css);
-@import url(./styles/main.css);
+@import url("./styles/base/fonts.css");
+@import url("./styles/base/global.css");
+@import url("./styles/theme/pokemon-types.css");
+@import url("./styles/components/navigation.css");
+@import url("./styles/components/search.css");
+@import url("./styles/components/buttons.css");
+@import url("./styles/components/badge.css");
+@import url("./styles/components/pokemon-card.css");
+@import url("./styles/components/pokemon-dialog.css");
+@import url("./styles/components/loading-spinner.css");

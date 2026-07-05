@@ -47,7 +47,7 @@ async function openDialog(pokemonId, visiblePokemonIndex) {
   await renderDialog(dialogRef, pokemonId, visiblePokemonIndex);
 
   dialogRef.showModal();
-  document.body.classList.add("overFlowHidden");
+  document.body.classList.add("overflow-hidden");
 }
 
 /**

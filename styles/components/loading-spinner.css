@@ -1,0 +1,20 @@
+/* Loading Spinner */
+#loading-spinner {
+  flex-grow: 1;
+}
+
+.loading-spinner-image {
+  max-width: 500px;
+  filter: drop-shadow(0 0 24px rgba(255, 255, 255, 0.7));
+  animation: spinner 3s linear infinite;
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+/* Loading Spinner END */

@@ -4,7 +4,7 @@
 function getPokemonCardTemplate(pokemonTemplateData) {
   return `<button 
     type="button"
-    class="card button-reset button-card bg-body-tertiary card-width h-100 p-0"
+    class="card pokemon-card pokemon-card-width button-reset bg-body-tertiary h-100 p-0"
     data-id="card"
     data-pokemon-id="${pokemonTemplateData.id}"
     data-visible-pokemon-index="${pokemonTemplateData.visiblePokemonIndex}"
@@ -13,8 +13,8 @@ function getPokemonCardTemplate(pokemonTemplateData) {
         <h5 class="text-end">${pokemonTemplateData.nameUpperCase}</h5> <h6>#${pokemonTemplateData.id}</h6>
       </header>
       <div
-      class="card-body position-relative d-flex justify-content-center card-body-height bg-type-${pokemonTemplateData.primaryTypeName} p-0">
-        <img src="${pokemonTemplateData.image}" alt="Pokemon: ${pokemonTemplateData.name}" class="card-image w-75" data-id="card-image">
+      class="card-body pokemon-card-body-height position-relative d-flex justify-content-center bg-type-${pokemonTemplateData.primaryTypeName} p-0">
+        <img src="${pokemonTemplateData.image}" alt="Pokemon: ${pokemonTemplateData.name}" class="pokemon-card-image w-75" data-id="pokemon-card-image">
       </div>
       <footer class="d-flex justify-content-center gap-5 p-1">${pokemonTemplateData.typeIconsHtml}</footer>
     </button>`;
@@ -24,7 +24,7 @@ function getPokemonCardTemplate(pokemonTemplateData) {
  * Creates the HTML for a Pokémon type icon.
  */
 function getPokemonCardTypeImageTemplate(typeTemplateData) {
-  return `<img src="${typeTemplateData.image}" alt="Type: ${typeTemplateData.name}" class="card-type-image">`;
+  return `<img src="${typeTemplateData.image}" alt="Type: ${typeTemplateData.name}" class="pokemon-card-type-image">`;
 }
 
 /**
@@ -48,7 +48,7 @@ function getDialogContentTemplate(dialogContentTemplateData) {
           </header>
           <div class="modal-body bg-body-secondary text-body rounded-3 px-3 py-2">
               ${dialogContentTemplateData.navTabHtml}
-            <div class="tab-content tab-content-maxHeight overflow-y-auto overflow-x-hidden"
+            <div class="tab-content dialog-tab-content overflow-y-auto overflow-x-hidden"
             id="myTabContent"
             data-id="dialog-nav-content"
             tabindex="-1">
@@ -81,7 +81,7 @@ function getDialogHeaderTemplate(pokemonTemplateData) {
           <img
           src="${pokemonTemplateData.image}"
           alt=""
-          class="w-50 dialog-image dialog-image-minwidth"
+          class="w-50 dialog-image dialog-image-min-width"
           data-id="dialog-image"
           />
           <button
@@ -246,7 +246,7 @@ function getStatsTabContentTemplate(statTemplateData) {
  * Creates one evolution image for the dialog's evolution tab.
  */
 function getEvoChainTabContentTemplate(evoChainTemplateData) {
-  return `<img src="${evoChainTemplateData.image}" class="evoChain-image">`;
+  return `<img src="${evoChainTemplateData.image}" class="dialog-tab-content-evolution-image">`;
 }
 
 /**

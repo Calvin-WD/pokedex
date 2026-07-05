@@ -1,0 +1,40 @@
+/* Dialog */
+.dialog:open::backdrop {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.dialog-image {
+  filter: drop-shadow(0 12px 14px rgba(0, 0, 0, 0.35));
+}
+
+.dialog-image-min-width {
+  min-width: 150px;
+}
+/* Dialog END */
+
+/* Dialog Tab Content */
+.dialog-tab-content {
+  max-height: 220px;
+  line-height: 1.6;
+}
+
+.dialog-tab-content::-webkit-scrollbar {
+  width: 16px;
+}
+
+.dialog-tab-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dialog-tab-content::-webkit-scrollbar-thumb {
+  background-color: var(--bs-secondary-color);
+  border: 6px solid transparent;
+  background-clip: content-box;
+  border-radius: 50px;
+}
+
+.dialog-tab-content-evolution-image {
+  width: 140px;
+  max-width: 20%;
+}
+/* Dialog Tab Content END */
