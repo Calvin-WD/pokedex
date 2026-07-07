@@ -4,7 +4,7 @@ const POKEAPI_TYPE = "type/";
 const POKEAPI_SPECIES = "pokemon-species/";
 const POKEAPI_EVOCHAIN = "evolution-chain/";
 const POKEAPI_IMG_URL = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/";
-const POKEMON_LOADING_INTERVAL = 40;
+const POKEMON_LOADING_INTERVAL = 20;
 let pokemons = {};
 let visiblePokemonIds = [];
 let types = {};
@@ -14,7 +14,7 @@ let pokemonApiIndexCounter = 0;
 let isLoadingMorePokemon = false;
 
 /**
- * Loads the next batch of Pokémon and stores their base data.
+ * Loads the next batch of Pokémon, caching their base and type data while a loading spinner is shown.
  */
 async function loadPokemons() {
   showHideLoadingSpinner();
@@ -220,7 +220,7 @@ function buildEvoChainObject(pokemon) {
 }
 
 /**
- * Adds one evolution stage to the simplified evolution chain object.
+ * Adds one evolution stage to the simplified evolution chain object and returns the next stage in the chain.
  */
 function addPokemonToEvoChainObject(pokemonId, evoChain, nextEvoChain, evoRank) {
   ensureEvoChainHasPokemonObject(evoChain);
@@ -274,7 +274,7 @@ function getPokemonIdByUrl(url, source) {
 }
 
 /**
- * Returns all cached Pokémon until the search value has at least three characters, then filters by name.
+ * Returns all cached Pokémon, filtered by name once the search value is at least three characters long.
  */
 function filterPokemonValuesByName(searchValue) {
   let filteredPokemonsArray = Object.values(pokemons);
@@ -300,20 +300,6 @@ function getAbilityNamesAsString(pokemon) {
   }
 
   return abilityNames.join(", ");
-}
-
-/**
- * Creates the data rows used to render the dialog's stats tab.
- */
-function getStatsTabContentAsArray(pokemonStatsArray) {
-  let statsTabContentArray = [];
-
-  for (let statsIndex = 0; statsIndex < pokemonStatsArray.length; statsIndex++) {
-    const currentStat = pokemonStatsArray[statsIndex];
-    statsTabContentArray.push({ title: currentStat.stat.name, value: currentStat.base_stat });
-  }
-
-  return statsTabContentArray;
 }
 
 /**

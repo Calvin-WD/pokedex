@@ -31,7 +31,7 @@ function renderLoadedPokemonCards(loadedPokemons) {
 }
 
 /**
- * Clears the card list and renders Pokémon that match the search value.
+ * Clears the card list and renders Pokémon that match the search value, or a feedback message if none match.
  */
 function renderFilteredCards(searchValue) {
   const contentWrapperRef = document.getElementById("pokemon-card-list");
@@ -84,7 +84,7 @@ function getCardTypeIconsHtml(typeValues) {
 }
 
 /**
- * Toggles the main content and full-content loading spinner visibility.
+ * Toggles visibility between the card list section and the loading spinner.
  */
 function showHideLoadingSpinner() {
   const loadingSpinnerRef = document.querySelector('[data-id="loading-spinner"]');

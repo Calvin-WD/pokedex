@@ -8,9 +8,9 @@ function getPokemonCardTemplate(pokemonTemplateData) {
     data-id="card"
     data-pokemon-id="${pokemonTemplateData.id}"
     data-visible-pokemon-index="${pokemonTemplateData.visiblePokemonIndex}"
-    onclick="openDialog(${pokemonTemplateData.id}, ${pokemonTemplateData.visiblePokemonIndex})">
+    onclick="openDialog(${pokemonTemplateData.visiblePokemonIndex})">
       <header class="card-header d-flex flex-row-reverse justify-content-between align-items-center">
-        <h5 class="text-end">${pokemonTemplateData.nameUpperCase}</h5> <h6>#${pokemonTemplateData.id}</h6>
+        <strong class="text-end">${pokemonTemplateData.nameUpperCase}</strong> <span>#${pokemonTemplateData.id}</span>
       </header>
       <div
       class="card-body pokemon-card-body position-relative d-flex justify-content-center bg-type-${pokemonTemplateData.primaryTypeName} p-0">
@@ -24,7 +24,11 @@ function getPokemonCardTemplate(pokemonTemplateData) {
  * Creates the HTML for a Pokémon type icon.
  */
 function getPokemonCardTypeImageTemplate(typeTemplateData) {
-  return `<img src="${typeTemplateData.image}" alt="Type: ${typeTemplateData.name}" class="pokemon-card-type-image">`;
+  return `<img
+        src="${typeTemplateData.image}"
+        alt="Type: ${typeTemplateData.name}"
+        class="pokemon-card-type-image"
+        loading="lazy">`;
 }
 
 /**
@@ -65,9 +69,9 @@ function getDialogContentTemplate(dialogContentTemplateData) {
  */
 function getDialogHeaderTemplate() {
   return `<div class="d-flex flex-row-reverse align-items-center justify-content-end w-100 gap-2">
-        <h3 class="modal-title fs-5" id="cardExtensionLabel" data-id="dialog-pokemon-name">
-        </h3>
-        <h4 data-id="dialog-pokemon-id"></h4>
+        <strong class="modal-title fs-5" id="cardExtensionLabel" data-id="dialog-pokemon-name">
+        </strong>
+        <span class="dialog-pokemon-id" data-id="dialog-pokemon-id"></span>
       </div>
       <div class="d-flex flex-column gap-4">
         <div class="d-flex justify-content-around align-items-center">
@@ -109,7 +113,7 @@ function getHeaderTypeBadgeTemplate(type) {
  * Creates the navigation tab list for the dialog body.
  */
 function getDialogTabListTemplate(navTabHtml) {
-  return `<ul class="nav nav-underline justify-content-around" id="myTab" role="tablist">${navTabHtml}</ul>`;
+  return `<ul class="nav nav-underline justify-content-around mb-1" id="myTab" role="tablist">${navTabHtml}</ul>`;
 }
 
 /**
@@ -139,12 +143,12 @@ function getDialogStatsTabButtonTemplate() {
   return `<li class="nav-item" role="presentation">
       <button
         class="nav-link button-reset button-nav"
-        id="stat-tab"
+        id="stats-tab"
         data-bs-toggle="tab"
-        data-bs-target="#stat-tab-pane"
+        data-bs-target="#stats-tab-pane"
         type="button"
         role="tab"
-        aria-controls="stat-tab-pane"
+        aria-controls="stats-tab-pane"
         aria-selected="false"
       >
         Stats
@@ -191,10 +195,10 @@ function getDialogAboutTabPaneTemplate() {
 function getDialogStatsTabPaneTemplate() {
   return `<div
       class="tab-pane fade"
-      id="stat-tab-pane"
-      data-id="stat-tab-pane"
+      id="stats-tab-pane"
+      data-id="stats-tab-pane"
       role="tabpanel"
-      aria-labelledby="stat-tab"
+      aria-labelledby="stats-tab"
     ></div>`;
 }
 
@@ -219,22 +223,33 @@ function getDialogEvolutionTabPaneTemplate() {
 /**
  * Creates one row for the dialog's about tab.
  */
-function getAboutPaneRowTemplate(aboutObject) {
+function getAboutPaneRowTemplate(templateData) {
   return `<dl class="row flex-column flex-sm-row align-items-start align-items-sm-center pt-2 mb-0">
-      <dt class="col-12 col-sm-4">${aboutObject.title}:</dt>
-      <dd class="col-12 col-sm-8 mb-0">${aboutObject.value}</dd>
+      <dt class="col-12 col-sm-4">${templateData.key}</dt>
+      <dd class="col-12 col-sm-8 mb-0">${templateData.value}</dd>
     </dl>`;
 }
 
 /**
- * Creates one stat row for the dialog's stats tab.
+ * Creates one stats row for the dialog's stats tab.
  */
-function getStatsPaneRowTemplate(statTemplateData) {
+function getStatsPaneRowTemplate(statsTemplateData) {
   return `<dl class="row flex-column flex-sm-row align-items-start align-items-sm-center pt-2 mb-0">
-      <dt class="col-12 col-sm-4">${statTemplateData.title}:</dt>
+      <dt class="col-12 col-sm-4">${statsTemplateData.statsTitle}:</dt>
       <dd class="col-12 col-sm-8 mb-0">
-        <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="${statTemplateData.value}" aria-valuemin="0" aria-valuemax="100">
-          <div class="progress-bar bg-type-${statTemplateData.primaryTypeName} h-75 rounded" style="width: ${statTemplateData.value}%"></div>
+        <div
+        class="progress"
+        data-id="stats-progress-${statsTemplateData.statsTitle}"
+        role="progressbar"
+        aria-label="Example with label"
+        aria-valuenow="${statsTemplateData.statsValue}"
+        aria-valuemin="0"
+        aria-valuemax="${statsTemplateData.statsMaxValue}">
+          <div
+          class="progress-bar h-75 rounded ${statsTemplateData.rowBg}"
+          data-id="stats-progressbar-${statsTemplateData.statsTitle}"
+          style="width: ${statsTemplateData.statsBarWidth}%">
+          </div>
         </div>
       </dd>
     </dl>`;

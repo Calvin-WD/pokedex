@@ -24,22 +24,11 @@ function renderDialogWrapper(dialogRef) {
   dialogRef.innerHTML = getDialogContentTemplate(dialogContentTemplateData);
 }
 
-function getDialogContentTemplateData() {
-  return {
-    headerHtml: getDialogHeaderTemplate(),
-    tabListHtml: getDialogTabListHtmlString(),
-    tabPanesHtml: getDialogTabPanesHtmlString(),
-  };
-}
-
 /**
  * Opens the dialog after rendering the selected Pokémon.
  */
-async function openDialog(pokemonId, visiblePokemonIndex) {
+async function openDialog(visiblePokemonIndex) {
   let dialogRef = document.querySelector(`[data-id="dialog"]`);
-
-  dialogRef.dataset.pokemonId = pokemonId;
-  dialogRef.dataset.visiblePokemonIndex = visiblePokemonIndex;
 
   renderDialogWrapper(dialogRef);
   await showDialogPokemon(visiblePokemonIndex);
@@ -69,7 +58,8 @@ function updateDialog(dialogRef, pokemon, typeValues, visiblePokemonIndex) {
  * Updates all Pokémon-specific dialog content for the current Pokémon.
  */
 function updateDialogContent(pokemon, typeValues) {
-  updateDialogBg(typeValues);
+  const dialogBgWrapperRef = document.querySelector('[data-id="dialog-bg-wrapper"]');
+  updateBg(typeValues, dialogBgWrapperRef);
   updateDialogHeader(pokemon, typeValues);
   updateDialogTabPaneContent(pokemon, typeValues);
 }
@@ -77,22 +67,21 @@ function updateDialogContent(pokemon, typeValues) {
 /**
  * Updates the dialog background class based on the Pokémon's primary type.
  */
-function updateDialogBg(typeValues) {
-  const dialogBgWrapperRef = document.querySelector('[data-id="dialog-bg-wrapper"]');
+function updateBg(typeValues, elementRef) {
   const classPrefix = "bg-type-";
   const currentTypeClassName = classPrefix + typeValues[0].type.name;
 
-  removeOldDialogBg(dialogBgWrapperRef, classPrefix, currentTypeClassName);
-  dialogBgWrapperRef.classList.add(currentTypeClassName);
+  removeOldBg(elementRef, classPrefix, currentTypeClassName);
+  elementRef.classList.add(currentTypeClassName);
 }
 
 /**
  * Removes outdated type background classes from the dialog wrapper.
  */
-function removeOldDialogBg(dialogBgWrapperRef, classPrefix, currentTypeClassName) {
-  dialogBgWrapperRef.classList.forEach((typeClassName) => {
+function removeOldBg(elementRef, classPrefix, currentTypeClassName) {
+  elementRef.classList.forEach((typeClassName) => {
     if (typeClassName.startsWith(classPrefix) && typeClassName != currentTypeClassName) {
-      dialogBgWrapperRef.classList.remove(typeClassName);
+      elementRef.classList.remove(typeClassName);
     }
   });
 }
@@ -119,15 +108,42 @@ function updateDialogHeader(pokemon, typeValues) {
  * Updates the about, stats and evolution tab contents for the current Pokémon.
  */
 function updateDialogTabPaneContent(pokemon, typeValues) {
-  const abilityNames = getAbilityNamesAsString(pokemon);
   const evoChainTemplateData = getEvolutionPaneImagesData(pokemon);
-  const aboutContentRef = document.querySelector('[data-id="about-tab-pane"]');
-  const statContentRef = document.querySelector('[data-id="stat-tab-pane"]');
   const evolutionContentRef = document.querySelector('[data-id="evolution-tab-pane-content"]');
 
-  aboutContentRef.innerHTML = getAboutPaneContentHtmlString(pokemon, abilityNames);
-  statContentRef.innerHTML = getStatsPaneContentHtmlString(pokemon, typeValues);
+  updateDialogAboutPaneContent(pokemon);
+  updateDialogStatsPaneContent(pokemon, typeValues);
   evolutionContentRef.innerHTML = getEvolutionPaneContentHtmlString(evoChainTemplateData);
+}
+
+/**
+ * Renders the about tab rows for the current Pokémon.
+ */
+function updateDialogAboutPaneContent(pokemon) {
+  const aboutPaneRef = document.querySelector('[data-id="about-tab-pane"]');
+  const pokemonAboutData = getPokemonAboutPaneData(pokemon);
+  let aboutPaneHtml = "";
+
+  for (let index = 0; index < pokemonAboutData.length; index++) {
+    const currentTemplateData = pokemonAboutData[index];
+    aboutPaneHtml += getAboutPaneRowTemplate(currentTemplateData);
+  }
+  aboutPaneRef.innerHTML = aboutPaneHtml;
+}
+
+/**
+ * Renders the stats tab rows for the current Pokémon.
+ */
+function updateDialogStatsPaneContent(pokemon, typeValues) {
+  const statsPaneRef = document.querySelector('[data-id="stats-tab-pane"]');
+  const pokemonStatsData = getPokemonStatsPaneData(pokemon, typeValues);
+  let statPaneHtml = "";
+
+  for (let index = 0; index < pokemonStatsData.length; index++) {
+    const currentTemplateData = pokemonStatsData[index];
+    statPaneHtml += getStatsPaneRowTemplate(currentTemplateData);
+  }
+  statsPaneRef.innerHTML = statPaneHtml;
 }
 
 /**
@@ -140,11 +156,7 @@ async function nextDialogPokemon(buttonRef, visiblePokemonIndex) {
 
   try {
     visiblePokemonIndex = visiblePokemonIndex + 1;
-    if (isValidVisiblePokemonIndex(visiblePokemonIndex)) {
-      await showDialogPokemon(visiblePokemonIndex);
-    } else {
-      console.error("No more Pokemons are loaded!");
-    }
+    await showDialogPokemonIfValid(visiblePokemonIndex, "No more Pokemons are loaded!");
   } finally {
     isChangingDialogPokemon = false;
   }
@@ -160,39 +172,34 @@ async function previousDialogPokemon(buttonRef, visiblePokemonIndex) {
 
   try {
     visiblePokemonIndex = visiblePokemonIndex - 1;
-    if (isValidVisiblePokemonIndex(visiblePokemonIndex)) {
-      await showDialogPokemon(visiblePokemonIndex);
-    } else {
-      console.error("You already reached the first Pokemon!");
-    }
+    await showDialogPokemonIfValid(visiblePokemonIndex, "You already reached the first Pokemon!");
   } finally {
     isChangingDialogPokemon = false;
   }
 }
 
-function getDialogHeaderPokemonData(pokemon, typeValues) {
- return {
-    name: pokemon.base.name.toUpperCase(),
-    id: pokemon.base.id,
-    imageSrc: pokemon.base.sprites.other.home.front_default,
-    imageAlt: `Pokemon: ${capitalize(pokemon.base.name)}`,
-    typeBadgesHtml: getDialogTypeBadgeHtmlString(typeValues),
-  };
+/**
+ * Shows the given Pokémon if its index is valid, otherwise logs the provided error message.
+ */
+async function showDialogPokemonIfValid(visiblePokemonIndex, errorMessage) {
+  if (isValidVisiblePokemonIndex(visiblePokemonIndex)) {
+      await showDialogPokemon(visiblePokemonIndex);
+    } else {
+      console.error(errorMessage);
+    }
 }
 
 /**
  * Creates the type badge HTML for all dialog header types.
  */
 function getDialogTypeBadgeHtmlString(typeValues) {
-  const classPrefix = "bg-type-";
   let badgesHtmlString = "";
 
   for (let indexType = 0; indexType < typeValues.length; indexType++) {
     const type = typeValues[indexType].type;
-    const typeBackground = classPrefix + type.name;
     const typeTemplateData = {
       name: capitalize(type.name),
-      bg: typeBackground,
+      bg: `bg-type-${type.name}`,
     };
     badgesHtmlString += getHeaderTypeBadgeTemplate(typeTemplateData);
   }
@@ -210,11 +217,11 @@ function getDialogTabListHtmlString() {
   tabButtonsHtml += getDialogStatsTabButtonTemplate();
   tabButtonsHtml += getDialogEvolutionTabButtonTemplate();
 
-  return getDialogTabListTemplate(tabButtonsHtml );
+  return getDialogTabListTemplate(tabButtonsHtml);
 }
 
 /**
- * Creates the dialog tab content panel HTML.
+ * Creates the empty tab pane containers for the dialog body, to be filled in separately.
  */
 function getDialogTabPanesHtmlString() {
   let tabPanesHtml = "";
@@ -224,42 +231,6 @@ function getDialogTabPanesHtmlString() {
   tabPanesHtml += getDialogEvolutionTabPaneTemplate();
 
   return tabPanesHtml;
-}
-
-/**
- * Creates the HTML for the dialog's about tab.
- */
-function getAboutPaneContentHtmlString(pokemon, abilityNames) {
-  const aboutTabTemplateData = getAboutPaneRowsData(pokemon, abilityNames);
-  let fullTabContentHtmlString = "";
-
-  for (let index = 0; index < aboutTabTemplateData.length; index++) {
-    const currentTemplateData = aboutTabTemplateData[index];
-    currentTemplateData.value = capitalize(currentTemplateData.value);
-    fullTabContentHtmlString += getAboutPaneRowTemplate(currentTemplateData);
-  }
-
-  return fullTabContentHtmlString;
-}
-
-/**
- * Creates the HTML for the dialog's stats tab from prepared stat data.
- */
-function getStatsPaneContentHtmlString(pokemon, typeValues) {
-  const statsTabContentArray = getStatsTabContentAsArray(pokemon.base.stats);
-  let fullTabContentHtmlString = "";
-
-  for (let index = 0; index < statsTabContentArray.length; index++) {
-    const currentStat = statsTabContentArray[index];
-    const statTemplateData = {
-      title: capitalize(currentStat.title),
-      value: currentStat.value,
-      primaryTypeName: typeValues[0].type.name,
-    };
-    fullTabContentHtmlString += getStatsPaneRowTemplate(statTemplateData);
-  }
-
-  return fullTabContentHtmlString;
 }
 
 /**
@@ -281,15 +252,67 @@ function getEvolutionPaneContentHtmlString(evoChainTemplateData) {
 }
 
 /**
- * Creates the template data rows used in the dialog's about tab.
+ * Builds the template data used to render the dialog wrapper's header, tab list and tab panes.
  */
-function getAboutPaneRowsData(pokemon, abilityNames) {
+function getDialogContentTemplateData() {
+  return {
+    headerHtml: getDialogHeaderTemplate(),
+    tabListHtml: getDialogTabListHtmlString(),
+    tabPanesHtml: getDialogTabPanesHtmlString(),
+  };
+}
+
+/**
+ * Builds the template data for the dialog header, including name, id, image and type badges.
+ */
+function getDialogHeaderPokemonData(pokemon, typeValues) {
+  return {
+    name: pokemon.base.name.toUpperCase(),
+    id: pokemon.base.id,
+    imageSrc: pokemon.base.sprites.other.home.front_default,
+    imageAlt: `Pokemon: ${capitalize(pokemon.base.name)}`,
+    typeBadgesHtml: getDialogTypeBadgeHtmlString(typeValues),
+  };
+}
+
+/**
+ * Builds the name, height, weight and ability rows shown in the dialog's about tab.
+ */
+function getPokemonAboutPaneData(pokemon) {
   return [
-    { value: pokemon.base.name, title: "Name" },
-    { value: pokemon.base.height, title: "Height" },
-    { value: pokemon.base.weight, title: "Weight" },
-    { value: abilityNames, title: "Abilities" },
+    { key: "Name:", value: capitalize(pokemon.base.name) },
+    { key: "Height:", value: pokemon.base.height },
+    { key: "Weight:", value: pokemon.base.weight },
+    { key: "Abilities:", value: getAbilityNamesAsString(pokemon) },
   ];
+}
+
+/**
+ * Builds the template data for the dialog's stats tab from the Pokémon's stats.
+ */
+function getPokemonStatsPaneData(pokemon, typeValues) {
+  const pokemonStats = pokemon.base.stats;
+
+  return buildPokemonStatsPaneData(pokemonStats, typeValues);
+}
+
+/**
+ * Creates one stats row entry per stat, with its title, value and type-colored background.
+ */
+function buildPokemonStatsPaneData(pokemonStats, typeValues) {
+  let statsTabContentArray = [];
+
+  for (let statsIndex = 0; statsIndex < pokemonStats.length; statsIndex++) {
+    const currentStats = pokemonStats[statsIndex];
+    statsTabContentArray.push({
+      statsTitle: capitalize(currentStats.stat.name),
+      statsValue: currentStats.base_stat,
+      statsBarWidth: ((currentStats.base_stat / 255) * 100).toFixed(2),
+      statsMaxValue: 255,
+      rowBg: `bg-type-${typeValues[0].type.name}`,
+    });
+  }
+  return statsTabContentArray;
 }
 
 /**
