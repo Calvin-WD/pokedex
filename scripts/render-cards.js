@@ -43,7 +43,7 @@ function renderFilteredCards(searchValue) {
   renderCards(visiblePokemonIds, visiblePokemonIndex);
 
   if (visiblePokemonIds.length === 0) {
-    contentWrapperRef.innerHTML = getFeedbackMessageTemplate("No match found!");
+    contentWrapperRef.innerHTML = getNoMatchFoundFeedbackMessageTemplate("No match found!");
   }
 }
 

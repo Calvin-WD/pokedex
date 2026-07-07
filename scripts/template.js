@@ -14,7 +14,7 @@ function getPokemonCardTemplate(pokemonTemplateData) {
       </header>
       <div
       class="card-body pokemon-card-body position-relative d-flex justify-content-center bg-type-${pokemonTemplateData.primaryTypeName} p-0">
-        <img src="${pokemonTemplateData.image}" alt="Pokemon: ${pokemonTemplateData.name}" class="pokemon-card-image w-75" data-id="pokemon-card-image">
+        <img src="${pokemonTemplateData.image}" alt="Pokemon: ${pokemonTemplateData.name}" class="pokemon-card-image w-75" data-id="card-image">
       </div>
       <footer class="d-flex justify-content-center gap-5 p-1">${pokemonTemplateData.typeIconsHtml}</footer>
     </button>`;
@@ -37,9 +37,8 @@ function getPokemonCardTypeImageTemplate(typeTemplateData) {
 function getDialogContentTemplate(dialogContentTemplateData) {
   return `<div class="modal-dialog">
         <div class="modal-content rounded-3"
-        data-id="dialog-bg-wrapper">
-          <header class="modal-header flex-column p-3 border-0"
-          data-id="overlay-pokemon-name">
+        data-id="overlay-pokemon-name">
+          <header class="modal-header flex-column p-3 border-0">
             <div class="d-flex justify-content-end align-items-center w-100">
               <button type="button" class="btn button-reset button-close" data-bs-theme="dark"
               onclick="closeDialog()"
@@ -270,8 +269,15 @@ function getEvolutionPaneArrowTemplate() {
 }
 
 /**
- * Creates a feedback message for loading failures and empty search results.
+ * Creates a feedback message for  empty search results.
+ */
+function getNoMatchFoundFeedbackMessageTemplate(string) {
+  return `<p class="container feedback-message d-flex justify-content-center text-center" data-id="not-found">${string}</p>`;
+}
+
+/**
+ * Creates a feedback message for failures.
  */
 function getFeedbackMessageTemplate(string) {
-  return `<p class="container feedback-message d-flex justify-content-center text-center" data-id="not-found">${string}</p>`;
+  return `<p class="container feedback-message d-flex justify-content-center text-center">${string}</p>`;
 }

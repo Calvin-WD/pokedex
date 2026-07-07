@@ -58,7 +58,7 @@ function updateDialog(dialogRef, pokemon, typeValues, visiblePokemonIndex) {
  * Updates all Pokémon-specific dialog content for the current Pokémon.
  */
 function updateDialogContent(pokemon, typeValues) {
-  const dialogBgWrapperRef = document.querySelector('[data-id="dialog-bg-wrapper"]');
+  const dialogBgWrapperRef = document.querySelector('[data-id="overlay-pokemon-name"]');
   updateBg(typeValues, dialogBgWrapperRef);
   updateDialogHeader(pokemon, typeValues);
   updateDialogTabPaneContent(pokemon, typeValues);
