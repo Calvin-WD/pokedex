@@ -224,8 +224,9 @@ function buildEvoChainObject(pokemon) {
  */
 function addPokemonToEvoChainObject(pokemonId, evoChain, nextEvoChain, evoRank) {
   ensureEvoChainHasPokemonObject(evoChain);
-
+  
   evoChain.pokemons[evoRank] = {
+    name: capitalize(pokemons[pokemonId].base.name),
     image: `${POKEAPI_IMG_URL + pokemonId}.png`,
   };
 

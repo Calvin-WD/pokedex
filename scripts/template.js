@@ -268,7 +268,7 @@ function getStatsPaneRowTemplate(statsTemplateData) {
  * Creates one evolution image for the dialog's evolution tab.
  */
 function getEvolutionPaneImageTemplate(evoChainTemplateData) {
-  return `<img src="${evoChainTemplateData.image}" class="dialog-tab-content-evolution-image">`;
+  return `<img src="${evoChainTemplateData.image}" alt="Pokemon: ${evoChainTemplateData.name}" class="dialog-tab-content-evolution-image">`;
 }
 
 /**

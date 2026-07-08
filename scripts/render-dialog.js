@@ -314,7 +314,8 @@ function getEvolutionPaneImagesData(pokemon) {
 
   for (let index = 1; index <= Object.keys(evoChainPokemons).length; index++) {
     const currentPokemonImage = evoChainPokemons[index].image;
-    evoChainImages.push({ image: currentPokemonImage });
+    const currentPokemonName = evoChainPokemons[index].name;
+    evoChainImages.push({ image: currentPokemonImage, name: currentPokemonName});
   }
 
   return evoChainImages;
