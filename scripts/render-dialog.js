@@ -155,8 +155,8 @@ async function nextDialogPokemon(buttonRef, visiblePokemonIndex) {
   isChangingDialogPokemon = true;
 
   try {
-    visiblePokemonIndex = visiblePokemonIndex + 1;
-    await showDialogPokemonIfValid(visiblePokemonIndex, "No more Pokemons are loaded!");
+    visiblePokemonIndex = validVisiblePokemonIndex(visiblePokemonIndex + 1);
+    await showDialogPokemon(visiblePokemonIndex);
   } finally {
     isChangingDialogPokemon = false;
   }
@@ -171,22 +171,11 @@ async function previousDialogPokemon(buttonRef, visiblePokemonIndex) {
   isChangingDialogPokemon = true;
 
   try {
-    visiblePokemonIndex = visiblePokemonIndex - 1;
-    await showDialogPokemonIfValid(visiblePokemonIndex, "You already reached the first Pokemon!");
+    visiblePokemonIndex = validVisiblePokemonIndex(visiblePokemonIndex - 1);
+    await showDialogPokemon(visiblePokemonIndex);
   } finally {
     isChangingDialogPokemon = false;
   }
-}
-
-/**
- * Shows the given Pokémon if its index is valid, otherwise logs the provided error message.
- */
-async function showDialogPokemonIfValid(visiblePokemonIndex, errorMessage) {
-  if (isValidVisiblePokemonIndex(visiblePokemonIndex)) {
-      await showDialogPokemon(visiblePokemonIndex);
-    } else {
-      console.error(errorMessage);
-    }
 }
 
 /**

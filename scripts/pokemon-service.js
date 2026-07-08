@@ -49,7 +49,7 @@ async function loadPokemonByListEntry(pokemon) {
  */
 async function loadMorePokemons() {
   if (isLoadingMorePokemon) return;
-  
+
   isLoadingMorePokemon = true;
 
   try {
@@ -303,13 +303,15 @@ function getAbilityNamesAsString(pokemon) {
 }
 
 /**
- * Checks whether a visible Pokémon index can be shown in the dialog.
+ * Wraps a visible Pokémon index within the bounds of the visible Pokémon list.
  */
-function isValidVisiblePokemonIndex(visiblePokemonIndex) {
-  if (0 <= visiblePokemonIndex && visiblePokemonIds.length > visiblePokemonIndex) {
-    return true;
+function validVisiblePokemonIndex(visiblePokemonIndex) {
+  if (visiblePokemonIndex < 0) {
+    return visiblePokemonIds.length - 1;
+  } else if (visiblePokemonIndex >= visiblePokemonIds.length) {
+    return 0;
   } else {
-    return false;
+    return visiblePokemonIndex;
   }
 }
 

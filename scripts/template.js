@@ -2,22 +2,26 @@
  * Creates the HTML for a Pokémon card.
  */
 function getPokemonCardTemplate(pokemonTemplateData) {
-  return `<button 
-    type="button"
-    class="card pokemon-card button-reset bg-body-tertiary h-100 p-0"
-    data-id="card"
-    data-pokemon-id="${pokemonTemplateData.id}"
-    data-visible-pokemon-index="${pokemonTemplateData.visiblePokemonIndex}"
-    onclick="openDialog(${pokemonTemplateData.visiblePokemonIndex})">
-      <header class="card-header d-flex flex-row-reverse justify-content-between align-items-center">
-        <strong class="text-end">${pokemonTemplateData.nameUpperCase}</strong> <span>#${pokemonTemplateData.id}</span>
-      </header>
-      <div
-      class="card-body pokemon-card-body position-relative d-flex justify-content-center bg-type-${pokemonTemplateData.primaryTypeName} p-0">
-        <img src="${pokemonTemplateData.image}" alt="Pokemon: ${pokemonTemplateData.name}" class="pokemon-card-image w-75" data-id="card-image">
-      </div>
-      <footer class="d-flex justify-content-center gap-5 p-1">${pokemonTemplateData.typeIconsHtml}</footer>
-    </button>`;
+  return `<li>
+      <button 
+      type="button"
+      class="card pokemon-card button-reset bg-body-tertiary h-100 p-0"
+      data-id="card"
+      data-pokemon-id="${pokemonTemplateData.id}"
+      data-visible-pokemon-index="${pokemonTemplateData.visiblePokemonIndex}"
+      aria-label="#${pokemonTemplateData.id} ${pokemonTemplateData.name}, open details"
+      onclick="openDialog(${pokemonTemplateData.visiblePokemonIndex})">
+        <header class="card-header d-flex flex-row justify-content-between align-items-center">
+          <span>#${pokemonTemplateData.id}</span>
+          <h2 class="text-end">${pokemonTemplateData.nameUpperCase}</h2>
+        </header>
+        <div
+        class="card-body pokemon-card-body position-relative d-flex justify-content-center bg-type-${pokemonTemplateData.primaryTypeName} p-0">
+          <img src="${pokemonTemplateData.image}" alt="Pokemon: ${pokemonTemplateData.name}" class="pokemon-card-image w-75" data-id="card-image">
+        </div>
+        <footer class="d-flex justify-content-center gap-5 p-1">${pokemonTemplateData.typeIconsHtml}</footer>
+      </button>
+    </li>`;
 }
 
 /**
@@ -40,7 +44,11 @@ function getDialogContentTemplate(dialogContentTemplateData) {
         data-id="overlay-pokemon-name">
           <header class="modal-header flex-column p-3 border-0">
             <div class="d-flex justify-content-end align-items-center w-100">
-              <button type="button" class="btn button-reset button-close" data-bs-theme="dark"
+              <button
+              type="button"
+              class="btn button-reset button-close"
+              data-bs-theme="dark"
+              aria-label="Close the Overview"
               onclick="closeDialog()"
               data-id="close-dialog-button">
                 <i class="bi bi-x-lg"></i>
@@ -68,8 +76,8 @@ function getDialogContentTemplate(dialogContentTemplateData) {
  */
 function getDialogHeaderTemplate() {
   return `<div class="d-flex flex-row-reverse align-items-center justify-content-end w-100 gap-2">
-        <strong class="modal-title fs-5" id="cardExtensionLabel" data-id="dialog-pokemon-name">
-        </strong>
+        <h2 class="modal-title" id="cardExtensionLabel" data-id="dialog-pokemon-name">
+        </h2>
         <span class="dialog-pokemon-id" data-id="dialog-pokemon-id"></span>
       </div>
       <div class="d-flex flex-column gap-4">
@@ -78,6 +86,7 @@ function getDialogHeaderTemplate() {
           type="button"
           class="btn button-reset button-skip"
           data-id="prev-button"
+          aria-label="Show previous Pokemon"
           onclick="previousDialogPokemon(this,Number(this.closest('dialog').dataset.visiblePokemonIndex))">
             <i class="bi bi-caret-left-fill"></i>
           </button>
@@ -90,6 +99,7 @@ function getDialogHeaderTemplate() {
           type="button"
           class="btn button-reset button-skip"
           data-id="next-button"
+          aria-label="Show next Pokemon"
           onclick="nextDialogPokemon(this,Number(this.closest('dialog').dataset.visiblePokemonIndex))">
             <i class="bi bi-caret-right-fill"></i>
           </button>
